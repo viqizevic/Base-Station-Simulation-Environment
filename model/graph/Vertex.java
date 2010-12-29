@@ -63,5 +63,8 @@ public class Vertex {
     public Key getKey() {
         return (this.key);
     }
-
+    
+    public String toString() {
+    	return "node:"+key;
+    }
 }

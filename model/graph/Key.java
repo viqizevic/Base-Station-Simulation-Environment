@@ -28,6 +28,9 @@ public final class Key {
       if (!(obj instanceof Key)) return false;
       return id.equals(((Key) obj).id);
     }
+    
+    public String toString() {
+    	return "key:"+id+";";
+    }
 
 }
-

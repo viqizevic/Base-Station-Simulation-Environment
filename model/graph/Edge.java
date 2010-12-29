@@ -93,4 +93,8 @@ public class Edge {
     public void setCounterEdge(Edge e) {
         this.counter_edge = e;
     }
+    
+    public String toString() {
+    	return "edge:"+key;
+    }
 }

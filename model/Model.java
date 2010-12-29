@@ -6,6 +6,8 @@ public class Model {
 	
     private Long internalIdCounter;
     
+    private GraphInstance graphInstance;
+    
 	public Model() {
 		internalIdCounter = 0L;
 	}
@@ -16,5 +18,10 @@ public class Model {
 	
 	public Long getNewId() {
 		return internalIdCounter++;
+	}
+	
+	public GraphInstance createGraphInstance( int numberOfBaseStations, int numberOfUsers ) {
+		graphInstance = new GraphInstance(numberOfBaseStations, numberOfUsers);
+		return graphInstance;
 	}
 }

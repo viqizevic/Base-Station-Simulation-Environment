@@ -83,4 +83,8 @@ public class Attribute {
         this.weight = weight;
 
     }
+    
+    public String toString() {
+    	return "attr:"+this.type+"-"+this.weight+";";
+    }
 }

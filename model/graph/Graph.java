@@ -9,8 +9,6 @@ import model.Model;
 
 
 public class Graph {
-    
-    private Long id;
 	
 	//flag for debug mode
     public static boolean debugMode = true;
@@ -37,7 +35,6 @@ public class Graph {
     private Vector<String> edgeAttributeDescriptions = new Vector<String>();
     
     public Graph() {
-    	id = Model.getModel().getNewId();
     }
 
     /**
@@ -373,5 +370,15 @@ public class Graph {
      */
     public Key getKeyToEdgeAttributeDescription(String description) {
         return (edgeAttributeKeys.elementAt(edgeAttributeDescriptions.indexOf(description)));
+    }
+    
+    public String toString() {
+    	String str = "graph:\n";
+    	str += "number of vertices: "+vertices.size()+"\n";
+    	str += "number of edges: "+edges.size()+"\n";
+    	for( Vertex v : getVertices() ) {
+    		str += v.toString()+"pos:"+vertexCoordinates.get(v.getKey())+"\n";
+    	}
+    	return str;
     }
 }
