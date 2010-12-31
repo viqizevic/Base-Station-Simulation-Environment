@@ -24,4 +24,11 @@ public class Model {
 		graphInstance = new GraphInstance(numberOfBaseStations, numberOfUsers);
 		return graphInstance;
 	}
+	
+	public GraphInstance getGraphInstance() {
+		if( graphInstance == null ) {
+			createGraphInstance(16, 32);
+		}
+		return graphInstance;
+	}
 }
