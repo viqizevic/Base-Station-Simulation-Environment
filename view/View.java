@@ -1,5 +1,7 @@
 package view;
 
+import model.Model;
+
 public class View {
 
 	/**
@@ -13,7 +15,7 @@ public class View {
 	private Window window;
 
 	public View() {
-		window = new Window("Base stations model");
+		window = new Window("Base stations model", Model.getModel().getSimulationMap());
 		window.setLocationRelativeTo( null );
 		window.pack();
 		window.setVisible(true);

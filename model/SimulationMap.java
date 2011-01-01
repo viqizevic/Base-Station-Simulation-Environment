@@ -2,6 +2,7 @@
 package model;
 
 import java.awt.Point;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -94,6 +95,18 @@ public class SimulationMap extends Graph {
 			}
 		}
     }
+
+	public FieldUsageType[][] getFieldUsage() {
+		return fieldUsage;
+	}
+
+	public Collection<BaseStation> getBasestations() {
+		return basestations.values();
+	}
+
+	public Collection<User> getUsers() {
+		return users.values();
+	}
 
 	public String toString() {
 		String str = "Simulation map ";

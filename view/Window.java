@@ -9,15 +9,17 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import model.SimulationMap;
+
 public class Window extends JFrame {
 	
 	private static final long serialVersionUID = -5266572208804064177L;
 
-	private ModelCanvas modelCanvas;
+	private SimulationMapCanvas modelCanvas;
 	
-	public Window( String title ) {
+	public Window( String title, SimulationMap map ) {
 		super( title );
-		modelCanvas = new ModelCanvas();
+		modelCanvas = new SimulationMapCanvas(map);
 		init();
 	}
 
