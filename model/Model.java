@@ -6,7 +6,7 @@ public class Model {
 	
     private Long internalIdCounter;
     
-    private GraphInstance graphInstance;
+    private SimulationMap simulationMap;
     
 	public Model() {
 		internalIdCounter = 0L;
@@ -20,15 +20,15 @@ public class Model {
 		return internalIdCounter++;
 	}
 	
-	public GraphInstance createGraphInstance( int numberOfBaseStations, int numberOfUsers ) {
-		graphInstance = new GraphInstance(numberOfBaseStations, numberOfUsers);
-		return graphInstance;
+	public SimulationMap createSimulationMap( int numberOfBaseStations, int numberOfUsers ) {
+		simulationMap = new SimulationMap(numberOfBaseStations, numberOfUsers);
+		return simulationMap;
 	}
 	
-	public GraphInstance getGraphInstance() {
-		if( graphInstance == null ) {
-			createGraphInstance(16, 32);
+	public SimulationMap getSimulationMap() {
+		if( simulationMap == null ) {
+			createSimulationMap(16, 32);
 		}
-		return graphInstance;
+		return simulationMap;
 	}
 }

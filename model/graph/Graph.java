@@ -16,7 +16,6 @@ public class Graph {
     //some flags for graph type
     private boolean isDirected;
     private boolean isEuclidean;
-    private boolean isSimple;
     private boolean isInteger;
 
     //vertices
@@ -83,22 +82,6 @@ public class Graph {
      */
     public void setEuclidian(boolean isEuclidean) {
         this.isEuclidean = isEuclidean;
-    }
-
-    /**
-     * returns if the graph is simple
-     * @return true if it is simple
-     */
-    public boolean isSimple() {
-        return isSimple;
-    }
-
-    /**
-     * sets if the graph is simple
-     * @param isSimple
-     */
-    public void setSimple(boolean isSimple) {
-        this.isSimple = isSimple;
     }
 
     /**

@@ -1,8 +1,14 @@
+
 package model;
 
+import java.awt.Point;
+import java.util.HashMap;
 import java.util.Random;
 
-public class SimulationMap {
+import model.graph.Graph;
+import model.graph.Key;
+
+public class SimulationMap extends Graph {
 
 	/**
 	 * This 2-dimensional array tells if the field is used or not.
@@ -10,13 +16,27 @@ public class SimulationMap {
 	 * The second index for the horizontal direction.
 	 */
 	private FieldUsageType[][] fieldUsage;
-	
-	private int numberOfBaseStations;
-	
-	private int numberOfUsers;
-	
-	public SimulationMap( int baseStationsNumber, int usersNumber ) {
-		// Compute at first the size of the simulation map.
+
+	private HashMap<Key, BaseStation> basestations;
+    
+    private HashMap<Key, User> users;
+
+    public SimulationMap( int baseStationsNumber, int usersNumber ) {
+    	super();
+    	basestations = new HashMap<Key, BaseStation>();
+    	users = new HashMap<Key, User>();
+		setDirected(false);
+		setEuclidian(true);
+		setInteger(false);
+		for( int i=1; i <= baseStationsNumber; i++ ) {
+		}
+		for( int i=1; i <= usersNumber; i++ ) {
+		}
+		for( BaseStation bs : basestations.values() ) {
+			for( User u : users.values() ) {
+				addEdge(bs, u);
+			}
+		}
 		/* We divide the map into small blocks
 		 *  B1 B2 B3 B4
 		 *  B5 B6 B7 ...
@@ -40,33 +60,41 @@ public class SimulationMap {
 				fieldUsage[i][j] = FieldUsageType.Empty;
 			}
 		}
-		// Define the location of the base stations
+		// Create and locate the base stations
 		int x = 0;
 		int y = 0;
-		this.numberOfBaseStations = 0;
+		int numberOfBaseStationsCreated = 0;
 		for( int i=0; i<blockNumberPerColumn; i++ ) {
 			y = i*fieldNumberPerBlockSide + 2;
 			for( int j=0; j<blockNumberPerRow; j++ ){
 				x = j*fieldNumberPerBlockSide + 2;
-				if( this.numberOfBaseStations < baseStationsNumber ) {
+				if( numberOfBaseStationsCreated < baseStationsNumber ) {
 					fieldUsage[y][x] = FieldUsageType.BaseStation;
-					this.numberOfBaseStations++;
+					BaseStation bs = new BaseStation();
+					Point p = new Point(x, y);
+					addVertex(bs, p);
+					basestations.put(bs.getKey(), bs);
+					numberOfBaseStationsCreated++;
 				}
 			}
 		}
-		// Define the location of the users
-		this.numberOfUsers = 0;
-		while( this.numberOfUsers < usersNumber ) {
+		// Create and locate the users
+		int numberOfUsersCreated = 0;
+		while( numberOfUsersCreated < usersNumber ) {
 			Random random = new Random();
 			y = random.nextInt(totalFieldNumberVertically);
 			x = random.nextInt(totalFieldNumberHorizontally);
 			if( fieldUsage[y][x] == FieldUsageType.Empty ) {
 				fieldUsage[y][x] = FieldUsageType.User;
-				this.numberOfUsers++;
+				User u = new User();
+				Point p = new Point( x, y );
+				addVertex(u, p);
+				users.put(u.getKey(), u);
+				numberOfUsersCreated++;
 			}
 		}
-	}
-	
+    }
+
 	public String toString() {
 		String str = "Simulation map ";
 		int m = fieldUsage.length;
@@ -86,7 +114,7 @@ public class SimulationMap {
 		}
 		return str;
 	}
-	
+
 	public enum FieldUsageType {
 		Empty,
 		BaseStation,
