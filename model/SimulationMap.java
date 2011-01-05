@@ -85,6 +85,10 @@ public class SimulationMap extends Graph {
 			Random random = new Random();
 			y = random.nextInt(totalFieldNumberVertically);
 			x = random.nextInt(totalFieldNumberHorizontally);
+//			do {
+//				y = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
+//				x = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
+//			} while( x<0 || y<0 || y>=totalFieldNumberVertically || x>=totalFieldNumberHorizontally );
 			if( fieldUsage[y][x] == FieldUsageType.Empty ) {
 				fieldUsage[y][x] = FieldUsageType.User;
 				User u = new User();

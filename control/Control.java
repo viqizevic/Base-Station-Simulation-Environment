@@ -6,7 +6,10 @@ public class Control {
 	
 	private static Control control = new Control();
 	
+	private CanvasMouseListener canvasMouseListener;
+	
 	public Control() {
+		canvasMouseListener = new CanvasMouseListener();
 	}
 	
 	public void initialize() {
@@ -15,5 +18,9 @@ public class Control {
 
 	public static Control getControl() {
 		return control;
+	}
+
+	public CanvasMouseListener getCanvasMouseListener() {
+		return canvasMouseListener;
 	}
 }
