@@ -11,8 +11,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import control.Control;
-
 import model.BaseStation;
 import model.SimulationMap;
 import model.User;
@@ -48,7 +46,6 @@ public class SimulationMapCanvas extends JPanel {
 			System.err.println("Cannot find image file");
 		}
 		hideGrids = true;//false;
-		this.addMouseListener(Control.getControl().getCanvasMouseListener());
 	}
 
 	public void paintComponent( Graphics g ) {
@@ -117,5 +114,18 @@ public class SimulationMapCanvas extends JPanel {
 				g2d.drawImage(userImg, userImgStartPoint_x, userImgStartPoint_y, userImgWidth, userImgHeight, null);
 			}
 		}
+	}
+
+	public int getWidthOfEachField() {
+		return fieldWidth;
+	}
+
+	public int getHeightOfEachField() {
+		return fieldHeight;
+	}
+
+	public Point getOriginOfTheMap() {
+		Point o = fieldsStartCoordinateInCanvas[0][0];
+		return new Point(o.x, o.y);
 	}
 }

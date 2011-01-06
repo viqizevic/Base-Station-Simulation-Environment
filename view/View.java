@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Point;
+
 import model.Model;
 
 public class View {
@@ -34,4 +36,16 @@ public class View {
 	 * This command should be called at the first time to start initializing the layout.
 	 */
 	public void initialize() {}
+
+	public int getWidthOfEachFieldInCanvas() {
+		return window.getWidthOfEachFieldInCanvas();
+	}
+
+	public int getHeightOfEachFieldInCanvas() {
+		return window.getHeightOfEachFieldInCanvas();
+	}
+
+	public Point getOriginOfTheMapInCanvas() {
+		return window.getOriginOfTheMapInCanvas();
+	}
 }

@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import control.Control;
 
 import model.SimulationMap;
 
@@ -32,6 +35,8 @@ public class Window extends JFrame {
 		modelCanvas.setMinimumSize( new Dimension(500,400) );
 		modelCanvas.setPreferredSize( new Dimension(500,400) );
 
+		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
+
 		this.add( modelCanvas );
 	}
 	
@@ -49,5 +54,17 @@ public class Window extends JFrame {
 		file.add( exit );
 		m.add( file );
 		this.setJMenuBar(m);
+	}
+
+	public int getWidthOfEachFieldInCanvas() {
+		return modelCanvas.getWidthOfEachField();
+	}
+
+	public int getHeightOfEachFieldInCanvas() {
+		return modelCanvas.getHeightOfEachField();
+	}
+
+	public Point getOriginOfTheMapInCanvas() {
+		return modelCanvas.getOriginOfTheMap();
 	}
 }
