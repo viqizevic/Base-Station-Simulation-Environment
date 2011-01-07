@@ -5,18 +5,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import model.Model;
+import model.SimulationMap.Field;
 
 import view.View;
 
 public class CanvasMouseListener implements MouseListener {
 
     void eventOutput(String eventDescription, MouseEvent e) {
-        System.out.println(eventDescription + " detected on "
+        String output = eventDescription + " detected on "
                 + e.getComponent().getClass().getName()
-                + ".");
-        System.out.print("x: "+e.getX());
-        System.out.println(", y: "+e.getY());
-        System.out.println(getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY()));
+                + ".\n";
+        Point fieldCoordinate = getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY());
+        output += fieldCoordinate+"\n";
+        Field field = Model.getModel().getSimulationMap().getFieldsMatrix()[fieldCoordinate.y][fieldCoordinate.x];
+        output += field.getFieldUsageType();
+        View.getView().showMessage(output);
     }
     
     public void mousePressed(MouseEvent e) {
@@ -51,8 +54,8 @@ public class CanvasMouseListener implements MouseListener {
     	while( y >= origin.y+fieldHeightInCanvas*(j+1) ) {
     		j++;
     	}
-    	int m = Model.getModel().getSimulationMap().getFieldUsage().length;
-    	int n = Model.getModel().getSimulationMap().getFieldUsage()[0].length;
+    	int m = Model.getModel().getSimulationMap().getFieldsMatrix().length;
+    	int n = Model.getModel().getSimulationMap().getFieldsMatrix()[0].length;
     	if ( i >= n || j >= m ) {
     		return null;
     	}

@@ -36,8 +36,8 @@ public class SimulationMapCanvas extends JPanel {
 	public SimulationMapCanvas( SimulationMap map ) {
 		super();
 		this.map = map;
-		int m = map.getFieldUsage().length;
-		int n = map.getFieldUsage()[0].length;
+		int m = map.getFieldsMatrix().length;
+		int n = map.getFieldsMatrix()[0].length;
 		fieldsStartCoordinateInCanvas = new Point[m][n];
 		try {
 			baseStationImg = ImageIO.read(new File("img/basestation.png"));
@@ -45,7 +45,8 @@ public class SimulationMapCanvas extends JPanel {
 		} catch (IOException e) {
 			System.err.println("Cannot find image file");
 		}
-		hideGrids = true;//false;
+//		hideGrids = true;
+		hideGrids = false;
 	}
 
 	public void paintComponent( Graphics g ) {
@@ -65,8 +66,8 @@ public class SimulationMapCanvas extends JPanel {
 		g2d.setColor( Color.BLACK );
 		int width = this.getWidth();
 		int height = this.getHeight();
-		int m = map.getFieldUsage().length;
-		int n = map.getFieldUsage()[0].length;
+		int m = map.getFieldsMatrix().length;
+		int n = map.getFieldsMatrix()[0].length;
 		fieldWidth = width/n;
 		fieldHeight = height/m;
 		int mapWidth = n*fieldWidth;

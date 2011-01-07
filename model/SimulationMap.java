@@ -8,6 +8,7 @@ import java.util.Random;
 
 import model.graph.Graph;
 import model.graph.Key;
+import model.graph.Vertex;
 
 public class SimulationMap extends Graph {
 
@@ -16,7 +17,7 @@ public class SimulationMap extends Graph {
 	 * The first index for the vertical direction.
 	 * The second index for the horizontal direction.
 	 */
-	private FieldUsageType[][] fieldUsage;
+	private Field[][] fieldsMatrix;
 
 	private HashMap<Key, BaseStation> basestations;
     
@@ -55,10 +56,10 @@ public class SimulationMap extends Graph {
 		}
 		int totalFieldNumberHorizontally = blockNumberPerRow*fieldNumberPerBlockSide;
 		int totalFieldNumberVertically = blockNumberPerColumn*fieldNumberPerBlockSide;
-		fieldUsage = new FieldUsageType[totalFieldNumberVertically][totalFieldNumberHorizontally];
+		fieldsMatrix = new Field[totalFieldNumberVertically][totalFieldNumberHorizontally];
 		for( int i=0; i<totalFieldNumberVertically; i++ ) {
 			for( int j=0; j<totalFieldNumberHorizontally; j++ ) {
-				fieldUsage[i][j] = FieldUsageType.Empty;
+				fieldsMatrix[i][j] = new Field();
 			}
 		}
 		// Create and locate the base stations
@@ -70,11 +71,11 @@ public class SimulationMap extends Graph {
 			for( int j=0; j<blockNumberPerRow; j++ ){
 				x = j*fieldNumberPerBlockSide + 2;
 				if( numberOfBaseStationsCreated < baseStationsNumber ) {
-					fieldUsage[y][x] = FieldUsageType.BaseStation;
 					BaseStation bs = new BaseStation();
 					Point p = new Point(x, y);
 					addVertex(bs, p);
 					basestations.put(bs.getKey(), bs);
+					fieldsMatrix[y][x].setFieldUser(bs);
 					numberOfBaseStationsCreated++;
 				}
 			}
@@ -89,19 +90,19 @@ public class SimulationMap extends Graph {
 //				y = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
 //				x = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
 //			} while( x<0 || y<0 || y>=totalFieldNumberVertically || x>=totalFieldNumberHorizontally );
-			if( fieldUsage[y][x] == FieldUsageType.Empty ) {
-				fieldUsage[y][x] = FieldUsageType.User;
+			if( fieldsMatrix[y][x].getFieldUsageType() == FieldUsageType.Empty ) {
 				User u = new User();
 				Point p = new Point( x, y );
 				addVertex(u, p);
 				users.put(u.getKey(), u);
+				fieldsMatrix[y][x].setFieldUser(u);
 				numberOfUsersCreated++;
 			}
 		}
     }
 
-	public FieldUsageType[][] getFieldUsage() {
-		return fieldUsage;
+	public Field[][] getFieldsMatrix() {
+		return fieldsMatrix;
 	}
 
 	public Collection<BaseStation> getBasestations() {
@@ -114,14 +115,14 @@ public class SimulationMap extends Graph {
 
 	public String toString() {
 		String str = "Simulation map ";
-		int m = fieldUsage.length;
-		int n = fieldUsage[0].length;
+		int m = fieldsMatrix.length;
+		int n = fieldsMatrix[0].length;
 		str += m +"x"+ n +"\n";
-		for( int i=0; i<fieldUsage.length; i++ ) {
-			for( int j=0; j<fieldUsage[i].length; j++ ) {
-				if( fieldUsage[i][j] == FieldUsageType.BaseStation) {
+		for( int i=0; i<fieldsMatrix.length; i++ ) {
+			for( int j=0; j<fieldsMatrix[i].length; j++ ) {
+				if( fieldsMatrix[i][j].getFieldUsageType() == FieldUsageType.BaseStation) {
 					str += "O ";
-				} else if( fieldUsage[i][j] == FieldUsageType.User ) {
+				} else if( fieldsMatrix[i][j].getFieldUsageType() == FieldUsageType.User ) {
 					str += "u ";
 				} else {
 					str += ". ";
@@ -131,7 +132,38 @@ public class SimulationMap extends Graph {
 		}
 		return str;
 	}
+	
+	public class Field {
+		
+		private Vertex fieldUser;
+		
+		private FieldUsageType fieldUsageType;
+		
+		public Field() {
+			fieldUser = null;
+			fieldUsageType = FieldUsageType.Empty;
+		}
 
+		public Vertex getFieldUser() {
+			return fieldUser;
+		}
+
+		public void setFieldUser(Vertex fieldUser) {
+			this.fieldUser = fieldUser;
+			if( fieldUser.getClass().equals(BaseStation.class) ) {
+				fieldUsageType = FieldUsageType.BaseStation;
+			} else if( fieldUser.getClass().equals(User.class) ) {
+				fieldUsageType = FieldUsageType.User;
+			} else {
+				fieldUsageType = FieldUsageType.Empty;
+			}
+		}
+
+		public FieldUsageType getFieldUsageType() {
+			return fieldUsageType;
+		}
+	}
+	
 	public enum FieldUsageType {
 		Empty,
 		BaseStation,

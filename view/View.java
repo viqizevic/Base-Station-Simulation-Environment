@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Point;
 
+import javax.swing.JOptionPane;
+
 import model.Model;
 
 public class View {
@@ -36,6 +38,14 @@ public class View {
 	 * This command should be called at the first time to start initializing the layout.
 	 */
 	public void initialize() {}
+
+	/**
+	 * Show message in a new frame.
+	 * @param text The message.
+	 */
+	public void showMessage( String text ) {
+		JOptionPane.showMessageDialog( window, text );
+	}
 
 	public int getWidthOfEachFieldInCanvas() {
 		return window.getWidthOfEachFieldInCanvas();
