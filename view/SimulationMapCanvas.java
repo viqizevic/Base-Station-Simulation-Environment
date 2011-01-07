@@ -76,8 +76,8 @@ public class SimulationMapCanvas extends JPanel {
 		int mapOrigin_y = (height-mapHeight)/2;
 		for( int i=0; i<m; i++ ) {
 			for( int j=0; j<n; j++ ) {
-				int fieldPos_x = mapOrigin_x + i*fieldWidth;
-				int fieldPos_y = mapOrigin_y + j*fieldHeight;
+				int fieldPos_x = mapOrigin_x + j*fieldWidth;
+				int fieldPos_y = mapOrigin_y + i*fieldHeight;
 				if( !hideGrids ) {
 					g2d.drawRect( fieldPos_x, fieldPos_y, fieldWidth, fieldHeight );
 				}

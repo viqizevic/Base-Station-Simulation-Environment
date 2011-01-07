@@ -10,12 +10,22 @@ import model.graph.Graph;
 import model.graph.Key;
 import model.graph.Vertex;
 
+/**
+ * Simulation Map represents the graph for the simulation environment.
+ * That's why this class extends the {@link Graph} class.
+ * The base stations and the users are the vertices of this graph.
+ * @author vicky
+ *
+ */
 public class SimulationMap extends Graph {
 
 	/**
-	 * This 2-dimensional array tells if the field is used or not.
-	 * The first index for the vertical direction.
-	 * The second index for the horizontal direction.
+	 * This 2-dimensional array contains the fields of the map.
+	 * The first index for the vertical direction (the y-axis).
+	 * The second index for the horizontal direction (the x-axis).
+	 * i.e. f11 f12 f13 ...
+	 *      f21 f22 f23 ...
+	 *      ...
 	 */
 	private Field[][] fieldsMatrix;
 
@@ -30,28 +40,20 @@ public class SimulationMap extends Graph {
 		setDirected(false);
 		setEuclidian(true);
 		setInteger(false);
-		for( int i=1; i <= baseStationsNumber; i++ ) {
-		}
-		for( int i=1; i <= usersNumber; i++ ) {
-		}
-		for( BaseStation bs : basestations.values() ) {
-			for( User u : users.values() ) {
-				addEdge(bs, u);
-			}
-		}
 		/* We divide the map into small blocks
 		 *  B1 B2 B3 B4
 		 *  B5 B6 B7 ...
+		 *  ...
 		 * Each block is a square containing small fields
 		 * with at most one base station in the middle of the block.
 		 */
-		int fieldNumberPerBlockSide = 5; // => The block size is then the square of this number
-		int blockNumberPerRow = 4;
+		int fieldNumberPerBlockSide = 5; // number of the fields in one block is the square of this number
+		int blockNumberPerRow = 4; // number of blocks in a row
 		if( baseStationsNumber < blockNumberPerRow ) {
 			blockNumberPerRow = Math.max(1, baseStationsNumber);
 		}
-		int blockNumberPerColumn = baseStationsNumber/blockNumberPerRow;
-		if( baseStationsNumber%blockNumberPerRow != 0 || blockNumberPerColumn == 0 ) {
+		int blockNumberPerColumn = baseStationsNumber/blockNumberPerRow; // number of blocks in a column
+		if( baseStationsNumber%blockNumberPerRow > 0 || baseStationsNumber == 0 ) {
 			blockNumberPerColumn++;
 		}
 		int totalFieldNumberHorizontally = blockNumberPerRow*fieldNumberPerBlockSide;
@@ -62,40 +64,40 @@ public class SimulationMap extends Graph {
 				fieldsMatrix[i][j] = new Field();
 			}
 		}
-		// Create and locate the base stations
-		int x = 0;
-		int y = 0;
+		// Create and place the base stations in the middle of a block
+		int i = 0;
+		int j = 0;
 		int numberOfBaseStationsCreated = 0;
-		for( int i=0; i<blockNumberPerColumn; i++ ) {
-			y = i*fieldNumberPerBlockSide + 2;
-			for( int j=0; j<blockNumberPerRow; j++ ){
-				x = j*fieldNumberPerBlockSide + 2;
+		for( int k=0; k<blockNumberPerColumn; k++ ) {
+			i = k*fieldNumberPerBlockSide + 2;
+			for( int l=0; l<blockNumberPerRow; l++ ) {
+				j = l*fieldNumberPerBlockSide + 2;
 				if( numberOfBaseStationsCreated < baseStationsNumber ) {
 					BaseStation bs = new BaseStation();
-					Point p = new Point(x, y);
+					Point p = new Point(j, i);
 					addVertex(bs, p);
 					basestations.put(bs.getKey(), bs);
-					fieldsMatrix[y][x].setFieldUser(bs);
+					fieldsMatrix[i][j].setFieldUser(bs);
 					numberOfBaseStationsCreated++;
 				}
 			}
 		}
-		// Create and locate the users
+		// Create and place the users randomly
 		int numberOfUsersCreated = 0;
 		while( numberOfUsersCreated < usersNumber ) {
 			Random random = new Random();
-			y = random.nextInt(totalFieldNumberVertically);
-			x = random.nextInt(totalFieldNumberHorizontally);
+			i = random.nextInt(totalFieldNumberVertically);
+			j = random.nextInt(totalFieldNumberHorizontally);
 //			do {
 //				y = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
 //				x = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
 //			} while( x<0 || y<0 || y>=totalFieldNumberVertically || x>=totalFieldNumberHorizontally );
-			if( fieldsMatrix[y][x].getFieldUsageType() == FieldUsageType.Empty ) {
+			if( fieldsMatrix[i][j].getFieldUsageType() == FieldUsageType.Empty ) {
 				User u = new User();
-				Point p = new Point( x, y );
+				Point p = new Point( j, i );
 				addVertex(u, p);
 				users.put(u.getKey(), u);
-				fieldsMatrix[y][x].setFieldUser(u);
+				fieldsMatrix[i][j].setFieldUser(u);
 				numberOfUsersCreated++;
 			}
 		}
@@ -103,6 +105,15 @@ public class SimulationMap extends Graph {
 
 	public Field[][] getFieldsMatrix() {
 		return fieldsMatrix;
+	}
+	
+	public Field getField( int x, int y ) {
+		if( x<0 || y<0 ) {
+			return null;
+		} else if( y>=fieldsMatrix.length || x>=fieldsMatrix[0].length) {
+			return null;
+		}
+		return fieldsMatrix[y][x];
 	}
 
 	public Collection<BaseStation> getBasestations() {

@@ -2,7 +2,6 @@ package test;
 
 import model.SimulationMap;
 import model.Model;
-import model.SimulationMap;
 
 public class TestModel {
 	

@@ -1,5 +1,6 @@
 package control;
 
+import model.Model;
 import view.View;
 
 public class Control {
@@ -13,6 +14,8 @@ public class Control {
 	}
 	
 	public void initialize() {
+		Model.getModel().createSimulationMap(7, 14);
+		System.out.println( Model.getModel().getSimulationMap() );
 		View.getView().initialize();
 	}
 

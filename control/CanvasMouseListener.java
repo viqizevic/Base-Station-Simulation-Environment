@@ -12,13 +12,9 @@ import view.View;
 public class CanvasMouseListener implements MouseListener {
 
     void eventOutput(String eventDescription, MouseEvent e) {
-        String output = eventDescription + " detected on "
-                + e.getComponent().getClass().getName()
-                + ".\n";
         Point fieldCoordinate = getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY());
-        output += fieldCoordinate+"\n";
-        Field field = Model.getModel().getSimulationMap().getFieldsMatrix()[fieldCoordinate.y][fieldCoordinate.x];
-        output += field.getFieldUsageType();
+        Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
+        String output = "" + field.getFieldUser();
         View.getView().showMessage(output);
     }
     
