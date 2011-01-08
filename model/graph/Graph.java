@@ -7,7 +7,11 @@ import java.util.Vector;
 
 import model.Model;
 
-
+/**
+ * Graph G=(V,E).
+ * @author vicky
+ *
+ */
 public class Graph {
 	
 	//flag for debug mode

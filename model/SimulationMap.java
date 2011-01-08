@@ -29,10 +29,21 @@ public class SimulationMap extends Graph {
 	 */
 	private Field[][] fieldsMatrix;
 
+	/**
+	 * A hash map for the base stations.
+	 */
 	private HashMap<Key, BaseStation> basestations;
-    
+
+	/**
+	 * A hash map for the users.
+	 */
     private HashMap<Key, User> users;
 
+    /**
+     * Construct a simulation map.
+     * @param baseStationsNumber The number of base stations in the map.
+     * @param usersNumber The number of the users in the map.
+     */
     public SimulationMap( int baseStationsNumber, int usersNumber ) {
     	super();
     	basestations = new HashMap<Key, BaseStation>();
@@ -103,10 +114,21 @@ public class SimulationMap extends Graph {
 		}
     }
 
+    /**
+     * Get the matrix of the fields.
+     * @return The matrix with elements from the type {@link Field}.
+     */
 	public Field[][] getFieldsMatrix() {
 		return fieldsMatrix;
 	}
-	
+
+	/**
+	 * Get the field with the specified coordinate in the map.
+	 * @param x The coordinate in x-axis.
+	 * @param y The coordinate in y-axis.
+	 * @return The {@link Field} with the coordinate given in the fields matrix.
+	 * <code>null</code> if the indexes x or y not in the fields matrix.
+	 */
 	public Field getField( int x, int y ) {
 		if( x<0 || y<0 ) {
 			return null;
@@ -116,10 +138,18 @@ public class SimulationMap extends Graph {
 		return fieldsMatrix[y][x];
 	}
 
+	/**
+	 * Get all the base stations.
+	 * @return A collection of the base stations.
+	 */
 	public Collection<BaseStation> getBasestations() {
 		return basestations.values();
 	}
 
+	/**
+	 * Get all the users.
+	 * @return A collection of the users.
+	 */
 	public Collection<User> getUsers() {
 		return users.values();
 	}
@@ -143,22 +173,44 @@ public class SimulationMap extends Graph {
 		}
 		return str;
 	}
-	
+
+	/**
+	 * The field in the simulation map.
+	 * @author vicky
+	 *
+	 */
 	public class Field {
-		
+
+		/**
+		 * User of the field ({@link BaseStation} or {@link User} or empty)
+		 */
 		private Vertex fieldUser;
-		
+
+		/**
+		 * Showing the usage type of the field.
+		 */
 		private FieldUsageType fieldUsageType;
-		
+
+		/**
+		 * Construct an empty field.
+		 */
 		public Field() {
 			fieldUser = null;
 			fieldUsageType = FieldUsageType.Empty;
 		}
 
+		/**
+		 * Get the user of the field.
+		 * @return The user of the field, it can be {@link BaseStation} or {@link User} or <code>null</code>.
+		 */
 		public Vertex getFieldUser() {
 			return fieldUser;
 		}
 
+		/**
+		 * Set the user of the field.
+		 * @param fieldUser The user of the field.
+		 */
 		public void setFieldUser(Vertex fieldUser) {
 			this.fieldUser = fieldUser;
 			if( fieldUser.getClass().equals(BaseStation.class) ) {
@@ -170,11 +222,20 @@ public class SimulationMap extends Graph {
 			}
 		}
 
+		/**
+		 * Get the usage type of the field.
+		 * @return The usage type.
+		 */
 		public FieldUsageType getFieldUsageType() {
 			return fieldUsageType;
 		}
 	}
-	
+
+	/**
+	 * An enum for the type of the field usage.
+	 * @author vicky
+	 *
+	 */
 	public enum FieldUsageType {
 		Empty,
 		BaseStation,

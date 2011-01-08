@@ -9,15 +9,13 @@ import model.SimulationMap.Field;
 
 import view.View;
 
+/**
+ * The mouse listener for the canvas.
+ * @author vicky
+ *
+ */
 public class CanvasMouseListener implements MouseListener {
 
-    void eventOutput(String eventDescription, MouseEvent e) {
-        Point fieldCoordinate = getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY());
-        Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
-        String output = "" + field.getFieldUser();
-        View.getView().showMessage(output);
-    }
-    
     public void mousePressed(MouseEvent e) {
     }
     
@@ -31,10 +29,19 @@ public class CanvasMouseListener implements MouseListener {
     }
     
     public void mouseClicked(MouseEvent e) {
-        eventOutput("Mouse clicked (# of clicks: "
-                + e.getClickCount() + ")", e);
+        Point fieldCoordinate = getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY());
+        Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
+        String output = "" + field.getFieldUser();
+        View.getView().showMessage(output);
     }
 
+    /**
+     * Get the coordinate of the field being clicked by the user.
+     * @param x The value of the clicked point in x-axis.
+     * @param y The value of the clicked point in y-axis.
+     * @return {@link Point} (i,j) in the fields matrix of the map.
+     * <code>null</code> if (x,y) located outside of the map.
+     */
     private Point getCoordinateOfTheClickedFieldInMap( int x, int y ) {
     	Point origin = View.getView().getOriginOfTheMapInCanvas();
     	if( x < origin.x || y < origin.y ) {

@@ -4,6 +4,11 @@
 
 package model.graph;
 
+/**
+ * Unique key for the object of the {@link Graph}.
+ * @author vicky
+ *
+ */
 public final class Key {
 
 	//unique id object

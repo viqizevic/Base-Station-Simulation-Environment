@@ -5,6 +5,11 @@ import java.util.HashMap;
 
 import model.Model;
 
+/**
+ * Vertex of the {@link Graph}.
+ * @author vicky
+ *
+ */
 public class Vertex {
 	
     //edges in

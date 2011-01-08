@@ -3,6 +3,11 @@
  */
 package model.graph;
 
+/**
+ * Attribute of an {@link Edge} or a {@link Vertex}.
+ * @author vicky
+ *
+ */
 public class Attribute {
 
     public static final int BOOLEAN = 0;

@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 import model.Model;
 
+/**
+ * Edge of the {@link Graph}.
+ * @author vicky
+ *
+ */
 public class Edge {
 
 	/**
