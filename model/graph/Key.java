@@ -35,7 +35,7 @@ public final class Key {
     }
     
     public String toString() {
-    	return "key:"+id+";";
+    	return "key:"+id;
     }
 
 }

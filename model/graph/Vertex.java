@@ -70,6 +70,13 @@ public class Vertex {
     }
     
     public String toString() {
-    	return "node:"+key;
+    	String output = "node: " +
+    			"* "+key.toString() + "\n";
+    	int k=1;
+    	for( Attribute attr : attributes.values() ) {
+    		output += "*"+k+" "+attr.toString()+"\n";
+    		k++;
+    	}
+    	return output;
     }
 }

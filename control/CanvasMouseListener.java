@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 
 import model.Model;
 import model.SimulationMap.Field;
+import model.SimulationMap.FieldUsageType;
 
 import view.View;
 
@@ -31,8 +32,13 @@ public class CanvasMouseListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         Point fieldCoordinate = getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY());
         Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
-        String output = "" + field.getFieldUser();
-        View.getView().showMessage(output);
+        if( field == null ) {
+        	return;
+        }
+        if( field.getFieldUsageType() != FieldUsageType.Empty ) {
+        	String output = "" + field.getFieldUser();
+        	View.getView().showMessage(output);
+        }
     }
 
     /**

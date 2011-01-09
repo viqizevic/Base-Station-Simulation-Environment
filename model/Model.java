@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Point;
+
 /**
  * The model of the simulation environment.
  * @author vicky
@@ -67,5 +69,13 @@ public class Model {
 			createSimulationMap(16, 32);
 		}
 		return simulationMap;
+	}
+	
+	public double distance( Point p1, Point p2 ) {
+		double x1 = p1.getX();
+		double y1 = p1.getY();
+		double x2 = p2.getX();
+		double y2 = p2.getY();
+		return Point.distance(x1, y1, x2, y2);
 	}
 }

@@ -38,13 +38,16 @@ public class Graph {
     private Vector<String> edgeAttributeDescriptions = new Vector<String>();
     
     public Graph() {
+    	isDirected = false;
+    	isEuclidean = false;
+    	isInteger = false;
     }
 
     /**
      * gets the current edge attributes keys available
      * @return a vector contains all keys of the attribute of the edges
      */
-    public Vector<Key> getCurrentEdgeAttributeKeys() {
+    public Vector<Key> getEdgeAttributeKeys() {
         return edgeAttributeKeys;
     }
 
@@ -52,7 +55,7 @@ public class Graph {
      * gets the current vertex attributes keys available
      * @return a vector contains all keys of the attribute of the vertices
      */
-    public Vector<Key> getCurrentVertexAttributeKeys() {
+    public Vector<Key> getVertexAttributeKeys() {
         return vertexAttributeKeys;
     }
 

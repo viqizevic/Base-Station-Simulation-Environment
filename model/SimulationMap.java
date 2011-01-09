@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Vector;
 
 import model.graph.Graph;
 import model.graph.Key;
@@ -30,14 +31,14 @@ public class SimulationMap extends Graph {
 	private Field[][] fieldsMatrix;
 
 	/**
-	 * A hash map for the base stations.
+	 * The subgraph containing the base stations.
 	 */
-	private HashMap<Key, BaseStation> basestations;
+	private Graph basestationsGraph;
 
 	/**
-	 * A hash map for the users.
+	 * The subgraph containing the users.
 	 */
-    private HashMap<Key, User> users;
+	private Graph usersGraph;
 
     /**
      * Construct a simulation map.
@@ -46,11 +47,9 @@ public class SimulationMap extends Graph {
      */
     public SimulationMap( int baseStationsNumber, int usersNumber ) {
     	super();
-    	basestations = new HashMap<Key, BaseStation>();
-    	users = new HashMap<Key, User>();
-		setDirected(false);
+    	basestationsGraph = new Graph();
+    	usersGraph = new Graph();
 		setEuclidian(true);
-		setInteger(false);
 		/* We divide the map into small blocks
 		 *  B1 B2 B3 B4
 		 *  B5 B6 B7 ...
@@ -75,7 +74,8 @@ public class SimulationMap extends Graph {
 				fieldsMatrix[i][j] = new Field();
 			}
 		}
-		// Create and place the base stations in the middle of a block
+		
+		// Create and place the base stations in the middle of the blocks
 		int i = 0;
 		int j = 0;
 		int numberOfBaseStationsCreated = 0;
@@ -87,7 +87,7 @@ public class SimulationMap extends Graph {
 					BaseStation bs = new BaseStation();
 					Point p = new Point(j, i);
 					addVertex(bs, p);
-					basestations.put(bs.getKey(), bs);
+					basestationsGraph.addVertex(bs, p);
 					fieldsMatrix[i][j].setFieldUser(bs);
 					numberOfBaseStationsCreated++;
 				}
@@ -107,11 +107,44 @@ public class SimulationMap extends Graph {
 				User u = new User();
 				Point p = new Point( j, i );
 				addVertex(u, p);
-				users.put(u.getKey(), u);
+				usersGraph.addVertex(u, p);
 				fieldsMatrix[i][j].setFieldUser(u);
 				numberOfUsersCreated++;
 			}
 		}
+		
+		setAttributesOfTheBasestations();
+		setAttributesOfTheUser();
+    }
+    
+    private void setAttributesOfTheBasestations() {
+    	Key transmitPowerKey = basestationsGraph.addVertexAttribute("Transmit power");
+    	for( Vertex bs : basestationsGraph.getVertices() ) {
+    		double transmitPower = 1;
+    		bs.getAttribute(transmitPowerKey).setWeight(transmitPower);
+    		bs.getAttribute(transmitPowerKey).setDescription(
+    				basestationsGraph.getVertexAttributeDescription(transmitPowerKey));
+    	}
+    }
+    
+    private void setAttributesOfTheUser() {
+    	int n = basestationsGraph.getVertices().size();
+    	Key[] distanceToBasestationsKey = new Key[n];
+    	for( int i=0; i<n; i++ ) {
+    		distanceToBasestationsKey[i] = usersGraph.addEdgeAttribute("Distance to basestation"+i);
+    	}
+    	for( Vertex u : usersGraph.getVertices() ) {
+    		int i=0;
+    		for( Vertex b : basestationsGraph.getVertices() ) {
+    			double d_ub = Model.getModel().distance(
+    					usersGraph.getVertexCoordinates(u.getKey()),
+    					basestationsGraph.getVertexCoordinates(b.getKey()) );
+    			u.getAttribute(distanceToBasestationsKey[i]).setWeight(d_ub);
+    			u.getAttribute(distanceToBasestationsKey[i]).setDescription(
+    					usersGraph.getEdgeAttributeDescription(distanceToBasestationsKey[i]));
+    			i++;
+    		}
+    	}
     }
 
     /**
@@ -142,16 +175,24 @@ public class SimulationMap extends Graph {
 	 * Get all the base stations.
 	 * @return A collection of the base stations.
 	 */
-	public Collection<BaseStation> getBasestations() {
-		return basestations.values();
+	public Vector<BaseStation> getBasestations() {
+		Vector<BaseStation> basestations = new Vector<BaseStation>();
+		for( Vertex v : basestationsGraph.getVertices() ) {
+			basestations.add( (BaseStation) v );
+		}
+		return basestations;
 	}
 
 	/**
 	 * Get all the users.
 	 * @return A collection of the users.
 	 */
-	public Collection<User> getUsers() {
-		return users.values();
+	public Vector<User> getUsers() {
+		Vector<User> users = new Vector<User>();
+		for( Vertex v : usersGraph.getVertices() ) {
+			users.add( (User) v );
+		}
+		return users;
 	}
 
 	public String toString() {

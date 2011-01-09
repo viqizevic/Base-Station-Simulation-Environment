@@ -1,95 +1,106 @@
-/**
- * Stores additional data in vertices or edges
- */
+
 package model.graph;
 
 /**
  * Attribute of an {@link Edge} or a {@link Vertex}.
+ * This class used to store additional data of an {@link Edge} or a {@link Vertex}.
  * @author vicky
  *
  */
 public class Attribute {
 
-    public static final int BOOLEAN = 0;
-    public static final int BYTE = 1;
-    public static final int INTEGER = 2;
-    public static final int LONG = 3;
-    public static final int FLOAT = 4;
-    public static final int DOUBLE = 5;
-    public static final int OTHER = 6;
+    /**
+     * Weight value of the attribute.
+     */
+    private Object weight;
 
-    //weight of attribute
-    private Object weight = null;
+    /**
+     * Type of the weight.
+     */
+    private Type type;
+    
+    private String description;
 
-    //type of attribute
-    private int type = -1;
-
-    public Attribute(Object weight) {
-
-        this.weight = weight;
-
-        if ("java.lang.Integer".equals(weight.getClass().getName())) {
-            this.type = Attribute.INTEGER;
-        } else if ("java.lang.Boolean".equals(weight.getClass().getName())) {
-            this.type = Attribute.BOOLEAN;
-        } else if ("java.lang.Byte".equals(weight.getClass().getName())) {
-            this.type = Attribute.BYTE;
-        } else if ("java.lang.Long".equals(weight.getClass().getName())) {
-            this.type = Attribute.LONG;
-        } else if ("java.lang.Float".equals(weight.getClass().getName())) {
-            this.type = Attribute.FLOAT;
-        } else if ("java.lang.Double".equals(weight.getClass().getName())) {
-            this.type = Attribute.DOUBLE;
-        } else {
-            this.type = Attribute.OTHER;
-        }
-    }
-
+    /**
+     * Construct an attribute with weight <code>null</code>.
+     */
     public Attribute() {
-    }
-
-    public Attribute(Object weight, int type) {
-        this.weight = weight;
-        this.type = type;
-    }
-
-    //getter and setter
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public Object getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Object weight) {
-    	
-        if (type == -1 && weight != null) {
-            if ("java.lang.Integer".equals(weight.getClass().getName())) {
-                this.type = Attribute.INTEGER;
-            } else if ("java.lang.Boolean".equals(weight.getClass().getName())) {
-                this.type = Attribute.BOOLEAN;
-            } else if ("java.lang.Byte".equals(weight.getClass().getName())) {
-                this.type = Attribute.BYTE;
-            } else if ("java.lang.Long".equals(weight.getClass().getName())) {
-                this.type = Attribute.LONG;
-            } else if ("java.lang.Float".equals(weight.getClass().getName())) {
-                this.type = Attribute.FLOAT;
-            } else if ("java.lang.Double".equals(weight.getClass().getName())) {
-                this.type = Attribute.DOUBLE;
-            } else {
-                this.type = Attribute.OTHER;
-            }
-        }
-        this.weight = weight;
-
+    	weight = null;
+    	type = Type.UNDEFINED;
+    	description = null;
     }
     
-    public String toString() {
-    	return "attr:"+this.type+"-"+this.weight+";";
+    public Attribute(Object weight, Type type) {
+    	this.weight = weight;
+    	this.type = type;
+    	description = null;
+    }
+
+    public Attribute(Object weight) {
+        this.weight = weight;
+        setType(weight);
+    	description = null;
+    }
+
+    private void setType( Object weight ) {
+    	if( weight == null ) {
+    		type = Type.UNDEFINED;
+    		return;
+    	}
+        if (Integer.class.getName().equals(weight.getClass().getName())) {
+            type = Type.INTEGER;
+        } else if (Boolean.class.getName().equals(weight.getClass().getName())) {
+            type = Type.BOOLEAN;
+        } else if (Byte.class.getName().equals(weight.getClass().getName())) {
+            type = Type.BYTE;
+        } else if (Long.class.getName().equals(weight.getClass().getName())) {
+            type = Type.LONG;
+        } else if (Float.class.getName().equals(weight.getClass().getName())) {
+            type = Type.FLOAT;
+        } else if (Double.class.getName().equals(weight.getClass().getName())) {
+            type = Type.DOUBLE;
+        } else {
+            type = Type.OTHER;
+        }
+    }
+    
+    public Object getWeight() {
+    	return weight;
+    }
+    
+    public void setWeight(Object weight) {
+    	this.weight = weight;
+    	setType(weight);
+    }
+
+    public Type getType() {
+        return type;
+    }
+    
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String toString() {
+		String str = "attr: "+weight;
+		if( description != null ) {
+			str += " ("+description+")";
+		}
+		return str;
+    }
+    
+    public enum Type {
+    	UNDEFINED,
+        BOOLEAN,
+        BYTE,
+        INTEGER,
+        LONG,
+        FLOAT,
+        DOUBLE,
+        OTHER
     }
 }
