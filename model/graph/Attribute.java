@@ -87,6 +87,9 @@ public class Attribute {
 
 	public String toString() {
 		String str = "attr: "+weight;
+		if( type == Type.DOUBLE ) {
+			str = "attr: "+String.format("%10.2f", weight).trim();
+		}
 		if( description != null ) {
 			str += " ("+description+")";
 		}

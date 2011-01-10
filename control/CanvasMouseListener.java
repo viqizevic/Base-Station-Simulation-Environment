@@ -31,13 +31,13 @@ public class CanvasMouseListener implements MouseListener {
     
     public void mouseClicked(MouseEvent e) {
         Point fieldCoordinate = getCoordinateOfTheClickedFieldInMap(e.getX(), e.getY());
-        Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
-        if( field == null ) {
+        if( fieldCoordinate == null ) {
         	return;
         }
+        Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
         if( field.getFieldUsageType() != FieldUsageType.Empty ) {
         	String output = "" + field.getFieldUser();
-        	View.getView().showMessage(output);
+        	View.getView().setText(output);
         }
     }
 

@@ -1,3 +1,11 @@
+
+/**
+ * @mainpage Base Station Simulation Environment
+ * 
+ * A simulation environment to observe
+ * the multi-point coordination of some base stations.
+ */
+
 package control;
 
 /**

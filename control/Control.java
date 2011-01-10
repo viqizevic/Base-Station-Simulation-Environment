@@ -32,7 +32,7 @@ public class Control {
 	 * Initialize the {@link View} and the {@link Model}.
 	 */
 	public void initialize() {
-		Model.getModel().createSimulationMap(7, 14);
+//		Model.getModel().createSimulationMap(7, 14);
 		View.getView().initialize();
 	}
 

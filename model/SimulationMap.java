@@ -2,8 +2,6 @@
 package model;
 
 import java.awt.Point;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
@@ -100,9 +98,9 @@ public class SimulationMap extends Graph {
 			i = random.nextInt(totalFieldNumberVertically);
 			j = random.nextInt(totalFieldNumberHorizontally);
 //			do {
-//				y = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
-//				x = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
-//			} while( x<0 || y<0 || y>=totalFieldNumberVertically || x>=totalFieldNumberHorizontally );
+//				i = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
+//				j = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
+//			} while( i<0 || j<0 || i>=totalFieldNumberVertically || j>=totalFieldNumberHorizontally );
 			if( fieldsMatrix[i][j].getFieldUsageType() == FieldUsageType.Empty ) {
 				User u = new User();
 				Point p = new Point( j, i );
@@ -134,15 +132,14 @@ public class SimulationMap extends Graph {
     		distanceToBasestationsKey[i] = usersGraph.addEdgeAttribute("Distance to basestation"+i);
     	}
     	for( Vertex u : usersGraph.getVertices() ) {
-    		int i=0;
     		for( Vertex b : basestationsGraph.getVertices() ) {
+    			int i = b.getKey().getId().intValue();
     			double d_ub = Model.getModel().distance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );
     			u.getAttribute(distanceToBasestationsKey[i]).setWeight(d_ub);
     			u.getAttribute(distanceToBasestationsKey[i]).setDescription(
     					usersGraph.getEdgeAttributeDescription(distanceToBasestationsKey[i]));
-    			i++;
     		}
     	}
     }

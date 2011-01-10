@@ -48,14 +48,18 @@ public class View {
 	}
 
 	public int getWidthOfEachFieldInCanvas() {
-		return window.getWidthOfEachFieldInCanvas();
+		return window.getSimulationMapCanvas().getWidthOfEachField();
 	}
 
 	public int getHeightOfEachFieldInCanvas() {
-		return window.getHeightOfEachFieldInCanvas();
+		return window.getSimulationMapCanvas().getHeightOfEachField();
 	}
 
 	public Point getOriginOfTheMapInCanvas() {
-		return window.getOriginOfTheMapInCanvas();
+		return window.getSimulationMapCanvas().getOriginOfTheMap();
+	}
+	
+	public void setText( String text ) {
+		window.setText(text);
 	}
 }
