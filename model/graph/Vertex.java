@@ -77,6 +77,11 @@ public class Vertex {
     		output += "*"+k+" "+attr.toString()+"\n";
     		k++;
     	}
+    	k=1;
+    	for( Edge e : outgoingEdges.values() ) {
+    		output += "*"+k+" "+e.toString()+"\n";
+    		k++;
+    	}
     	return output;
     }
 }

@@ -100,6 +100,6 @@ public class Edge {
     }
     
     public String toString() {
-    	return "edge:"+key;
+    	return "edge: * "+key;
     }
 }

@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import model.BaseStation;
 import model.SimulationMap;
 import model.User;
+import model.graph.Edge;
+import model.graph.Vertex;
 
 public class SimulationMapCanvas extends JPanel {
 	
@@ -32,6 +34,8 @@ public class SimulationMapCanvas extends JPanel {
 	private BufferedImage userImg;
 	
 	private boolean hideGrids;
+	
+	private Vertex highlightedVertex;
 
 	public SimulationMapCanvas( SimulationMap map ) {
 		super();
@@ -52,7 +56,18 @@ public class SimulationMapCanvas extends JPanel {
 	public void paintComponent( Graphics g ) {
 		Graphics2D g2d = (Graphics2D) g;
 		setFields(g2d);
-		
+		if( highlightedVertex != null ) {
+			g2d.setColor( Color.YELLOW );
+			Point vCoordInMap = map.getVertexCoordinates(highlightedVertex.getKey());
+			Point vCoordInCanvas = fieldsStartCoordinateInCanvas[vCoordInMap.y][vCoordInMap.x];
+			g2d.drawRect(vCoordInCanvas.x, vCoordInCanvas.y, fieldWidth, fieldHeight);
+			for( Edge e_vw : highlightedVertex.getOutgoingEdges() ) {
+				Point wCoordInMap = map.getVertexCoordinates(e_vw.getTail().getKey());
+				Point wCoordInCanvas = fieldsStartCoordinateInCanvas[wCoordInMap.y][wCoordInMap.x];
+				g2d.drawLine(vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2,
+						wCoordInCanvas.x+fieldWidth/2, wCoordInCanvas.y+fieldHeight/2);
+			}
+		}
 		drawBaseStationsAndUsers(g2d);
 	}
 	
@@ -69,8 +84,8 @@ public class SimulationMapCanvas extends JPanel {
 		int mapHeight = m*fieldHeight;
 		int mapOrigin_x = (width-mapWidth)/2;
 		int mapOrigin_y = (height-mapHeight)/2;
-		
-//		g2d.setColor( Color.getHSBColor(216, 244, 171) );
+
+		// TODO draw another color as the background of the map
 		g2d.setColor( Color.WHITE );
 		g2d.fillRect(mapOrigin_x, mapOrigin_y, mapWidth, mapHeight);
 		
@@ -84,6 +99,18 @@ public class SimulationMapCanvas extends JPanel {
 				}
 				fieldsStartCoordinateInCanvas[i][j] = new Point(fieldPos_x, fieldPos_y);
 			}
+		}
+	}
+	
+	private void drawAllEdges( Graphics2D g2d ) {
+		g2d.setColor( Color.GRAY );
+		for( Edge e_uv : map.getEdges() ) {
+			Point uCoordInMap = map.getVertexCoordinates(e_uv.getHead().getKey());
+			Point uCoordInCanvas = fieldsStartCoordinateInCanvas[uCoordInMap.y][uCoordInMap.x];
+			Point vCoordInMap = map.getVertexCoordinates(e_uv.getTail().getKey());
+			Point vCoordInCanvas = fieldsStartCoordinateInCanvas[vCoordInMap.y][vCoordInMap.x];
+			g2d.drawLine(uCoordInCanvas.x+fieldWidth/2, uCoordInCanvas.y+fieldHeight/2,
+					vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2);
 		}
 	}
 	
@@ -133,6 +160,11 @@ public class SimulationMapCanvas extends JPanel {
 	
 	public void toggleGrids() {
 		hideGrids = !hideGrids;
+	}
+	
+	public void highlightVertex( Vertex v ) {
+		highlightedVertex = v;
+		repaint();
 	}
 	
 	public void repaint() {

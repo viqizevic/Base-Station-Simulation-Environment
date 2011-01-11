@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.Random;
 import java.util.Vector;
 
+import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Key;
 import model.graph.Vertex;
@@ -113,6 +114,8 @@ public class SimulationMap extends Graph {
 		
 		setAttributesOfTheBasestations();
 		setAttributesOfTheUser();
+		
+		setEdges();
     }
     
     private void setAttributesOfTheBasestations() {
@@ -123,6 +126,11 @@ public class SimulationMap extends Graph {
     		bs.getAttribute(transmitPowerKey).setDescription(
     				basestationsGraph.getVertexAttributeDescription(transmitPowerKey));
     	}
+    	/**
+    	 * TODO add more attribute
+    	 * like antenna height, type (i.e. non-directional),
+    	 * maximal user, user assigned to and sending frequency 
+    	 */
     }
     
     private void setAttributesOfTheUser() {
@@ -134,12 +142,34 @@ public class SimulationMap extends Graph {
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex b : basestationsGraph.getVertices() ) {
     			int i = b.getKey().getId().intValue();
-    			double d_ub = Model.getModel().distance(
+    			double d_ub = Model.getModel().computeDistance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );
     			u.getAttribute(distanceToBasestationsKey[i]).setWeight(d_ub);
     			u.getAttribute(distanceToBasestationsKey[i]).setDescription(
     					usersGraph.getEdgeAttributeDescription(distanceToBasestationsKey[i]));
+    		}
+    	}
+    	/**
+    	 * TODO add more attribute
+    	 * like antenna height, type (i.e. non-directional),
+    	 * base station connected to, channel frequency,
+    	 * fading coefficient to all base stations or SINR
+    	 */
+    }
+    
+    private void setEdges() {
+    	for( Vertex u : usersGraph.getVertices() ) {
+    		for( Vertex bs : basestationsGraph.getVertices() ) {
+    			this.addEdge(u, bs);
+    		}
+    	}
+    	for( Vertex bs_1 : basestationsGraph.getVertices() ) {
+    		for( Vertex bs_2 : basestationsGraph.getVertices() ) {
+    			if( !bs_1.equals(bs_2) ) {
+    				this.addEdge(bs_1, bs_2);
+    				// FIXME creating to many edges..
+    			}
     		}
     	}
     }

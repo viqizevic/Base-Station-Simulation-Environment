@@ -25,6 +25,11 @@ public class Model {
     private SimulationMap simulationMap;
 
     /**
+     * The thread for the simulation.
+     */
+    private SimulationThread simulationThread;
+    
+    /**
      * Construct the model.
      */
 	public Model() {
@@ -71,11 +76,24 @@ public class Model {
 		return simulationMap;
 	}
 	
-	public double distance( Point p1, Point p2 ) {
+	public double computeDistance( Point p1, Point p2 ) {
 		double x1 = p1.getX();
 		double y1 = p1.getY();
 		double x2 = p2.getX();
 		double y2 = p2.getY();
 		return Point.distance(x1, y1, x2, y2);
+	}
+	
+	public void startSimulation() {
+		if( simulationThread == null ) {
+			simulationThread = new SimulationThread();
+			new Thread(simulationThread).run();
+		}
+	}
+	
+	public void stopSimulation() {
+		if( simulationThread != null ) {
+			simulationThread.shouldStop();
+		}
 	}
 }

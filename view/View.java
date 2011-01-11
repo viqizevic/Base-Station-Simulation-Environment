@@ -5,6 +5,7 @@ import java.awt.Point;
 import javax.swing.JOptionPane;
 
 import model.Model;
+import model.graph.Vertex;
 
 public class View {
 
@@ -35,7 +36,7 @@ public class View {
 
 	/**
 	 * Initialize the layout.
-	 * This command should be called at the first time to start initializing the layout.
+	 * Call this command to show the GUI.
 	 */
 	public void initialize() {}
 
@@ -57,6 +58,10 @@ public class View {
 
 	public Point getOriginOfTheMapInCanvas() {
 		return window.getSimulationMapCanvas().getOriginOfTheMap();
+	}
+	
+	public void highlightVertex( Vertex v ) {
+		window.getSimulationMapCanvas().highlightVertex(v);
 	}
 	
 	public void setText( String text ) {

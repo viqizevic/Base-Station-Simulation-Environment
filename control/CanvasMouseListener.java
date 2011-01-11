@@ -37,6 +37,7 @@ public class CanvasMouseListener implements MouseListener {
         Field field = Model.getModel().getSimulationMap().getField(fieldCoordinate.x,fieldCoordinate.y);
         if( field.getFieldUsageType() != FieldUsageType.Empty ) {
         	String output = "" + field.getFieldUser();
+        	View.getView().highlightVertex(field.getFieldUser());
         	View.getView().setText(output);
         }
     }
