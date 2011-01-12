@@ -76,12 +76,20 @@ public class Model {
 		return simulationMap;
 	}
 	
-	public double computeDistance( Point p1, Point p2 ) {
+	public double computeEuclidianDistance( Point p1, Point p2 ) {
 		double x1 = p1.getX();
 		double y1 = p1.getY();
 		double x2 = p2.getX();
 		double y2 = p2.getY();
 		return Point.distance(x1, y1, x2, y2);
+	}
+	
+	public int computeManhattanDistance( Point p1, Point p2 ) {
+		int x1 = p1.x;
+		int y1 = p1.y;
+		int x2 = p2.x;
+		int y2 = p2.y;
+		return Math.max( Math.abs(x1-x2), Math.abs(y1-y2) );
 	}
 	
 	public void startSimulation() {

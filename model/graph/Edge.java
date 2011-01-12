@@ -100,6 +100,12 @@ public class Edge {
     }
     
     public String toString() {
-    	return "edge: * "+key;
+    	String output = "edge: " + head.getKey().getId() + " -> " + tail.getKey().getId();
+    	int k=1;
+    	for( Attribute attr : attributes.values() ) {
+    		output += " "+attr.toString();
+    		k++;
+    	}
+    	return output;
     }
 }

@@ -62,6 +62,13 @@ public class SimulationMapCanvas extends JPanel {
 			Point vCoordInCanvas = fieldsStartCoordinateInCanvas[vCoordInMap.y][vCoordInMap.x];
 			g2d.drawRect(vCoordInCanvas.x, vCoordInCanvas.y, fieldWidth, fieldHeight);
 			for( Edge e_vw : highlightedVertex.getOutgoingEdges() ) {
+				if( highlightedVertex.getClass().equals(User.class) ) {
+					if( (Boolean) e_vw.getAttribute(map.getAssignmentKey()).getWeight() ) {
+						g2d.setColor( Color.RED );
+					} else {
+						g2d.setColor( Color.YELLOW );
+					}
+				}
 				Point wCoordInMap = map.getVertexCoordinates(e_vw.getTail().getKey());
 				Point wCoordInCanvas = fieldsStartCoordinateInCanvas[wCoordInMap.y][wCoordInMap.x];
 				g2d.drawLine(vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2,

@@ -39,6 +39,8 @@ public class SimulationMap extends Graph {
 	 */
 	private Graph usersGraph;
 
+	private Key assignmentKey;
+
     /**
      * Construct a simulation map.
      * @param baseStationsNumber The number of base stations in the map.
@@ -142,7 +144,7 @@ public class SimulationMap extends Graph {
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex b : basestationsGraph.getVertices() ) {
     			int i = b.getKey().getId().intValue();
-    			double d_ub = Model.getModel().computeDistance(
+    			double d_ub = Model.getModel().computeEuclidianDistance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );
     			u.getAttribute(distanceToBasestationsKey[i]).setWeight(d_ub);
@@ -164,14 +166,26 @@ public class SimulationMap extends Graph {
     			this.addEdge(u, bs);
     		}
     	}
+    	assignmentKey = this.addEdgeAttribute("Connection through this edge");
+    	for( Edge e : this.getEdges() ) {
+    		e.getAttribute(assignmentKey).setWeight(false);
+    		e.getAttribute(assignmentKey).setDescription(
+    				this.getEdgeAttributeDescription(assignmentKey));
+    	}
     	Vertex[] basestations = new Vertex[basestationsGraph.getVertices().size()];
     	basestationsGraph.getVertices().toArray(basestations);
     	for( int i=0; i<basestations.length; i++ ) {
     		Vertex bs_i = basestations[i];
     		for( int j=i+1; j<basestations.length; j++ ) {
     			Vertex bs_j = basestations[j];
-    			this.addEdge(bs_i, bs_j);
+    			basestationsGraph.addEdge(bs_i, bs_j);
     		}
+    	}
+    	Key cooperationKey = basestationsGraph.addEdgeAttribute("Cooperation through this edge");
+    	for( Edge e : basestationsGraph.getEdges() ) {
+    		e.getAttribute(cooperationKey).setWeight(false);
+    		e.getAttribute(cooperationKey).setDescription(
+    				basestationsGraph.getEdgeAttributeDescription(cooperationKey));
     	}
     }
 
@@ -221,6 +235,10 @@ public class SimulationMap extends Graph {
 			users.add( (User) v );
 		}
 		return users;
+	}
+
+	public Key getAssignmentKey() {
+		return assignmentKey;
 	}
 
 	public String toString() {

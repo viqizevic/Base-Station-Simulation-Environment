@@ -1,5 +1,6 @@
 package model.graph;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -77,10 +78,16 @@ public class Vertex {
     		output += "*"+k+" "+attr.toString()+"\n";
     		k++;
     	}
-    	k=1;
+    	String[] edgeStrings = new String[outgoingEdges.size()];
     	for( Edge e : outgoingEdges.values() ) {
-    		output += "*"+k+" "+e.toString()+"\n";
-    		k++;
+    		k = e.getTail().getKey().getId().intValue();
+    		if( k > this.getKey().getId().intValue() ) {
+    			k--;
+    		}
+    		edgeStrings[k] = e.toString();
+    	}
+    	for( k=0; k<edgeStrings.length; k++ ) {
+    		output += "*"+k+" "+edgeStrings[k]+"\n";
     	}
     	return output;
     }
