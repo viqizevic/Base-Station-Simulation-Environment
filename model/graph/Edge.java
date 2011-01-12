@@ -82,6 +82,10 @@ public class Edge {
         }
         return (attributes.get(k));
     }
+    
+    public boolean hasAttribute(Key k) {
+    	return attributes.containsKey(k);
+    }
 
     public Attribute removeAttribute(Key k) {
         return (attributes.remove(k));

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,6 +16,7 @@ import model.BaseStation;
 import model.SimulationMap;
 import model.User;
 import model.graph.Edge;
+import model.graph.Key;
 import model.graph.Vertex;
 
 public class SimulationMapCanvas extends JPanel {
@@ -56,25 +58,7 @@ public class SimulationMapCanvas extends JPanel {
 	public void paintComponent( Graphics g ) {
 		Graphics2D g2d = (Graphics2D) g;
 		setFields(g2d);
-		if( highlightedVertex != null ) {
-			g2d.setColor( Color.YELLOW );
-			Point vCoordInMap = map.getVertexCoordinates(highlightedVertex.getKey());
-			Point vCoordInCanvas = fieldsStartCoordinateInCanvas[vCoordInMap.y][vCoordInMap.x];
-			g2d.drawRect(vCoordInCanvas.x, vCoordInCanvas.y, fieldWidth, fieldHeight);
-			for( Edge e_vw : highlightedVertex.getOutgoingEdges() ) {
-				if( highlightedVertex.getClass().equals(User.class) ) {
-					if( (Boolean) e_vw.getAttribute(map.getAssignmentKey()).getWeight() ) {
-						g2d.setColor( Color.RED );
-					} else {
-						g2d.setColor( Color.YELLOW );
-					}
-				}
-				Point wCoordInMap = map.getVertexCoordinates(e_vw.getTail().getKey());
-				Point wCoordInCanvas = fieldsStartCoordinateInCanvas[wCoordInMap.y][wCoordInMap.x];
-				g2d.drawLine(vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2,
-						wCoordInCanvas.x+fieldWidth/2, wCoordInCanvas.y+fieldHeight/2);
-			}
-		}
+		highlightVertex(g2d);
 		drawBaseStationsAndUsers(g2d);
 	}
 	
@@ -96,6 +80,10 @@ public class SimulationMapCanvas extends JPanel {
 		g2d.setColor( Color.WHITE );
 		g2d.fillRect(mapOrigin_x, mapOrigin_y, mapWidth, mapHeight);
 		
+		float dash[] = {4.0f};
+		BasicStroke standardStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, 
+				BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
+		g2d.setStroke(standardStroke);
 		g2d.setColor( Color.GRAY );
 		for( int i=0; i<m; i++ ) {
 			for( int j=0; j<n; j++ ) {
@@ -105,6 +93,36 @@ public class SimulationMapCanvas extends JPanel {
 					g2d.drawRect( fieldPos_x, fieldPos_y, fieldWidth, fieldHeight );
 				}
 				fieldsStartCoordinateInCanvas[i][j] = new Point(fieldPos_x, fieldPos_y);
+			}
+		}
+	}
+	
+	private void highlightVertex( Graphics2D g2d ) {
+		if( highlightedVertex != null ) {
+			float dash[] = {4.0f};
+			BasicStroke standardStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, 
+					BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
+			g2d.setStroke(standardStroke);
+			float dash2[] = {3.0f};
+			BasicStroke specialStroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, 
+					BasicStroke.JOIN_MITER, 10.0f, dash2, 0.0f);
+			g2d.setColor( Color.YELLOW );
+			Point vCoordInMap = map.getVertexCoordinates(highlightedVertex.getKey());
+			Point vCoordInCanvas = fieldsStartCoordinateInCanvas[vCoordInMap.y][vCoordInMap.x];
+			g2d.drawRect(vCoordInCanvas.x, vCoordInCanvas.y, fieldWidth, fieldHeight);
+			for( Edge e_vw : highlightedVertex.getOutgoingEdges() ) {
+				g2d.setStroke(standardStroke);
+				g2d.setColor( Color.YELLOW );
+				if( e_vw.hasAttribute(map.getAssignmentKey()) ) {
+					if( (Boolean) e_vw.getAttribute(map.getAssignmentKey()).getWeight() ) {
+						g2d.setStroke(specialStroke);
+						g2d.setColor( Color.RED );
+					}
+				}
+				Point wCoordInMap = map.getVertexCoordinates(e_vw.getTail().getKey());
+				Point wCoordInCanvas = fieldsStartCoordinateInCanvas[wCoordInMap.y][wCoordInMap.x];
+				g2d.drawLine(vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2,
+						wCoordInCanvas.x+fieldWidth/2, wCoordInCanvas.y+fieldHeight/2);
 			}
 		}
 	}

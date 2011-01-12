@@ -2,7 +2,7 @@ package model;
 
 import model.graph.Edge;
 
-public class SimulationThread implements Runnable {
+public class SimulationThread extends Thread {
 
 	private volatile boolean shallRun;
 	
@@ -13,20 +13,29 @@ public class SimulationThread implements Runnable {
 	public void run() {
 		SimulationMap map = Model.getModel().getSimulationMap();
 		for( User u : map.getUsers() ) {
+			double minDistance = Double.MAX_VALUE;
+			BaseStation bsToRequest = null;
 			for( BaseStation bs : map.getBasestations() ) {
-				int manhattanDistance = Model.getModel().computeManhattanDistance(
+				double euclidianDistance = Model.getModel().computeEuclidianDistance(
 						map.getVertexCoordinates(u.getKey()), map.getVertexCoordinates(bs.getKey()));
-				if( manhattanDistance <= 2 ) {
-					for( Edge e : u.getOutgoingEdges() ) {
-						if( e.getTail().equals(bs) ) {
-							e.getAttribute(map.getAssignmentKey()).setWeight(true);
-						}
-					}
+				if( euclidianDistance < minDistance ) {
+					minDistance = euclidianDistance;
+					bsToRequest = bs;
+				}
+			}
+			for( Edge e : u.getOutgoingEdges() ) {
+				if( e.getTail().equals(bsToRequest) ) {
+					e.getAttribute(map.getAssignmentKey()).setWeight(true);
 				}
 			}
 		}
 		while( shallRun ) {
 			// TODO add simulation process
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

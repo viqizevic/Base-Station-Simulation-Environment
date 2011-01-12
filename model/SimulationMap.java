@@ -122,11 +122,21 @@ public class SimulationMap extends Graph {
     
     private void setAttributesOfTheBasestations() {
     	Key transmitPowerKey = basestationsGraph.addVertexAttribute("Transmit power");
+    	Key baseStationHeightKey = basestationsGraph.addVertexAttribute("Base station height");
+    	Key maximalUserNumberKey = basestationsGraph.addVertexAttribute("Maximal number of users");
     	for( Vertex bs : basestationsGraph.getVertices() ) {
-    		double transmitPower = 1;
+    		double transmitPower = 1; // 1 Watt
     		bs.getAttribute(transmitPowerKey).setWeight(transmitPower);
     		bs.getAttribute(transmitPowerKey).setDescription(
     				basestationsGraph.getVertexAttributeDescription(transmitPowerKey));
+    		double baseStationHeight = 30; // 30 m
+    		bs.getAttribute(baseStationHeightKey).setWeight(baseStationHeight);
+    		bs.getAttribute(baseStationHeightKey).setDescription(
+    				basestationsGraph.getVertexAttributeDescription(baseStationHeightKey));
+    		int maximalUserNumber = 5;
+    		bs.getAttribute(maximalUserNumberKey).setWeight(maximalUserNumber);
+    		bs.getAttribute(maximalUserNumberKey).setDescription(
+    				basestationsGraph.getVertexAttributeDescription(maximalUserNumberKey));
     	}
     	/**
     	 * TODO add more attribute
@@ -139,11 +149,12 @@ public class SimulationMap extends Graph {
     	int n = basestationsGraph.getVertices().size();
     	Key[] distanceToBasestationsKey = new Key[n];
     	for( int i=0; i<n; i++ ) {
-    		distanceToBasestationsKey[i] = usersGraph.addEdgeAttribute("Distance to basestation"+i);
+    		distanceToBasestationsKey[i] = usersGraph.addEdgeAttribute("Distance to bs_"+i);
     	}
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex b : basestationsGraph.getVertices() ) {
     			int i = b.getKey().getId().intValue();
+    			// FIXME should be careful here, since we use the id of the key..
     			double d_ub = Model.getModel().computeEuclidianDistance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );

@@ -95,7 +95,7 @@ public class Model {
 	public void startSimulation() {
 		if( simulationThread == null ) {
 			simulationThread = new SimulationThread();
-			new Thread(simulationThread).run();
+			simulationThread.run();
 		}
 	}
 	
