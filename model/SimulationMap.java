@@ -164,12 +164,13 @@ public class SimulationMap extends Graph {
     			this.addEdge(u, bs);
     		}
     	}
-    	for( Vertex bs_1 : basestationsGraph.getVertices() ) {
-    		for( Vertex bs_2 : basestationsGraph.getVertices() ) {
-    			if( !bs_1.equals(bs_2) ) {
-    				this.addEdge(bs_1, bs_2);
-    				// FIXME creating to many edges..
-    			}
+    	Vertex[] basestations = new Vertex[basestationsGraph.getVertices().size()];
+    	basestationsGraph.getVertices().toArray(basestations);
+    	for( int i=0; i<basestations.length; i++ ) {
+    		Vertex bs_i = basestations[i];
+    		for( int j=i+1; j<basestations.length; j++ ) {
+    			Vertex bs_j = basestations[j];
+    			this.addEdge(bs_i, bs_j);
     		}
     	}
     }
