@@ -97,6 +97,9 @@ public class SimulationMap extends Graph {
 		// Create and place the users randomly
 		int numberOfUsersCreated = 0;
 		while( numberOfUsersCreated < usersNumber ) {
+			/**
+			 * TODO set a random user generator class
+			 */
 			Random random = new Random();
 			i = random.nextInt(totalFieldNumberVertically);
 			j = random.nextInt(totalFieldNumberHorizontally);
@@ -124,16 +127,16 @@ public class SimulationMap extends Graph {
     	Key transmitPowerKey = basestationsGraph.addVertexAttribute("Transmit power");
     	Key baseStationHeightKey = basestationsGraph.addVertexAttribute("Base station height");
     	Key maximalUserNumberKey = basestationsGraph.addVertexAttribute("Maximal number of users");
+    	double transmitPower = 1; // 1 Watt
+    	double baseStationHeight = 30; // 30 m
+    	int maximalUserNumber = 5;
     	for( Vertex bs : basestationsGraph.getVertices() ) {
-    		double transmitPower = 1; // 1 Watt
     		bs.getAttribute(transmitPowerKey).setWeight(transmitPower);
     		bs.getAttribute(transmitPowerKey).setDescription(
     				basestationsGraph.getVertexAttributeDescription(transmitPowerKey));
-    		double baseStationHeight = 30; // 30 m
     		bs.getAttribute(baseStationHeightKey).setWeight(baseStationHeight);
     		bs.getAttribute(baseStationHeightKey).setDescription(
     				basestationsGraph.getVertexAttributeDescription(baseStationHeightKey));
-    		int maximalUserNumber = 5;
     		bs.getAttribute(maximalUserNumberKey).setWeight(maximalUserNumber);
     		bs.getAttribute(maximalUserNumberKey).setDescription(
     				basestationsGraph.getVertexAttributeDescription(maximalUserNumberKey));
@@ -146,21 +149,26 @@ public class SimulationMap extends Graph {
     }
     
     private void setAttributesOfTheUser() {
+    	Key userMobileStationHeightKey = usersGraph.addVertexAttribute("Mobile station height");
     	int n = basestationsGraph.getVertices().size();
     	Key[] distanceToBasestationsKey = new Key[n];
     	for( int i=0; i<n; i++ ) {
-    		distanceToBasestationsKey[i] = usersGraph.addEdgeAttribute("Distance to bs_"+i);
+    		distanceToBasestationsKey[i] = usersGraph.addVertexAttribute("Distance to bs_"+i);
     	}
+    	double userMobileStationHeight = 1.5; // 1.5 m
     	for( Vertex u : usersGraph.getVertices() ) {
+    		u.getAttribute(userMobileStationHeightKey).setWeight(userMobileStationHeight);
+    		u.getAttribute(userMobileStationHeightKey).setDescription(
+    				usersGraph.getVertexAttributeDescription(userMobileStationHeightKey));
     		for( Vertex b : basestationsGraph.getVertices() ) {
     			int i = b.getKey().getId().intValue();
-    			// FIXME should be careful here, since we use the id of the key..
     			double d_ub = Model.getModel().computeEuclidianDistance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );
     			u.getAttribute(distanceToBasestationsKey[i]).setWeight(d_ub);
     			u.getAttribute(distanceToBasestationsKey[i]).setDescription(
-    					usersGraph.getEdgeAttributeDescription(distanceToBasestationsKey[i]));
+    					usersGraph.getVertexAttributeDescription(distanceToBasestationsKey[i]));
+    			// FIXME is correct but still we should be careful here, since we use the id of the key..
     		}
     	}
     	/**
@@ -177,7 +185,7 @@ public class SimulationMap extends Graph {
     			this.addEdge(u, bs);
     		}
     	}
-    	assignmentKey = this.addEdgeAttribute("Connection through this edge");
+    	assignmentKey = this.addEdgeAttribute("Connecting");
     	for( Edge e : this.getEdges() ) {
     		e.getAttribute(assignmentKey).setWeight(false);
     		e.getAttribute(assignmentKey).setDescription(
@@ -192,7 +200,7 @@ public class SimulationMap extends Graph {
     			basestationsGraph.addEdge(bs_i, bs_j);
     		}
     	}
-    	Key cooperationKey = basestationsGraph.addEdgeAttribute("Cooperation through this edge");
+    	Key cooperationKey = basestationsGraph.addEdgeAttribute("Cooperating");
     	for( Edge e : basestationsGraph.getEdges() ) {
     		e.getAttribute(cooperationKey).setWeight(false);
     		e.getAttribute(cooperationKey).setDescription(

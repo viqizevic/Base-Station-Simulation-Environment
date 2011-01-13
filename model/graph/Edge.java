@@ -105,10 +105,12 @@ public class Edge {
     
     public String toString() {
     	String output = "edge: " + head.getKey().getId() + " -> " + tail.getKey().getId();
-    	int k=1;
-    	for( Attribute attr : attributes.values() ) {
-    		output += " "+attr.toString();
-    		k++;
+    	if( Graph.debugMode ) {
+    		int k=1;
+    		for( Attribute attr : attributes.values() ) {
+    			output += " "+attr.toString();
+    			k++;
+    		}
     	}
     	return output;
     }

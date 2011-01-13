@@ -73,21 +73,27 @@ public class Vertex {
     public String toString() {
     	String output = "node: " +
     			"* "+key.toString() + "\n";
-    	int k=1;
-    	for( Attribute attr : attributes.values() ) {
-    		output += "*"+k+" "+attr.toString()+"\n";
-    		k++;
-    	}
-    	String[] edgeStrings = new String[outgoingEdges.size()];
-    	for( Edge e : outgoingEdges.values() ) {
-    		k = e.getTail().getKey().getId().intValue();
-    		if( k > this.getKey().getId().intValue() ) {
-    			k--;
+    	if( Graph.debugMode ) {
+    		int k=0;
+    		String[] attrString = new String[attributes.size()];
+    		for( Attribute attr : attributes.values() ) {
+    			attrString[k] = attr.getDescription() + "!!!" + attr.toString();
+    			k++;
     		}
-    		edgeStrings[k] = e.toString();
-    	}
-    	for( k=0; k<edgeStrings.length; k++ ) {
-    		output += "*"+k+" "+edgeStrings[k]+"\n";
+    		Arrays.sort(attrString);
+    		for( k=0; k<attrString.length; k++ ) {
+    			output += "*"+k+" "+attrString[k].split("!!!")[1]+"\n";
+    		}
+    		k=0;
+    		String[] edgeStrings = new String[outgoingEdges.size()];
+    		for( Edge e : outgoingEdges.values() ) {
+    			edgeStrings[k] = e.toString();
+    			k++;
+    		}
+    		Arrays.sort(edgeStrings);
+    		for( k=0; k<edgeStrings.length; k++ ) {
+    			output += "*"+k+" "+edgeStrings[k]+"\n";
+    		}
     	}
     	return output;
     }
