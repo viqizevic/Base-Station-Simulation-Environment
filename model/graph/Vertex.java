@@ -73,17 +73,17 @@ public class Vertex {
     public String toString() {
     	String output = "node: " +
     			"* "+key.toString() + "\n";
+    	int k=0;
+    	String[] attrString = new String[attributes.size()];
+    	for( Attribute attr : attributes.values() ) {
+    		attrString[k] = attr.getDescription() + "!!!" + attr.toString();
+    		k++;
+    	}
+    	Arrays.sort(attrString);
+    	for( k=0; k<attrString.length; k++ ) {
+    		output += "*"+k+" "+attrString[k].split("!!!")[1]+"\n";
+    	}
     	if( Graph.debugMode ) {
-    		int k=0;
-    		String[] attrString = new String[attributes.size()];
-    		for( Attribute attr : attributes.values() ) {
-    			attrString[k] = attr.getDescription() + "!!!" + attr.toString();
-    			k++;
-    		}
-    		Arrays.sort(attrString);
-    		for( k=0; k<attrString.length; k++ ) {
-    			output += "*"+k+" "+attrString[k].split("!!!")[1]+"\n";
-    		}
     		k=0;
     		String[] edgeStrings = new String[outgoingEdges.size()];
     		for( Edge e : outgoingEdges.values() ) {

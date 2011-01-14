@@ -15,7 +15,7 @@ import model.Model;
 public class Graph {
 	
 	//flag for debug mode
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
     
     //some flags for graph type
     private boolean isDirected;

@@ -11,6 +11,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+//import org.jfree.chart.ChartFactory;
+//import org.jfree.chart.ChartPanel;
+//import org.jfree.chart.JFreeChart;
+//import org.jfree.chart.plot.PlotOrientation;
+//import org.jfree.data.xy.XYSeries;
+//import org.jfree.data.xy.XYSeriesCollection;
+//import model.PathLoss;
+
 import control.Control;
 
 import model.Model;
@@ -64,6 +72,21 @@ public class Window extends JFrame {
 		this.setLayout( borderLayout );
 		this.add( modelCanvas, BorderLayout.CENTER );
 		this.add( textArea, BorderLayout.EAST );
+
+//		// Create a simple XY chart
+//		XYSeries series = new XYSeries("");
+//		for( int d=1; d<=20; d++ ) {
+//			System.out.println(d);
+//			System.out.println(PathLoss.getPathLoss(1000, d*1000, 200, 2));
+//			series.add(d, PathLoss.getPathLoss(1000, d*1000, 200, 2));
+//		}
+//		// Add the series to your data set
+//		XYSeriesCollection dataset = new XYSeriesCollection();
+//		dataset.addSeries(series);
+//		JFreeChart chart = ChartFactory.createXYLineChart("",
+//				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
+//        ChartPanel xyChartPanel = new ChartPanel(chart);
+//		this.add( xyChartPanel, BorderLayout.SOUTH );
 	}
 
 	/**

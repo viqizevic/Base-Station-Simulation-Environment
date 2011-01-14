@@ -319,6 +319,10 @@ public class SimulationMap extends Graph {
 		 */
 		public void setFieldUser(Vertex fieldUser) {
 			this.fieldUser = fieldUser;
+			if( fieldUser == null ) {
+				fieldUsageType = FieldUsageType.Empty;
+				return;
+			}
 			if( fieldUser.getClass().equals(BaseStation.class) ) {
 				fieldUsageType = FieldUsageType.BaseStation;
 			} else if( fieldUser.getClass().equals(User.class) ) {
