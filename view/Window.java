@@ -10,17 +10,20 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
-//import org.jfree.chart.ChartFactory;
-//import org.jfree.chart.ChartPanel;
-//import org.jfree.chart.JFreeChart;
-//import org.jfree.chart.plot.PlotOrientation;
-//import org.jfree.data.xy.XYSeries;
-//import org.jfree.data.xy.XYSeriesCollection;
-//import model.PathLoss;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import model.OkumuraHata_PathLossModel;
 
 import control.Control;
 
+import model.Cost231WalfishIkegami_PathLossModel;
 import model.Model;
 import model.SimulationMap;
 
@@ -61,32 +64,34 @@ public class Window extends JFrame {
 		this.setMinimumSize( new Dimension(600,570) );
 		this.setPreferredSize( new Dimension(790,570) );
 
-		modelCanvas.setMinimumSize( new Dimension(200,200) );
-		modelCanvas.setPreferredSize( new Dimension(400,400) );
+		JTabbedPane tabbedPane = new JTabbedPane();
 
+		JPanel simulationPanel = new JPanel();
 		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
-
 		textArea.setEditable(false);
-		
 		BorderLayout borderLayout = new BorderLayout(5,5);
-		this.setLayout( borderLayout );
-		this.add( modelCanvas, BorderLayout.CENTER );
-		this.add( textArea, BorderLayout.EAST );
+		simulationPanel.setLayout( borderLayout );
+		simulationPanel.add( modelCanvas, BorderLayout.CENTER );
+		simulationPanel.add( textArea, BorderLayout.EAST );
+		
+		// Create a simple XY chart
+		XYSeries series = new XYSeries("");
+		double d = 0.25;
+		while( d <= 1 ) {
+			series.add(d, 1000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+//			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
+			d += 0.05;
+		}
+		// Add the series to your data set
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(series);
+		JFreeChart chart = ChartFactory.createXYLineChart("",
+				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel xyChartPanel = new ChartPanel(chart);
 
-//		// Create a simple XY chart
-//		XYSeries series = new XYSeries("");
-//		for( int d=1; d<=20; d++ ) {
-//			System.out.println(d);
-//			System.out.println(PathLoss.getPathLoss(1000, d*1000, 200, 2));
-//			series.add(d, PathLoss.getPathLoss(1000, d*1000, 200, 2));
-//		}
-//		// Add the series to your data set
-//		XYSeriesCollection dataset = new XYSeriesCollection();
-//		dataset.addSeries(series);
-//		JFreeChart chart = ChartFactory.createXYLineChart("",
-//				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
-//        ChartPanel xyChartPanel = new ChartPanel(chart);
-//		this.add( xyChartPanel, BorderLayout.SOUTH );
+        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
+        tabbedPane.addTab("Main", null, simulationPanel, "Main");
+		this.add( tabbedPane );
 	}
 
 	/**
