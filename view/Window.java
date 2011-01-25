@@ -77,8 +77,9 @@ public class Window extends JFrame {
 		// Create a simple XY chart
 		XYSeries series = new XYSeries("");
 		double d = 0.25;
-		while( d <= 1 ) {
-			series.add(d, 1000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+		while( d <= 5 ) {
+			series.add(d, 1000000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+//			System.out.println(d + ": " + 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
 //			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
 			d += 0.05;
 		}
@@ -89,8 +90,8 @@ public class Window extends JFrame {
 				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
         ChartPanel xyChartPanel = new ChartPanel(chart);
 
-        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
         tabbedPane.addTab("Main", null, simulationPanel, "Main");
+//        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
 		this.add( tabbedPane );
 	}
 

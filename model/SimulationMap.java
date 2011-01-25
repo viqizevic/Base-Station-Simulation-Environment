@@ -153,19 +153,20 @@ public class SimulationMap extends Graph {
     	int n = basestationsGraph.getVertices().size();
     	Key[] distanceToBasestationsKey = new Key[n];
     	for( int i=0; i<n; i++ ) {
-    		distanceToBasestationsKey[i] = usersGraph.addVertexAttribute("Distance to bs_"+i);
+    		distanceToBasestationsKey[i] = usersGraph.addVertexAttribute("Path loss from bs_"+(i+1));
     	}
     	double userMobileStationHeight = 1.5; // 1.5 m
     	for( Vertex u : usersGraph.getVertices() ) {
-    		u.getAttribute(userMobileStationHeightKey).setWeight(userMobileStationHeight);
-    		u.getAttribute(userMobileStationHeightKey).setDescription(
-    				usersGraph.getVertexAttributeDescription(userMobileStationHeightKey));
+//    		u.getAttribute(userMobileStationHeightKey).setWeight(userMobileStationHeight);
+//    		u.getAttribute(userMobileStationHeightKey).setDescription(
+//    				usersGraph.getVertexAttributeDescription(userMobileStationHeightKey));
     		for( Vertex b : basestationsGraph.getVertices() ) {
     			int i = b.getKey().getId().intValue();
     			double d_ub = Model.getModel().computeEuclidianDistance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );
-    			u.getAttribute(distanceToBasestationsKey[i]).setWeight(d_ub);
+    			double pathLoss = 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 0.25*d_ub);
+    			u.getAttribute(distanceToBasestationsKey[i]).setWeight(pathLoss);
     			u.getAttribute(distanceToBasestationsKey[i]).setDescription(
     					usersGraph.getVertexAttributeDescription(distanceToBasestationsKey[i]));
     			// FIXME is correct but still we should be careful here, since we use the id of the key..

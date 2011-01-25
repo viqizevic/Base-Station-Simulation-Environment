@@ -97,4 +97,19 @@ public class Vertex {
     	}
     	return output;
     }
+    
+    public String getAttributesInString() {
+    	String output = "";
+    	int k=0;
+    	String[] attrString = new String[attributes.size()];
+    	for( Attribute attr : attributes.values() ) {
+    		attrString[k] = attr.getDescription() + "!!!" + attr.toString();
+    		k++;
+    	}
+    	Arrays.sort(attrString);
+    	for( k=0; k<attrString.length; k++ ) {
+    		output += "* "+attrString[k].split("!!!")[1]+"\n";
+    	}
+    	return output;
+    }
 }
