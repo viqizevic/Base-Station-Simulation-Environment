@@ -36,7 +36,6 @@ public class Control {
 		Model.getModel().getSimulationMap();
 		View.getView().initialize();
 //		Model.getModel().startSimulation();
-		Model.getModel().saveModelFile("model.env");
 	}
 
 	/**

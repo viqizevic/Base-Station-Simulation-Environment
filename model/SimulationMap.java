@@ -9,6 +9,7 @@ import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Key;
 import model.graph.Vertex;
+import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 
 /**
  * Simulation Map represents the graph for the simulation environment.
@@ -58,6 +59,7 @@ public class SimulationMap extends Graph {
 		 * Each block is a square containing small fields
 		 * with at most one base station in the middle of the block.
 		 */
+		// TODO this parameters should be saved in an init file
 		int fieldNumberPerBlockSide = 5; // number of the fields in one block is the square of this number
 		int blockNumberPerRow = 4; // number of blocks in a row
 		if( baseStationsNumber < blockNumberPerRow ) {
@@ -79,11 +81,12 @@ public class SimulationMap extends Graph {
 		// Create and place the base stations in the middle of the blocks
 		int i = 0;
 		int j = 0;
+		int numberOfFieldsToTheMiddle = fieldNumberPerBlockSide/2;
 		int numberOfBaseStationsCreated = 0;
 		for( int k=0; k<blockNumberPerColumn; k++ ) {
-			i = k*fieldNumberPerBlockSide + 2;
+			i = k*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
 			for( int l=0; l<blockNumberPerRow; l++ ) {
-				j = l*fieldNumberPerBlockSide + 2;
+				j = l*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
 				if( numberOfBaseStationsCreated < baseStationsNumber ) {
 					BaseStation bs = new BaseStation();
 					Point p = new Point(j, i);

@@ -1,4 +1,4 @@
-package model;
+package model.pathloss;
 
 public class Cost231WalfishIkegami_PathLossModel {
 

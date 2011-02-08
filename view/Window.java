@@ -19,13 +19,13 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import model.OkumuraHata_PathLossModel;
 
 import control.Control;
 
-import model.Cost231WalfishIkegami_PathLossModel;
 import model.Model;
 import model.SimulationMap;
+import model.pathloss.Cost231WalfishIkegami_PathLossModel;
+import model.pathloss.OkumuraHata_PathLossModel;
 
 /**
  * The window frame of the GUI.

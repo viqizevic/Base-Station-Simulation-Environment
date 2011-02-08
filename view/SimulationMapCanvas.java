@@ -50,7 +50,6 @@ public class SimulationMapCanvas extends JPanel {
 		} catch (IOException e) {
 			System.err.println("Cannot find image file");
 		}
-//		hideGrids = true;
 		hideGrids = false;
 	}
 
@@ -76,7 +75,6 @@ public class SimulationMapCanvas extends JPanel {
 		int mapOrigin_x = (width-mapWidth)/2;
 		int mapOrigin_y = (height-mapHeight)/2;
 
-//		g2d.setColor( Color.WHITE );
 		g2d.setColor( new Color(158,249,148) );
 		g2d.fillRect(mapOrigin_x, mapOrigin_y, mapWidth, mapHeight);
 		
