@@ -45,8 +45,8 @@ public class SimulationMapCanvas extends JPanel {
 		int n = map.getFieldsMatrix()[0].length;
 		fieldsStartCoordinateInCanvas = new Point[m][n];
 		try {
-			baseStationImg = ImageIO.read(new File("img/basestation.png"));
-			userImg = ImageIO.read(new File("img/handy.png"));
+			baseStationImg = ImageIO.read(new File("src/view/images/basestation.png"));
+			userImg = ImageIO.read(new File("src/view/images/handy.png"));
 		} catch (IOException e) {
 			System.err.println("Cannot find image file");
 		}
@@ -76,8 +76,8 @@ public class SimulationMapCanvas extends JPanel {
 		int mapOrigin_x = (width-mapWidth)/2;
 		int mapOrigin_y = (height-mapHeight)/2;
 
-		// TODO draw another color as the background of the map
-		g2d.setColor( Color.WHITE );
+//		g2d.setColor( Color.WHITE );
+		g2d.setColor( new Color(158,249,148) );
 		g2d.fillRect(mapOrigin_x, mapOrigin_y, mapWidth, mapHeight);
 		
 		float dash[] = {4.0f};
