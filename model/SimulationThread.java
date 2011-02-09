@@ -18,7 +18,7 @@ public class SimulationThread extends Thread {
 	private volatile boolean shallRun;
 	
 	public SimulationThread() {
-		shallRun = true;
+		shallRun = true;  
 	}
 	
 	public void run() {
