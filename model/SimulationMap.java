@@ -21,16 +21,6 @@ import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 public class SimulationMap extends Graph {
 
 	/**
-	 * This 2-dimensional array contains the fields of the map.
-	 * The first index for the vertical direction (the y-axis).
-	 * The second index for the horizontal direction (the x-axis).
-	 * i.e. f11 f12 f13 ...
-	 *      f21 f22 f23 ...
-	 *      ...
-	 */
-	private Field[][] fieldsMatrix;
-
-	/**
 	 * The subgraph containing the base stations.
 	 */
 	private Graph basestationsGraph;
@@ -40,7 +30,45 @@ public class SimulationMap extends Graph {
 	 */
 	private Graph usersGraph;
 
+	/**
+	 * This 2-dimensional array contains the fields of the map.
+	 * The first index for the vertical direction (the y-axis).
+	 * The second index for the horizontal direction (the x-axis).
+	 * i.e. f11 f12 f13 ...
+	 *      f21 f22 f23 ...
+	 *      ...
+	 */
+	private Field[][] fieldsMatrix;
+
 	private Key assignmentKey;
+
+    public SimulationMap( int baseStationsNumber, int usersNumber, int fieldWidth, int fieldHeight ) {
+    	super();
+    	basestationsGraph = new Graph();
+    	usersGraph = new Graph();
+		setEuclidian(true);
+    	
+		fieldsMatrix = new Field[fieldHeight][fieldWidth];
+		for( int i=0; i<fieldHeight; i++ ) {
+			for( int j=0; j<fieldWidth; j++ ) {
+				fieldsMatrix[i][j] = new Field();
+			}
+		}
+    }
+
+    public void addBaseStation( Point p ) {
+		BaseStation bs = new BaseStation();
+		addVertex(bs, p);
+		basestationsGraph.addVertex(bs, p);
+		fieldsMatrix[p.y][p.x].setFieldUser(bs);
+    }
+    
+    public void addUser( Point p ) {
+		User u = new User();
+		addVertex(u, p);
+		usersGraph.addVertex(u, p);
+		fieldsMatrix[p.y][p.x].setFieldUser(u);
+    }
 
     /**
      * Construct a simulation map.
@@ -123,7 +151,7 @@ public class SimulationMap extends Graph {
 		setAttributesOfTheBasestations();
 		setAttributesOfTheUser();
 		
-		setEdges();
+		setAllEdges();
     }
     
     private void setAttributesOfTheBasestations() {
@@ -183,7 +211,7 @@ public class SimulationMap extends Graph {
     	 */
     }
     
-    private void setEdges() {
+    private void setAllEdges() {
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex bs : basestationsGraph.getVertices() ) {
     			this.addEdge(u, bs);

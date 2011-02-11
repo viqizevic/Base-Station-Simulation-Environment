@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import view.View;
 
@@ -77,25 +78,52 @@ public class Model {
 	public boolean readIniFile( String iniFilePath ) {
 		try {
 			BufferedReader br = new BufferedReader( new FileReader( iniFilePath ) );
-			
+
+			int mapWidth = -1;
+			int mapHeight = -1;
 			int bs_numb = -1;
+			LinkedList<Point> bs_locations = new LinkedList<Point>();
 			int u_numb = -1;
+			LinkedList<Point> u_locations = new LinkedList<Point>();
 			
 			String input;
 			while( (input=br.readLine()) != null ) {
 				if( !input.trim().startsWith("#") ) {
-					if( input.trim().startsWith("basestations.number") ) {
+					input = input.trim();
+					if( input.startsWith("map.width") ) {
+						mapWidth = Integer.parseInt( input.split(":")[1].trim() );
+					} else if( input.startsWith("map.height") ) {
+						mapHeight = Integer.parseInt( input.split(":")[1].trim() );
+					} else if( input.startsWith("basestations.number") ) {
 						bs_numb = Integer.parseInt( input.split(":")[1].trim() );
-					} else if( input.trim().startsWith("users.number") ) {
+					} else if( input.startsWith("users.number") ) {
 						u_numb = Integer.parseInt( input.split(":")[1].trim() );
+					} else if( input.startsWith("b_") ) {
+						String point = input.split(":")[1].trim();
+						String[] p = point.split(",");
+						int x = Integer.parseInt( p[0].substring(1).trim() );
+						int y = Integer.parseInt( p[1].substring(0, p[1].length()-1) );
+						bs_locations.add( new Point(x,y) );
+					} else if( input.startsWith("u_") ) {
+						String point = input.split(":")[1].trim();
+						String[] p = point.split(",");
+						int x = Integer.parseInt( p[0].substring(1).trim() );
+						int y = Integer.parseInt( p[1].substring(0, p[1].length()-1) );
+						u_locations.add( new Point(x,y) );
 					}
 				}
 			}
 			
-			if( bs_numb < 0 || u_numb < 0 ) {
+			if( bs_numb < 0 || u_numb < 0 || mapWidth < 0 || mapHeight < 0 ) {
 				return false;
 			}
-			createSimulationMap(bs_numb, u_numb);
+			simulationMap = new SimulationMap(bs_numb, u_numb, mapWidth, mapHeight);
+			for( Point p : bs_locations ) {
+				simulationMap.addBaseStation(p);
+			}
+			for( Point p : u_locations ) {
+				simulationMap.addUser(p);
+			}
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
