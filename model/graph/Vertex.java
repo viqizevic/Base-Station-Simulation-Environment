@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-import model.Model;
-
 /**
  * Vertex of the {@link Graph}.
  * @author vicky
@@ -23,7 +21,7 @@ public class Vertex {
     private final Key key;
     
     public Vertex() {
-        this.key = new Key(Model.getModel().getNewId());
+        this.key = new Key();
     }
 
     public void removeEdge(Edge e) {

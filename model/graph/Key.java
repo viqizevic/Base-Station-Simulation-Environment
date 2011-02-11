@@ -11,14 +11,16 @@ package model.graph;
  */
 public final class Key {
 
+	/**
+	 * An internal id counter for the objects of the graph.
+	 */
+    private static Long internalIdCounter = 0L;
+
 	//unique id object
     private final Long id;
 
-    public Key(Long id) {
-      if (id == null) {
-        throw new IllegalArgumentException();
-      }
-      this.id = id;
+    public Key() {
+      this.id = internalIdCounter++;
     }
 
     public int hashCode() {
@@ -26,8 +28,8 @@ public final class Key {
     }
 
     public Long getId() {
-        return id;
-      }
+    	return id;
+    }
     
     public boolean equals(Object obj) {
       if (!(obj instanceof Key)) return false;

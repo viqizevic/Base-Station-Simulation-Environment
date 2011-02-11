@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
-import model.Model;
-
 /**
  * Graph G=(V,E).
  * @author vicky
@@ -251,7 +249,7 @@ public class Graph {
      * @return the Key to use for accessing the Attribute
      */
     public Key addVertexAttribute(String typeDescription) {
-        Key k = new Key(Model.getModel().getNewId());
+        Key k = new Key();
         vertexAttributeKeys.add(k);
         vertexAttributeDescriptions.add(typeDescription);
         return (k);
@@ -275,7 +273,7 @@ public class Graph {
      * @return the Key for accessing the Attribute object
      */
     public Key addEdgeAttribute(String typeDescription) {
-        Key k = new Key(Model.getModel().getNewId());
+        Key k = new Key();
         edgeAttributeKeys.add(k);
         edgeAttributeDescriptions.add(typeDescription);
 

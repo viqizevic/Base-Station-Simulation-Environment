@@ -2,8 +2,6 @@ package model.graph;
 
 import java.util.HashMap;
 
-import model.Model;
-
 /**
  * Edge of the {@link Graph}.
  * @author vicky
@@ -41,7 +39,7 @@ public class Edge {
      * @param id
      */
     public Edge() {
-        this.key = new Key(Model.getModel().getNewId());
+        this.key = new Key();
     }
 
     public Vertex getHead() {

@@ -165,7 +165,7 @@ public class SimulationMap extends Graph {
 //    				usersGraph.getVertexAttributeDescription(userMobileStationHeightKey));
     		for( Vertex b : basestationsGraph.getVertices() ) {
     			int i = b.getKey().getId().intValue();
-    			double d_ub = Model.getModel().computeEuclidianDistance(
+    			double d_ub = Model.computeEuclidianDistance(
     					usersGraph.getVertexCoordinates(u.getKey()),
     					basestationsGraph.getVertexCoordinates(b.getKey()) );
     			double pathLoss = 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 0.25*d_ub);

@@ -10,7 +10,7 @@ import model.SimulationMap.FieldUsageType;
 import model.graph.Edge;
 
 /**
- * TODO think over again, maybe this class should belong to control
+ * TODO think over again, maybe this class should belong to control package
  * @author vicky
  */
 public class SimulationThread extends Thread {

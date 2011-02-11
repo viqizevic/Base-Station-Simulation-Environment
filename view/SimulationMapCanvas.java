@@ -37,6 +37,8 @@ public class SimulationMapCanvas extends JPanel {
 	private boolean hideGrids;
 	
 	private Vertex highlightedVertex;
+	
+	private final String imageDirectory = "src/view/images/";
 
 	public SimulationMapCanvas( SimulationMap map ) {
 		super();
@@ -45,8 +47,8 @@ public class SimulationMapCanvas extends JPanel {
 		int n = map.getFieldsMatrix()[0].length;
 		fieldsStartCoordinateInCanvas = new Point[m][n];
 		try {
-			baseStationImg = ImageIO.read(new File("src/view/images/basestation.png"));
-			userImg = ImageIO.read(new File("src/view/images/handy.png"));
+			baseStationImg = ImageIO.read(new File(imageDirectory+"basestation.png"));
+			userImg = ImageIO.read(new File(imageDirectory+"handy.png"));
 		} catch (IOException e) {
 			System.err.println("Cannot find image file");
 		}

@@ -1,6 +1,9 @@
 package model;
 
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -18,11 +21,6 @@ public class Model {
 	 */
 	private static Model model = new Model();
 
-	/**
-	 * An internal id counter for the objects of the graph.
-	 */
-    private Long internalIdCounter;
-
     /**
      * The simulation map.
      */
@@ -37,7 +35,7 @@ public class Model {
      * Construct the model.
      */
 	public Model() {
-		internalIdCounter = 0L;
+		readIniFile("src/simulation.ini");
 	}
 
 	/**
@@ -46,14 +44,6 @@ public class Model {
 	 */
 	public static Model getModel() {
 		return model;
-	}
-
-	/**
-	 * Get new id (a number from the type {@link Long}).
-	 * @return A number from the type {@link Long}.
-	 */
-	public Long getNewId() {
-		return internalIdCounter++;
 	}
 
 	/**
@@ -80,20 +70,52 @@ public class Model {
 		return simulationMap;
 	}
 	
-	public double computeEuclidianDistance( Point p1, Point p2 ) {
+	/**
+	 * Read an ini file
+	 * @return true if success reading, otherwise false
+	 */
+	public boolean readIniFile( String iniFilePath ) {
+		try {
+			BufferedReader br = new BufferedReader( new FileReader( iniFilePath ) );
+			
+			int bs_numb = -1;
+			int u_numb = -1;
+			
+			String input;
+			while( (input=br.readLine()) != null ) {
+				if( !input.trim().startsWith("#") ) {
+					if( input.trim().startsWith("basestations.number") ) {
+						bs_numb = Integer.parseInt( input.split(":")[1].trim() );
+					} else if( input.trim().startsWith("users.number") ) {
+						u_numb = Integer.parseInt( input.split(":")[1].trim() );
+					}
+				}
+			}
+			
+			if( bs_numb < 0 || u_numb < 0 ) {
+				return false;
+			}
+			createSimulationMap(bs_numb, u_numb);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static double computeEuclidianDistance( Point p1, Point p2 ) {
 		double x1 = p1.getX();
 		double y1 = p1.getY();
 		double x2 = p2.getX();
 		double y2 = p2.getY();
 		return Point.distance(x1, y1, x2, y2);
-	}
-	
-	public int computeManhattanDistance( Point p1, Point p2 ) {
-		int x1 = p1.x;
-		int y1 = p1.y;
-		int x2 = p2.x;
-		int y2 = p2.y;
-		return Math.max( Math.abs(x1-x2), Math.abs(y1-y2) );
 	}
 	
 	public void startSimulation() {
