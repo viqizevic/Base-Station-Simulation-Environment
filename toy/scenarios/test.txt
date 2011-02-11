@@ -1,0 +1,16 @@
+#model test
+#noBS
+2
+#noMS
+1#P (total power per BS
+1 10.0
+2 5.0
+#K (max number of MS served by BS)1 3.0
+2 2.0
+#H (channel per MS and BS)
+1 1 8.417032815799666E-8
+1 2 5.2109201342003975E-9
+#gamma (demand per MS)
+1 3.4E-4
+#sigma^2 (noise per MS)
+1 5.E-12
