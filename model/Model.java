@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
+
+import model.SimulationMap.FieldUsageType;
 
 import view.View;
 
@@ -53,8 +56,62 @@ public class Model {
 	 * @param numberOfUsers The number of the users.
 	 * @return The simulation map created.
 	 */
-	public SimulationMap createSimulationMap( int numberOfBaseStations, int numberOfUsers ) {
-		simulationMap = new SimulationMap(numberOfBaseStations, numberOfUsers);
+	public SimulationMap createRandomSimulationMap( int baseStationsNumber, int usersNumber ) {
+		/* We divide the map into small blocks
+		 *  B1 B2 B3 B4
+		 *  B5 B6 B7 ...
+		 *  ...
+		 * Each block is a square containing small fields
+		 * with at most one base station in the middle of the block.
+		 */
+		// TODO this parameters should be saved in an init file
+		int fieldNumberPerBlockSide = 5; // number of the fields in one block is the square of this number
+		int blockNumberPerRow = 4; // number of blocks in a row
+		if( baseStationsNumber < blockNumberPerRow ) {
+			blockNumberPerRow = Math.max(1, baseStationsNumber);
+		}
+		int blockNumberPerColumn = baseStationsNumber/blockNumberPerRow; // number of blocks in a column
+		if( baseStationsNumber%blockNumberPerRow > 0 || baseStationsNumber == 0 ) {
+			blockNumberPerColumn++;
+		}
+		int totalFieldNumberHorizontally = blockNumberPerRow*fieldNumberPerBlockSide;
+		int totalFieldNumberVertically = blockNumberPerColumn*fieldNumberPerBlockSide;
+		simulationMap = new SimulationMap(totalFieldNumberHorizontally, totalFieldNumberVertically);
+		
+		// Create and place the base stations in the middle of the blocks
+		int i = 0;
+		int j = 0;
+		int numberOfFieldsToTheMiddle = fieldNumberPerBlockSide/2;
+		int numberOfBaseStationsCreated = 0;
+		for( int k=0; k<blockNumberPerColumn; k++ ) {
+			i = k*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
+			for( int l=0; l<blockNumberPerRow; l++ ) {
+				j = l*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
+				if( numberOfBaseStationsCreated < baseStationsNumber ) {
+					Point p = new Point(j, i);
+					simulationMap.addBaseStation(p);
+					numberOfBaseStationsCreated++;
+				}
+			}
+		}
+		
+		// Create and place the users randomly
+		int numberOfUsersCreated = 0;
+		while( numberOfUsersCreated < usersNumber ) {
+			// TODO set a random user generator class
+			Random random = new Random();
+			i = random.nextInt(totalFieldNumberVertically);
+			j = random.nextInt(totalFieldNumberHorizontally);
+//			do {
+//				i = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
+//				j = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
+//			} while( i<0 || j<0 || i>=totalFieldNumberVertically || j>=totalFieldNumberHorizontally );
+			if( simulationMap.getField(j, i).getFieldUsageType() == FieldUsageType.Empty ) {
+				Point p = new Point( j, i );
+				simulationMap.addUser(p);
+				numberOfUsersCreated++;
+			}
+		}
 		return simulationMap;
 	}
 
@@ -66,7 +123,7 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-			createSimulationMap(16, 32);
+			createRandomSimulationMap(16, 32);
 		}
 		return simulationMap;
 	}
@@ -117,7 +174,10 @@ public class Model {
 			if( bs_numb < 0 || u_numb < 0 || mapWidth < 0 || mapHeight < 0 ) {
 				return false;
 			}
-			simulationMap = new SimulationMap(bs_numb, u_numb, mapWidth, mapHeight);
+			if( bs_numb != bs_locations.size() || u_numb != u_locations.size() ) {
+				return false;
+			}
+			simulationMap = new SimulationMap(mapWidth, mapHeight);
 			for( Point p : bs_locations ) {
 				simulationMap.addBaseStation(p);
 			}
