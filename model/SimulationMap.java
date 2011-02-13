@@ -2,7 +2,6 @@
 package model;
 
 import java.awt.Point;
-import java.util.Random;
 import java.util.Vector;
 
 import model.graph.Edge;
@@ -42,7 +41,7 @@ public class SimulationMap extends Graph {
 
 	private Key assignmentKey;
 
-    public SimulationMap( int baseStationsNumber, int usersNumber, int fieldWidth, int fieldHeight ) {
+    public SimulationMap( int fieldWidth, int fieldHeight ) {
     	super();
     	basestationsGraph = new Graph();
     	usersGraph = new Graph();
@@ -68,90 +67,6 @@ public class SimulationMap extends Graph {
 		addVertex(u, p);
 		usersGraph.addVertex(u, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(u);
-    }
-
-    /**
-     * Construct a simulation map.
-     * @param baseStationsNumber The number of base stations in the map.
-     * @param usersNumber The number of the users in the map.
-     */
-    public SimulationMap( int baseStationsNumber, int usersNumber ) {
-    	super();
-    	basestationsGraph = new Graph();
-    	usersGraph = new Graph();
-		setEuclidian(true);
-		/* We divide the map into small blocks
-		 *  B1 B2 B3 B4
-		 *  B5 B6 B7 ...
-		 *  ...
-		 * Each block is a square containing small fields
-		 * with at most one base station in the middle of the block.
-		 */
-		// TODO this parameters should be saved in an init file
-		int fieldNumberPerBlockSide = 5; // number of the fields in one block is the square of this number
-		int blockNumberPerRow = 4; // number of blocks in a row
-		if( baseStationsNumber < blockNumberPerRow ) {
-			blockNumberPerRow = Math.max(1, baseStationsNumber);
-		}
-		int blockNumberPerColumn = baseStationsNumber/blockNumberPerRow; // number of blocks in a column
-		if( baseStationsNumber%blockNumberPerRow > 0 || baseStationsNumber == 0 ) {
-			blockNumberPerColumn++;
-		}
-		int totalFieldNumberHorizontally = blockNumberPerRow*fieldNumberPerBlockSide;
-		int totalFieldNumberVertically = blockNumberPerColumn*fieldNumberPerBlockSide;
-		fieldsMatrix = new Field[totalFieldNumberVertically][totalFieldNumberHorizontally];
-		for( int i=0; i<totalFieldNumberVertically; i++ ) {
-			for( int j=0; j<totalFieldNumberHorizontally; j++ ) {
-				fieldsMatrix[i][j] = new Field();
-			}
-		}
-		
-		// Create and place the base stations in the middle of the blocks
-		int i = 0;
-		int j = 0;
-		int numberOfFieldsToTheMiddle = fieldNumberPerBlockSide/2;
-		int numberOfBaseStationsCreated = 0;
-		for( int k=0; k<blockNumberPerColumn; k++ ) {
-			i = k*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
-			for( int l=0; l<blockNumberPerRow; l++ ) {
-				j = l*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
-				if( numberOfBaseStationsCreated < baseStationsNumber ) {
-					BaseStation bs = new BaseStation();
-					Point p = new Point(j, i);
-					addVertex(bs, p);
-					basestationsGraph.addVertex(bs, p);
-					fieldsMatrix[i][j].setFieldUser(bs);
-					numberOfBaseStationsCreated++;
-				}
-			}
-		}
-		// Create and place the users randomly
-		int numberOfUsersCreated = 0;
-		while( numberOfUsersCreated < usersNumber ) {
-			/**
-			 * TODO set a random user generator class
-			 */
-			Random random = new Random();
-			i = random.nextInt(totalFieldNumberVertically);
-			j = random.nextInt(totalFieldNumberHorizontally);
-//			do {
-//				i = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
-//				j = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
-//			} while( i<0 || j<0 || i>=totalFieldNumberVertically || j>=totalFieldNumberHorizontally );
-			if( fieldsMatrix[i][j].getFieldUsageType() == FieldUsageType.Empty ) {
-				User u = new User();
-				Point p = new Point( j, i );
-				addVertex(u, p);
-				usersGraph.addVertex(u, p);
-				fieldsMatrix[i][j].setFieldUser(u);
-				numberOfUsersCreated++;
-			}
-		}
-		
-		setAttributesOfTheBasestations();
-		setAttributesOfTheUser();
-		
-		setAllEdges();
     }
     
     private void setAttributesOfTheBasestations() {
