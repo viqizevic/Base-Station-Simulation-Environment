@@ -69,6 +69,28 @@ public class SimulationMap extends Graph {
 		fieldsMatrix[p.y][p.x].setFieldUser(u);
     }
     
+    public Key getKeyOfBaseStationDataAttribute() {
+    	String bsDataDescription = "BS Data";
+    	String[] attrDescriptions = basestationsGraph.getVertexAttributeDescriptions();
+    	for( int i=0; i<attrDescriptions.length; i++ ) {
+    		if( attrDescriptions[i].equals(bsDataDescription) ) {
+    			return basestationsGraph.getKeyToVertexAttributeDescription(bsDataDescription);
+    		}
+    	}
+    	return basestationsGraph.addVertexAttribute(bsDataDescription);
+    }
+    
+    public Key getKeyOfUserDataAttribute() {
+    	String userDataDescription = "User Data";
+    	String[] attrDescriptions = usersGraph.getVertexAttributeDescriptions();
+    	for( int i=0; i<attrDescriptions.length; i++ ) {
+    		if( attrDescriptions[i].equals(userDataDescription) ) {
+    			return usersGraph.getKeyToVertexAttributeDescription(userDataDescription);
+    		}
+    	}
+    	return usersGraph.addVertexAttribute(userDataDescription);
+    }
+    
     private void setAttributesOfTheBasestations() {
     	Key transmitPowerKey = basestationsGraph.addVertexAttribute("Transmit power");
     	Key baseStationHeightKey = basestationsGraph.addVertexAttribute("Base station height");

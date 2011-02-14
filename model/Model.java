@@ -9,7 +9,11 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
+import model.BaseStation.BSData;
 import model.SimulationMap.FieldUsageType;
+import model.User.MSData;
+import model.graph.Key;
+import model.zimpl.SCN_FileCreator;
 
 import view.View;
 
@@ -39,6 +43,7 @@ public class Model {
      * Construct the model.
      */
 	public Model() {
+		// FIXME place the simulation.ini correctly..
 		readIniFile("src/simulation.ini");
 	}
 
@@ -48,6 +53,10 @@ public class Model {
 	 */
 	public static Model getModel() {
 		return model;
+	}
+	
+	public double getDistanceBetweenTwoBlocksInMeter() {
+		return 250.0;
 	}
 
 	/**
@@ -112,6 +121,22 @@ public class Model {
 				numberOfUsersCreated++;
 			}
 		}
+		
+		Key bsDataKey = simulationMap.getKeyOfBaseStationDataAttribute();
+		Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+		
+		for( BaseStation b : simulationMap.getBasestations() ) {
+			Point bsPos = simulationMap.getVertexCoordinates(b.getKey());
+			BSData bsData = b.new BSData(bsPos, 10.0, 3.0);
+			b.getAttribute(bsDataKey).setWeight(bsData);
+		}
+		
+		for( User u : simulationMap.getUsers() ) {
+			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
+			MSData msData = u.new MSData(uPos, 1.5E-5);
+			u.getAttribute(userDataKey).setWeight(msData);
+		}
+		
 		return simulationMap;
 	}
 
@@ -123,8 +148,11 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-			createRandomSimulationMap(16, 32);
+//			createRandomSimulationMap(16, 16);
+			createRandomSimulationMap(3, 3);
 		}
+		// FIXME should not call this method here
+		SCN_FileCreator.createSCN(simulationMap, "test");
 		return simulationMap;
 	}
 	
