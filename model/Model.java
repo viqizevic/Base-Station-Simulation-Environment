@@ -13,6 +13,8 @@ import model.BaseStation.BSData;
 import model.SimulationMap.FieldUsageType;
 import model.User.MSData;
 import model.graph.Key;
+import model.pathloss.Cost231WalfishIkegami_PathLossModel;
+import model.zimpl.CommandExecutor;
 import model.zimpl.SCN_FileCreator;
 
 import view.View;
@@ -55,6 +57,7 @@ public class Model {
 		return model;
 	}
 	
+	// TODO this is hard coded..
 	public double getDistanceBetweenTwoBlocksInMeter() {
 		return 250.0;
 	}
@@ -121,7 +124,12 @@ public class Model {
 				numberOfUsersCreated++;
 			}
 		}
-		
+		addBSDatasAndMSDatas();
+		return simulationMap;
+	}
+
+	// FIXME this is hard coded..
+	private void addBSDatasAndMSDatas() {
 		Key bsDataKey = simulationMap.getKeyOfBaseStationDataAttribute();
 		Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
 		
@@ -133,11 +141,10 @@ public class Model {
 		
 		for( User u : simulationMap.getUsers() ) {
 			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
-			MSData msData = u.new MSData(uPos, 1.5E-5);
+			MSData msData = u.new MSData(uPos,
+					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 250.0/1000));
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
-		
-		return simulationMap;
 	}
 
 	/**
@@ -148,11 +155,8 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-//			createRandomSimulationMap(16, 16);
-			createRandomSimulationMap(3, 3);
+			createRandomSimulationMap(16, 16);
 		}
-		// FIXME should not call this method here
-		SCN_FileCreator.createSCN(simulationMap, "test");
 		return simulationMap;
 	}
 	
@@ -212,6 +216,7 @@ public class Model {
 			for( Point p : u_locations ) {
 				simulationMap.addUser(p);
 			}
+			addBSDatasAndMSDatas();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -224,6 +229,19 @@ public class Model {
 			return false;
 		}
 		return true;
+	}
+	
+	public void createSCN( String fileName ) {
+		SCN_FileCreator.createSCN(simulationMap, fileName);
+	}
+	
+	public boolean executeZIMPL( String zimplFileName, String resourceFileName ) {
+		return CommandExecutor.execute("zimpl " + zimplFileName + " -D file=" + resourceFileName);
+	}
+	
+	public boolean executeSCIP( String lpFileName, String outputFileName ) {
+		return CommandExecutor.execute("scip -f " + lpFileName + " -l " + outputFileName);
+//		toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+7);
 	}
 	
 	public static double computeEuclidianDistance( Point p1, Point p2 ) {

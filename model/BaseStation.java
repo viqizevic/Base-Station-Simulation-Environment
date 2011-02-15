@@ -90,5 +90,11 @@ public class BaseStation extends Vertex {
 		{
 			this.nUsersServed *= factor;
 		}
-}
+		
+		public String toString() {
+			String str = "Tp = " + totalPower;
+			str += ", Kp = " + nUsersServed;
+			return str;
+		}
+	}
 }

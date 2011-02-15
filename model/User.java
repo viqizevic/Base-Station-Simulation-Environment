@@ -83,5 +83,10 @@ public class User extends Vertex {
 		{
 			this.gamma *= factor;
 		}
+		
+		public String toString() {
+			String str = "QoS = " + gamma;
+			return str;
+		}
 	}
 }

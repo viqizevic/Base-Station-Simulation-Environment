@@ -8,8 +8,9 @@ public class CommandExecutor {
 	/**
 	 * executes command in terminal
 	 * @param command command to be executed
+	 * @return true if no error occurs, false otherwise
 	 */
-	public static void execute(String command) 
+	public static boolean execute(String command) 
 	{
 		try 
 		{
@@ -25,13 +26,16 @@ public class CommandExecutor {
 			if( exitVal > 0 ) 
 			{
 				System.out.println("Exited with error code " + exitVal);
+				return false;
 			}
 		} 
 		catch(Exception e) 
 		{
 			System.out.println(e.toString());
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 }
