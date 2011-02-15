@@ -13,19 +13,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+//import org.jfree.chart.ChartFactory;
+//import org.jfree.chart.ChartPanel;
+//import org.jfree.chart.JFreeChart;
+//import org.jfree.chart.plot.PlotOrientation;
+//import org.jfree.data.xy.XYSeries;
+//import org.jfree.data.xy.XYSeriesCollection;
 
 import control.Control;
 
 import model.Model;
 import model.SimulationMap;
-import model.pathloss.Cost231WalfishIkegami_PathLossModel;
-import model.pathloss.OkumuraHata_PathLossModel;
 
 /**
  * The window frame of the GUI.
@@ -109,10 +107,8 @@ public class Window extends JFrame {
 		});
 
 		JMenu run = new JMenu("Run");
-		JMenuItem createSCN = new JMenuItem("Create SCN file for ZIMPL");
-		JMenuItem runSCIP = new JMenuItem("Run SCIP");
+		JMenuItem runSCIP = new JMenuItem("Optimize");
 		
-		createSCN.addActionListener( Control.getControl().getRunOptionListener() );
 		runSCIP.addActionListener( Control.getControl().getRunOptionListener() );
 		
 		JMenu option = new JMenu("Option");
@@ -126,7 +122,6 @@ public class Window extends JFrame {
 		});
 
 		file.add(exit);
-		run.add(createSCN);
 		run.add(runSCIP);
 		option.add(toggleGrids);
 		m.add(file);

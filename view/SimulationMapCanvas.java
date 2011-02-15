@@ -140,6 +140,16 @@ public class SimulationMapCanvas extends JPanel {
 							vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2);
 				}
 			}
+			if( e_uv.hasAttribute(map.getCooperationKey()) ) {
+				if( (Boolean) e_uv.getAttribute(map.getCooperationKey()).getWeight() ) {
+					Point uCoordInMap = map.getVertexCoordinates(e_uv.getHead().getKey());
+					Point uCoordInCanvas = fieldsStartCoordinateInCanvas[uCoordInMap.y][uCoordInMap.x];
+					Point vCoordInMap = map.getVertexCoordinates(e_uv.getTail().getKey());
+					Point vCoordInCanvas = fieldsStartCoordinateInCanvas[vCoordInMap.y][vCoordInMap.x];
+					g2d.drawLine(uCoordInCanvas.x+fieldWidth/2, uCoordInCanvas.y+fieldHeight/2,
+							vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2);
+				}
+			}
 		}
 	}
 	
