@@ -40,6 +40,8 @@ public class SimulationMap extends Graph {
 	private Field[][] fieldsMatrix;
 
 	private Key assignmentKey;
+	
+	private Key cooperationKey;
 
     public SimulationMap( int fieldWidth, int fieldHeight ) {
     	super();
@@ -148,7 +150,7 @@ public class SimulationMap extends Graph {
     	 */
     }
     
-    private void setAllEdges() {
+    public void setAllEdges() {
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex bs : basestationsGraph.getVertices() ) {
     			this.addEdge(u, bs);
@@ -169,7 +171,7 @@ public class SimulationMap extends Graph {
     			basestationsGraph.addEdge(bs_i, bs_j);
     		}
     	}
-    	Key cooperationKey = basestationsGraph.addEdgeAttribute("Cooperating");
+    	cooperationKey = basestationsGraph.addEdgeAttribute("Cooperating");
     	for( Edge e : basestationsGraph.getEdges() ) {
     		e.getAttribute(cooperationKey).setWeight(false);
     		e.getAttribute(cooperationKey).setDescription(
@@ -227,6 +229,10 @@ public class SimulationMap extends Graph {
 
 	public Key getAssignmentKey() {
 		return assignmentKey;
+	}
+
+	public Key getCooperationKey() {
+		return cooperationKey;
 	}
 
 	public String toString() {

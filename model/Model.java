@@ -15,6 +15,7 @@ import model.User.MSData;
 import model.graph.Key;
 import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 import model.zimpl.CommandExecutor;
+import model.zimpl.SCIP_FileOutputParser;
 import model.zimpl.SCN_FileCreator;
 
 import view.View;
@@ -145,6 +146,7 @@ public class Model {
 					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 500.0/1000));
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
+		simulationMap.setAllEdges();
 	}
 
 	/**
@@ -242,6 +244,10 @@ public class Model {
 	public boolean executeSCIP( String lpFileName, String outputFileName ) {
 		return CommandExecutor.execute("scip -f " + lpFileName + " -l " + outputFileName);
 //		toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+7);
+	}
+	
+	public boolean readSolutionFromSCIP( String scipFileOutputName ) {
+		return SCIP_FileOutputParser.readSolutionAndEditTheMap(scipFileOutputName, simulationMap);
 	}
 	
 	public static double computeEuclidianDistance( Point p1, Point p2 ) {
