@@ -88,6 +88,7 @@ public class SCN_FileCreator {
 			
 		}catch (IOException e){
 			System.out.println("Unexpected error while writing results to file");
+			e.printStackTrace();
 			return;
 		}
 	}

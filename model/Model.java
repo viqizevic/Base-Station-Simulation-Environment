@@ -142,7 +142,7 @@ public class Model {
 		for( User u : simulationMap.getUsers() ) {
 			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
 			MSData msData = u.new MSData(uPos,
-					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 250.0/1000));
+					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 500.0/1000));
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
 	}

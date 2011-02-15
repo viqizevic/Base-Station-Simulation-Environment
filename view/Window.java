@@ -75,21 +75,21 @@ public class Window extends JFrame {
 		simulationPanel.add( textArea, BorderLayout.EAST );
 		
 		// Create a simple XY chart
-		XYSeries series = new XYSeries("");
-		double d = 0.25;
-		while( d <= 5 ) {
-			series.add(d, 1000000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
-//			System.out.println(d + ": " + 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
-//			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
-			d += 0.05;
-		}
-		// Add the series to your data set
-		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
-		JFreeChart chart = ChartFactory.createXYLineChart("",
-				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
-        ChartPanel xyChartPanel = new ChartPanel(chart);
-
+//		XYSeries series = new XYSeries("");
+//		double d = 0.25;
+//		while( d <= 5 ) {
+//			series.add(d, 1000000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+////			System.out.println(d + ": " + 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+////			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
+//			d += 0.05;
+//		}
+//		// Add the series to our data set
+//		XYSeriesCollection dataset = new XYSeriesCollection();
+//		dataset.addSeries(series);
+//		JFreeChart chart = ChartFactory.createXYLineChart("",
+//				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
+//        ChartPanel xyChartPanel = new ChartPanel(chart);
+//
         tabbedPane.addTab("Main", null, simulationPanel, "Main");
 //        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
 		this.add( tabbedPane );
@@ -102,15 +102,20 @@ public class Window extends JFrame {
 		JMenuBar m = new JMenuBar();
 		
 		JMenu file = new JMenu("File");
-		
 		JMenuItem exit = new JMenuItem("Exit");
 		
 		exit.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) { System.exit(0); }
 		});
+
+		JMenu run = new JMenu("Run");
+		JMenuItem createSCN = new JMenuItem("Create SCN file for ZIMPL");
+		JMenuItem runSCIP = new JMenuItem("Run SCIP");
+		
+		createSCN.addActionListener( Control.getControl().getRunOptionListener() );
+		runSCIP.addActionListener( Control.getControl().getRunOptionListener() );
 		
 		JMenu option = new JMenu("Option");
-		
 		JMenuItem toggleGrids = new JMenuItem("Toggle grids");
 		
 		toggleGrids.addActionListener( new ActionListener() {
@@ -121,8 +126,11 @@ public class Window extends JFrame {
 		});
 
 		file.add(exit);
+		run.add(createSCN);
+		run.add(runSCIP);
 		option.add(toggleGrids);
 		m.add(file);
+		m.add(run);
 		m.add(option);
 		this.setJMenuBar(m);
 	}

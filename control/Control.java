@@ -20,12 +20,15 @@ public class Control {
 	 * The mouse listener for the canvas.
 	 */
 	private CanvasMouseListener canvasMouseListener;
+	
+	private RunOptionListener runOptionListener;
 
 	/**
 	 * Construct the controller.
 	 */
 	public Control() {
 		canvasMouseListener = new CanvasMouseListener();
+		runOptionListener = new RunOptionListener();
 	}
 
 	/**
@@ -49,5 +52,9 @@ public class Control {
 	 */
 	public CanvasMouseListener getCanvasMouseListener() {
 		return canvasMouseListener;
+	}
+
+	public RunOptionListener getRunOptionListener() {
+		return runOptionListener;
 	}
 }
