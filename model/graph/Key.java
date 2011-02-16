@@ -22,6 +22,10 @@ public final class Key {
     public Key() {
       this.id = internalIdCounter++;
     }
+    
+    public Key( Long id ) {
+    	this.id = id;
+    }
 
     public int hashCode() {
       return id.hashCode();

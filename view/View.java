@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Point;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import model.Model;
@@ -74,5 +75,17 @@ public class View {
 	
 	public void refresh() {
 		window.getSimulationMapCanvas().repaint();
+	}
+	
+	public String loadFile(){
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		
+		int state = fileChooser.showOpenDialog(null);
+		
+		if(state == JFileChooser.APPROVE_OPTION){
+			return fileChooser.getSelectedFile().getPath();
+		}
+		return "";
 	}
 }
