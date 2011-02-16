@@ -57,4 +57,12 @@ public class Control {
 	public RunOptionListener getRunOptionListener() {
 		return runOptionListener;
 	}
+	
+	public void loadFile() {
+		String file = View.getView().loadFile();
+		if( !file.isEmpty() ) {
+			Model.getModel().loadFile(file);
+			View.getView().refresh();
+		}
+	}
 }

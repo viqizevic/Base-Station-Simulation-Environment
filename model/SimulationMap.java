@@ -57,18 +57,20 @@ public class SimulationMap extends Graph {
 		}
     }
 
-    public void addBaseStation( Point p ) {
+    public BaseStation addBaseStation( Point p ) {
 		BaseStation bs = new BaseStation();
 		addVertex(bs, p);
 		basestationsGraph.addVertex(bs, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(bs);
+		return bs;
     }
     
-    public void addUser( Point p ) {
+    public User addUser( Point p ) {
 		User u = new User();
 		addVertex(u, p);
 		usersGraph.addVertex(u, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(u);
+		return u;
     }
     
     public Key getKeyOfBaseStationDataAttribute() {

@@ -17,6 +17,7 @@ import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 import model.zimpl.CommandExecutor;
 import model.zimpl.SCIP_FileOutputParser;
 import model.zimpl.SCN_FileCreator;
+import model.zimpl.ToyParser;
 
 import view.View;
 
@@ -231,6 +232,44 @@ public class Model {
 			return false;
 		}
 		return true;
+	}
+	
+	public void loadFile( String filename ) {
+		try {
+			ToyParser tp = new ToyParser(filename);
+			tp.parse();
+			int maxX = 0;
+			int maxY = 0;
+			for( BSData bsData : tp.getBaseStations().values() ) {
+				if( bsData.getXPosition() > maxX ) {
+					maxX = (int) Math.ceil( bsData.getXPosition() );
+				}
+				if( bsData.getYPosition() > maxY ) {
+					maxY = (int) Math.ceil( bsData.getYPosition() );
+				}
+			}
+			for( MSData msData : tp.getUsers().values() ) {
+				if( msData.getXPosition() > maxX ) {
+					maxX = (int) Math.ceil( msData.getXPosition() );
+				}
+				if( msData.getYPosition() > maxY ) {
+					maxY = (int) Math.ceil( msData.getYPosition() );
+				}
+			}
+			simulationMap = new SimulationMap(maxX+1, maxY+1);
+			Key bsDataKey = simulationMap.getKeyOfBaseStationDataAttribute();
+			Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+			for( BSData bsData : tp.getBaseStations().values() ) {
+				BaseStation b = simulationMap.addBaseStation( bsData.getPosition() );
+				b.getAttribute(bsDataKey).setWeight(bsData);
+			}
+			for( MSData msData : tp.getUsers().values() ) {
+				User u = simulationMap.addUser( msData.getPosition() );
+				u.getAttribute(userDataKey).setWeight(msData);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createSCN( String fileName ) {

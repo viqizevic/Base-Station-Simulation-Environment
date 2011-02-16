@@ -92,8 +92,14 @@ public class Window extends JFrame {
 		JMenuBar m = new JMenuBar();
 		
 		JMenu file = new JMenu("File");
+		JMenuItem open = new JMenuItem("Open");
 		JMenuItem exit = new JMenuItem("Exit");
 		
+		open.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Control.getControl().loadFile();
+			}
+		});
 		exit.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) { System.exit(0); }
 		});
@@ -113,6 +119,7 @@ public class Window extends JFrame {
 			}
 		});
 
+		file.add(open);
 		file.add(exit);
 		run.add(runSCIP);
 		option.add(toggleGrids);
@@ -132,5 +139,11 @@ public class Window extends JFrame {
 	
 	public void appendText( String text ) {
 		outputTab.appendText(text);
+	}
+	
+	public void refresh() {
+		modelCanvas = new SimulationMapCanvas(Model.getModel().getSimulationMap());
+		modelCanvas.repaint();
+		this.repaint();
 	}
 }

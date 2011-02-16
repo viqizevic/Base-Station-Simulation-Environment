@@ -74,7 +74,7 @@ public class View {
 	}
 	
 	public void refresh() {
-		window.getSimulationMapCanvas().repaint();
+		window.refresh();
 	}
 	
 	public String loadFile(){
