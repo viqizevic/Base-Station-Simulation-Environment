@@ -3,6 +3,8 @@ package model.zimpl;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import view.View;
+
 public class CommandExecutor {
 
 	/**
@@ -20,18 +22,18 @@ public class CommandExecutor {
 			String line=null;
 			while((line=input.readLine()) != null)
 			{
-				System.out.println(line);
+				View.getView().appendText(line);
 			}
 			int exitVal = pr.waitFor();
 			if( exitVal > 0 ) 
 			{
-				System.out.println("Exited with error code " + exitVal);
+				View.getView().appendText("Exited with error code " + exitVal);
 				return false;
 			}
 		} 
 		catch(Exception e) 
 		{
-			System.out.println(e.toString());
+			View.getView().appendText(e.toString());
 			e.printStackTrace();
 			return false;
 		}

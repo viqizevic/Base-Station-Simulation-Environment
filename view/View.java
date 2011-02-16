@@ -67,6 +67,10 @@ public class View {
 	public void setText( String text ) {
 		window.setText(text);
 	}
+
+	public void appendText( String text ) {
+		window.appendText(text);
+	}
 	
 	public void refresh() {
 		window.getSimulationMapCanvas().repaint();

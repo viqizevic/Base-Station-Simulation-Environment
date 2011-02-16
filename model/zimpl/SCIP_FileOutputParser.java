@@ -23,9 +23,7 @@ public class SCIP_FileOutputParser {
 					br.readLine(); // ""
 					input = br.readLine();
 					if( input.startsWith("objective value:") ) {
-						System.out.println("----------------------------------------------------------------");
-						System.out.println("solution readed: ");
-						System.out.println(input);
+						// TODO check the objective value
 					}
 					while( (input=br.readLine()).startsWith("a") ) {
 						String[] str = input.split("#");	// expected: a#i#j#k ...
@@ -35,9 +33,9 @@ public class SCIP_FileOutputParser {
 						str = str[3].substring(3).split("obj");
 						double val = Double.parseDouble(str[0].substring(0, str[0].length()-1));
 						if( val < 0.01 ) {
-							System.out.println(idx_u + " " + idx_b1 + " " + idx_b2 + " " + val);
 							continue;
 						}
+						// FIXME define indices for the vertices
 						int i = 1;
 						for( User user : map.getUsers() ) {
 							if( i == idx_u ) {

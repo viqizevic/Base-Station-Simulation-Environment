@@ -129,6 +129,7 @@ public class SimulationMapCanvas extends JPanel {
 				BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
 		g2d.setStroke(standardStroke);
 		g2d.setColor( Color.ORANGE );
+		// FIXME need code optimization here
 		for( Edge e_uv : map.getEdges() ) {
 			if( e_uv.hasAttribute(map.getAssignmentKey()) ) {
 				if( (Boolean) e_uv.getAttribute(map.getAssignmentKey()).getWeight() ) {

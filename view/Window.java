@@ -1,8 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 //import org.jfree.chart.ChartFactory;
@@ -39,7 +36,7 @@ public class Window extends JFrame {
 	 */
 	private SimulationMapCanvas modelCanvas;
 	
-	private TextArea textArea;
+	private OutputTab outputTab;
 
 	/**
 	 * Constructs the window.
@@ -49,7 +46,7 @@ public class Window extends JFrame {
 	public Window( String title, SimulationMap map ) {
 		super( title );
 		modelCanvas = new SimulationMapCanvas(map);
-		textArea = new TextArea(15,35);
+		outputTab = new OutputTab();
 		init();
 	}
 
@@ -64,13 +61,7 @@ public class Window extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 
-		JPanel simulationPanel = new JPanel();
 		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
-		textArea.setEditable(false);
-		BorderLayout borderLayout = new BorderLayout(5,5);
-		simulationPanel.setLayout( borderLayout );
-		simulationPanel.add( modelCanvas, BorderLayout.CENTER );
-		simulationPanel.add( textArea, BorderLayout.EAST );
 		
 		// Create a simple XY chart
 //		XYSeries series = new XYSeries("");
@@ -88,7 +79,8 @@ public class Window extends JFrame {
 //				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
 //        ChartPanel xyChartPanel = new ChartPanel(chart);
 //
-        tabbedPane.addTab("Main", null, simulationPanel, "Main");
+        tabbedPane.addTab("Main", null, modelCanvas, "Main");
+        tabbedPane.addTab("Output", null, outputTab, "Main");
 //        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
 		this.add( tabbedPane );
 	}
@@ -135,6 +127,10 @@ public class Window extends JFrame {
 	}
 	
 	public void setText( String text ) {
-		textArea.setText(text);
+		outputTab.setText(text);
+	}
+	
+	public void appendText( String text ) {
+		outputTab.appendText(text);
 	}
 }
