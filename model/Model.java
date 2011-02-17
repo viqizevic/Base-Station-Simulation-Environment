@@ -2,7 +2,6 @@ package model;
 
 import java.awt.Point;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -161,7 +160,7 @@ public class Model {
 			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
 			MSData msData = u.new MSData(uPos,
 					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800,
-							2*lengthOfOneBoxInTheMap_inMeter/1000.0));
+							4*lengthOfOneBoxInTheMap_inMeter/1000.0));
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
 		simulationMap.setAllEdges();
@@ -175,7 +174,8 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-			createRandomSimulationMap(16, 16);
+//			createRandomSimulationMap(16, 16);
+			createRandomSimulationMap(8, 8);
 		}
 		return simulationMap;
 	}

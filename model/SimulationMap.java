@@ -180,6 +180,15 @@ public class SimulationMap extends Graph {
     				basestationsGraph.getEdgeAttributeDescription(cooperationKey));
     	}
     }
+    
+    public void clearAssignmentAndConnectionFromAllEdges() {
+    	for( Edge e : this.getEdges() ) {
+    		e.getAttribute(assignmentKey).setWeight(false);
+    	}
+    	for( Edge e : basestationsGraph.getEdges() ) {
+    		e.getAttribute(cooperationKey).setWeight(false);
+    	}
+    }
 
     /**
      * Get the matrix of the fields.

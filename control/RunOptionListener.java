@@ -47,6 +47,7 @@ public class RunOptionListener implements ActionListener {
 		if( Model.getModel().createSCN(scnFileName, false) ) {
 			if( Model.getModel().executeZIMPL("src/model/parser/model.zpl", scnFileName+".scn") ) {
 				if( Model.getModel().executeSCIP(zimplFileName+".lp", outputFileName) ) {
+					Model.getModel().getSimulationMap().clearAssignmentAndConnectionFromAllEdges();
 					if( Model.getModel().readSolutionFromSCIP(outputFileName) ) {
 						View.getView().showMessage("Solution available.");
 						View.getView().repaint();

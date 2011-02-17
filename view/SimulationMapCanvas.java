@@ -111,8 +111,17 @@ public class SimulationMapCanvas extends JPanel {
 			for( Edge e_vw : highlightedVertex.getOutgoingEdges() ) {
 //				g2d.setStroke(standardStroke);
 //				g2d.setColor( Color.YELLOW );
+				// FIXME need code optimization here
 				if( e_vw.hasAttribute(map.getAssignmentKey()) ) {
 					if( (Boolean) e_vw.getAttribute(map.getAssignmentKey()).getWeight() ) {
+						Point wCoordInMap = map.getVertexCoordinates(e_vw.getTail().getKey());
+						Point wCoordInCanvas = fieldsStartCoordinateInCanvas[wCoordInMap.y][wCoordInMap.x];
+						g2d.drawLine(vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2,
+								wCoordInCanvas.x+fieldWidth/2, wCoordInCanvas.y+fieldHeight/2);
+					}
+				}
+				if( e_vw.hasAttribute(map.getCooperationKey()) ) {
+					if( (Boolean) e_vw.getAttribute(map.getCooperationKey()).getWeight() ) {
 						Point wCoordInMap = map.getVertexCoordinates(e_vw.getTail().getKey());
 						Point wCoordInCanvas = fieldsStartCoordinateInCanvas[wCoordInMap.y][wCoordInMap.x];
 						g2d.drawLine(vCoordInCanvas.x+fieldWidth/2, vCoordInCanvas.y+fieldHeight/2,
@@ -129,8 +138,8 @@ public class SimulationMapCanvas extends JPanel {
 				BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
 		g2d.setStroke(standardStroke);
 		g2d.setColor( Color.ORANGE );
-		// FIXME need code optimization here
 		for( Edge e_uv : map.getEdges() ) {
+			// FIXME need code optimization here
 			if( e_uv.hasAttribute(map.getAssignmentKey()) ) {
 				if( (Boolean) e_uv.getAttribute(map.getAssignmentKey()).getWeight() ) {
 					Point uCoordInMap = map.getVertexCoordinates(e_uv.getHead().getKey());
