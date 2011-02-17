@@ -252,7 +252,6 @@ public class SimulationMap extends Graph {
 		Arrays.sort(mobiles, new VertexComparator());
 		users = new Vector<User>();
 		for( int i=0; i<mobiles.length; i++ ) {
-			System.out.println(mobiles[i]);
 			users.add(mobiles[i]);
 		}
 		return users;
