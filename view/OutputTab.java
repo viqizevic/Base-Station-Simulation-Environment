@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.TextArea;
 
@@ -12,23 +13,24 @@ import control.Control;
 
 public class OutputTab extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 297273744957091658L;
 	
 	private TextArea textArea;
+	
+	private JButton optimizeButton;
 	
 	private JButton scnOutputButton;
 	
 	public OutputTab() {
 		super();
 		textArea = new TextArea(35,35);
+		optimizeButton = new JButton("Optimize");
 		scnOutputButton = new JButton("See SCN File");
 		init();
 	}
 	
 	public void init() {
+		optimizeButton.addActionListener( Control.getControl().getRunOptionListener() );
 		scnOutputButton.addActionListener( Control.getControl().getRunOptionListener() );
 		
 		textArea.setEditable(false);
@@ -39,6 +41,7 @@ public class OutputTab extends JPanel {
 		this.add( textArea, BorderLayout.CENTER );
 		
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.add(optimizeButton);
 		buttonsPanel.add(scnOutputButton);
 		this.add(buttonsPanel, BorderLayout.NORTH);
 	}

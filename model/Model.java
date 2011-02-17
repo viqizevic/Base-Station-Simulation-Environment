@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Point;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -288,12 +289,22 @@ public class Model {
 		}
 	}
 	
-	public void createSCN( String fileName, boolean showMessage ) {
-		SCN_FileCreator.createSCN(simulationMap, fileName, showMessage);
+	public boolean createSCN( String fileName, boolean showMessage ) {
+		return SCN_FileCreator.createSCN(simulationMap, fileName, showMessage);
 	}
 	
 	public boolean executeZIMPL( String zimplFileName, String resourceFileName ) {
-		return CommandExecutor.execute("zimpl " + zimplFileName + " -D file=" + resourceFileName);
+		if( CommandExecutor.execute("zimpl " + zimplFileName + " -D file=" + resourceFileName) ) {
+			return true;
+		} else {
+			try {
+				new FileReader(zimplFileName);
+			} catch (FileNotFoundException e) {
+				View.getView().showMessage("Cannot find the zimpl file: "
+						+ zimplFileName);
+			}
+			return false;
+		}
 	}
 	
 	public boolean executeSCIP( String lpFileName, String outputFileName ) {

@@ -23,7 +23,14 @@ import model.pathloss.Cost231WalfishIkegami_PathLossModel;
  */
 public class SCN_FileCreator {
 	
-	public static void createSCN( SimulationMap map, String name,
+	/**
+	 * Create .scn file needed by the zimpl file
+	 * @param map the simulation map object
+	 * @param name the name of the file (not ended with .scn)
+	 * @param showMessage tells if a message should be shown in output text area or not
+	 * @return true if file successfully created, false otherwise 
+	 */
+	public static boolean createSCN( SimulationMap map, String name,
 			boolean showMessage ) {
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(name+".scn"));
@@ -79,7 +86,7 @@ public class SCN_FileCreator {
 			}
 			output += "#sigma^2 (noise per MS)\n";
 			i=1;
-			for( User u : users ) {
+			for( @SuppressWarnings("unused") User u : users ) {
 				output += i + " 5.E-13\n";
 				i++;
 			}
@@ -90,10 +97,11 @@ public class SCN_FileCreator {
 				View.getView().appendText(output);
 			}
 			
-		}catch (IOException e){
+		} catch (IOException e){
 			System.out.println("Unexpected error while writing results to file");
 			e.printStackTrace();
-			return;
+			return false;
 		}
+		return true;
 	}
 }

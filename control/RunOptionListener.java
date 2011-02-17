@@ -20,19 +20,7 @@ public class RunOptionListener implements ActionListener {
 			String command = item.getActionCommand();
 			
 			if( command.equals("Optimize") ) {
-				String scnFileName = "model";
-				String zimplFileName = "model";
-				String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
-				String outputFileName = zimplFileName + "-" + date + ".out";
-				
-				View.getView().setText("");
-				Model.getModel().createSCN(scnFileName, false);
-				Model.getModel().executeZIMPL("src/model/parser/model.zpl", scnFileName+".scn");
-				Model.getModel().executeSCIP(zimplFileName+".lp", outputFileName);
-				if( Model.getModel().readSolutionFromSCIP(outputFileName) ) {
-					View.getView().showMessage("Solution available.");
-					View.getView().repaint();
-				}
+				optimize();
 			}
 		} else if( e.getSource().getClass().equals(JButton.class) ) {
 			JButton button = (JButton) e.getSource();
@@ -42,8 +30,29 @@ public class RunOptionListener implements ActionListener {
 				String scnFileName = "model";
 				View.getView().setText("");
 				Model.getModel().createSCN(scnFileName, true);
+			} else if( command.equals("Optimize") ) {
+				optimize();
 			}
+
 		}
 	}
 
+	private void optimize() {
+		String scnFileName = "model";
+		String zimplFileName = "model";
+		String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+		String outputFileName = zimplFileName + "-" + date + ".out";
+		
+		View.getView().setText("");
+		if( Model.getModel().createSCN(scnFileName, false) ) {
+			if( Model.getModel().executeZIMPL("src/model/parser/model.zpl", scnFileName+".scn") ) {
+				if( Model.getModel().executeSCIP(zimplFileName+".lp", outputFileName) ) {
+					if( Model.getModel().readSolutionFromSCIP(outputFileName) ) {
+						View.getView().showMessage("Solution available.");
+						View.getView().repaint();
+					}
+				}
+			}
+		}
+	}
 }
