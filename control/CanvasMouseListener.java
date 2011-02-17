@@ -39,6 +39,9 @@ public class CanvasMouseListener implements MouseListener {
         	String output = "" + field.getFieldUser();
         	View.getView().highlightVertex(field.getFieldUser());
         	// TODO show edit options after double click
+        	if( e.getClickCount() >= 2 ) {
+        		View.getView().showMessage(output);
+        	}
 //        	View.getView().setText(output);
         }
     }

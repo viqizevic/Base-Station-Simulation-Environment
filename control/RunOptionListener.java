@@ -27,10 +27,12 @@ public class RunOptionListener implements ActionListener {
 				
 				View.getView().setText("");
 				Model.getModel().createSCN(scnFileName, false);
-				Model.getModel().executeZIMPL("src/model/zimpl/model.zpl", scnFileName+".scn");
+				Model.getModel().executeZIMPL("src/model/parser/model.zpl", scnFileName+".scn");
 				Model.getModel().executeSCIP(zimplFileName+".lp", outputFileName);
-				Model.getModel().readSolutionFromSCIP(outputFileName);
-				View.getView().repaint();
+				if( Model.getModel().readSolutionFromSCIP(outputFileName) ) {
+					View.getView().showMessage("Solution available.");
+					View.getView().repaint();
+				}
 			}
 		} else if( e.getSource().getClass().equals(JButton.class) ) {
 			JButton button = (JButton) e.getSource();

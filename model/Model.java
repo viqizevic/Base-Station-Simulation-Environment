@@ -12,6 +12,7 @@ import java.util.Random;
 import model.BaseStation.BSData;
 import model.SimulationMap.FieldUsageType;
 import model.User.MSData;
+import model.graph.Graph;
 import model.graph.Key;
 import model.parser.CommandExecutor;
 import model.parser.SCIP_FileOutputParser;
@@ -53,6 +54,7 @@ public class Model {
 		readIniFile("src/simulation.ini");
 		// TODO this should also be placed in ini file
 		lengthOfOneBoxInTheMap_inMeter = 250;
+		Graph.debugMode = false;
 	}
 
 	/**
@@ -150,14 +152,15 @@ public class Model {
 		
 		for( BaseStation b : simulationMap.getBasestations() ) {
 			Point bsPos = simulationMap.getVertexCoordinates(b.getKey());
-			BSData bsData = b.new BSData(bsPos, 10.0, 3.0);
+			BSData bsData = b.new BSData(bsPos, 1.0, 3.0);
 			b.getAttribute(bsDataKey).setWeight(bsData);
 		}
 		
 		for( User u : simulationMap.getUsers() ) {
 			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
 			MSData msData = u.new MSData(uPos,
-					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, 500.0/1000));
+					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800,
+							2*lengthOfOneBoxInTheMap_inMeter/1000.0));
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
 		simulationMap.setAllEdges();

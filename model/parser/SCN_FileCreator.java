@@ -38,7 +38,7 @@ public class SCN_FileCreator {
 			output += "#noBS\n";
 			output += Integer.toString(m) + "\n";
 			output += "#noMS\n";
-			output += Integer.toString(n);
+			output += Integer.toString(n) + "\n";
 			output += "#P (total power per BS)\n";
 			int i=1;
 			Key bsDataKey = map.getKeyOfBaseStationDataAttribute();
@@ -80,7 +80,7 @@ public class SCN_FileCreator {
 			output += "#sigma^2 (noise per MS)\n";
 			i=1;
 			for( User u : users ) {
-				output += i + " 5.E-12\n";
+				output += i + " 5.E-13\n";
 				i++;
 			}
 			out.write( output );

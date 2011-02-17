@@ -28,6 +28,7 @@ public class SCIP_FileOutputParser {
 						// TODO check the objective value
 					} else if( input.startsWith("no solution") ) {
 						View.getView().showMessage("No solution available..");
+						return false;
 					}
 					while( (input=br.readLine()).startsWith("a") ) {
 						String[] str = input.split("#");	// expected: a#i#j#k ...
@@ -69,6 +70,7 @@ public class SCIP_FileOutputParser {
 					}
 				}
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
