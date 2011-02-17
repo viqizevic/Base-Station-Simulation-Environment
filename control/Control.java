@@ -22,6 +22,8 @@ public class Control {
 	private CanvasMouseListener canvasMouseListener;
 	
 	private RunOptionListener runOptionListener;
+	
+	private MoveObjectActionListener moveObjectActionListener;
 
 	/**
 	 * Construct the controller.
@@ -29,6 +31,7 @@ public class Control {
 	public Control() {
 		canvasMouseListener = new CanvasMouseListener();
 		runOptionListener = new RunOptionListener();
+		moveObjectActionListener = new MoveObjectActionListener();
 	}
 
 	/**
@@ -58,6 +61,10 @@ public class Control {
 		return runOptionListener;
 	}
 	
+	public MoveObjectActionListener getMoveObjectActionListener() {
+		return moveObjectActionListener;
+	}
+
 	public void loadFile() {
 		String file = View.getView().loadFile();
 		if( !file.isEmpty() ) {

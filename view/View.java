@@ -6,6 +6,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import model.Model;
+import model.User;
 import model.graph.Vertex;
 
 public class View {
@@ -91,5 +92,9 @@ public class View {
 			return fileChooser.getSelectedFile().getPath();
 		}
 		return "";
+	}
+	
+	public void showMoveObjectDialog( User user ) {
+		MoveObjectDialog mod = new MoveObjectDialog(window, user);
 	}
 }

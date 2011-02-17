@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Vector;
 
+import model.User.MSData;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Key;
@@ -217,6 +218,43 @@ public class SimulationMap extends Graph {
 			return null;
 		}
 		return fieldsMatrix[y][x];
+	}
+	
+	public boolean moveUser( Key userKey, Direction dir ) {
+		Point userPos = getVertexCoordinates(userKey);
+		User user = (User) this.getVertex(userKey);
+		int x = userPos.x;
+		int y = userPos.y;
+		switch (dir) {
+		case UP:
+			return moveUser(user, x, y, x, y-1);
+		case RIGHT:
+			return moveUser(user, x, y, x+1, y);
+		case DOWN:
+			return moveUser(user, x, y, x, y+1);
+		case LEFT:
+			return moveUser(user, x, y, x-1, y);
+		default:
+			return false;
+		}
+	}
+	
+	private boolean moveUser( User user, int x, int y, int new_x, int new_y ) {
+		if( new_x < 0 || fieldsMatrix[0].length <= new_x
+				|| new_y < 0 || fieldsMatrix.length <= new_y ) {
+			return false;
+		}
+		if(fieldsMatrix[new_y][new_x].fieldUsageType == FieldUsageType.Empty) {
+			fieldsMatrix[new_y][new_x].setFieldUser(user);
+			fieldsMatrix[y][x].setFieldUser(null);
+			getVertexCoordinates(user.getKey()).setLocation(new_x, new_y);
+			MSData msData = (MSData) user.getAttribute(
+					getKeyOfUserDataAttribute()).getWeight();
+			msData.setPosition(new_x, new_y);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**

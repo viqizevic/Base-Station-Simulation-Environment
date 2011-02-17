@@ -15,25 +15,13 @@ import model.Model;
 public class RunOptionListener implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
-		if( e.getSource().getClass().equals(JMenuItem.class) ) {
-			JMenuItem item = (JMenuItem) e.getSource();
-			String command = item.getActionCommand();
-			
-			if( command.equals("Optimize") ) {
-				optimize();
-			}
-		} else if( e.getSource().getClass().equals(JButton.class) ) {
-			JButton button = (JButton) e.getSource();
-			String command = button.getActionCommand();
-			
-			if( command.startsWith("See SCN") ) {
-				String scnFileName = "model";
-				View.getView().setText("");
-				Model.getModel().createSCN(scnFileName, true);
-			} else if( command.equals("Optimize") ) {
-				optimize();
-			}
-
+		String command = e.getActionCommand();
+		if( command.equals("Optimize") ) {
+			optimize();
+		} else if( command.startsWith("See SCN") ) {
+			String scnFileName = "model";
+			View.getView().setText("");
+			Model.getModel().createSCN(scnFileName, true);
 		}
 	}
 
@@ -49,7 +37,6 @@ public class RunOptionListener implements ActionListener {
 				if( Model.getModel().executeSCIP(zimplFileName+".lp", outputFileName) ) {
 					Model.getModel().getSimulationMap().clearAssignmentAndConnectionFromAllEdges();
 					if( Model.getModel().readSolutionFromSCIP(outputFileName) ) {
-						View.getView().showMessage("Solution available.");
 						View.getView().repaint();
 					}
 				}
