@@ -2,12 +2,15 @@
 package model;
 
 import java.awt.Point;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Vector;
 
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Key;
 import model.graph.Vertex;
+import model.graph.VertexComparator;
 import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 
 /**
@@ -57,16 +60,18 @@ public class SimulationMap extends Graph {
 		}
     }
 
-    public BaseStation addBaseStation( Point p ) {
+    public BaseStation addBaseStation( Point p, String id ) {
 		BaseStation bs = new BaseStation();
+		bs.setId(id);
 		addVertex(bs, p);
 		basestationsGraph.addVertex(bs, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(bs);
 		return bs;
     }
     
-    public User addUser( Point p ) {
+    public User addUser( Point p, String id ) {
 		User u = new User();
+		u.setId(id);
 		addVertex(u, p);
 		usersGraph.addVertex(u, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(u);
@@ -223,6 +228,13 @@ public class SimulationMap extends Graph {
 		for( Vertex v : basestationsGraph.getVertices() ) {
 			basestations.add( (BaseStation) v );
 		}
+		BaseStation[] bases = new BaseStation[basestations.size()];
+		basestations.toArray(bases);
+		Arrays.sort(bases, new VertexComparator());
+		basestations = new Vector<BaseStation>();
+		for(int i=0; i<bases.length; i++) {
+			basestations.add(bases[i]);
+		}
 		return basestations;
 	}
 
@@ -234,6 +246,14 @@ public class SimulationMap extends Graph {
 		Vector<User> users = new Vector<User>();
 		for( Vertex v : usersGraph.getVertices() ) {
 			users.add( (User) v );
+		}
+		User[] mobiles = new User[users.size()];
+		users.toArray(mobiles);
+		Arrays.sort(mobiles, new VertexComparator());
+		users = new Vector<User>();
+		for( int i=0; i<mobiles.length; i++ ) {
+			System.out.println(mobiles[i]);
+			users.add(mobiles[i]);
 		}
 		return users;
 	}

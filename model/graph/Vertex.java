@@ -19,6 +19,8 @@ public class Vertex {
     private HashMap<Key, Attribute> attributes = new HashMap<Key, Attribute>();
     //Key object for hashing
     private final Key key;
+	
+	private String id;
     
     public Vertex() {
         this.key = new Key();
@@ -67,10 +69,17 @@ public class Vertex {
     public Key getKey() {
         return (this.key);
     }
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
+	}
     
     public String toString() {
-    	String output = "node: " +
-    			"* "+key.toString() + "\n";
+    	String output = id + "\n";
     	int k=0;
     	String[] attrString = new String[attributes.size()];
     	for( Attribute attr : attributes.values() ) {

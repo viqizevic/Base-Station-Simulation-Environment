@@ -10,10 +10,10 @@ import model.graph.Vertex;
  *
  */
 public class BaseStation extends Vertex {
-	
+
 	public String toString() {
-		return "Base Station:\n" +
-				"-- "+super.toString();
+		return "Base Station: " +
+				super.toString();
 	}
 	
 	/**
@@ -92,7 +92,8 @@ public class BaseStation extends Vertex {
 		}
 		
 		public String toString() {
-			String str = "Tp = " + totalPower;
+			String str = "Pos = ("+ position.x+","+position.y+")";
+			str += ", Tp = " + totalPower;
 			str += ", Kp = " + nUsersServed;
 			return str;
 		}

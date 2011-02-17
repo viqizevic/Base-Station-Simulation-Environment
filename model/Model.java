@@ -118,7 +118,7 @@ public class Model {
 				j = l*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
 				if( numberOfBaseStationsCreated < baseStationsNumber ) {
 					Point p = new Point(j, i);
-					simulationMap.addBaseStation(p);
+					simulationMap.addBaseStation(p, ""+(numberOfBaseStationsCreated+1));
 					numberOfBaseStationsCreated++;
 				}
 			}
@@ -137,11 +137,12 @@ public class Model {
 //			} while( i<0 || j<0 || i>=totalFieldNumberVertically || j>=totalFieldNumberHorizontally );
 			if( simulationMap.getField(j, i).getFieldUsageType() == FieldUsageType.Empty ) {
 				Point p = new Point( j, i );
-				simulationMap.addUser(p);
+				simulationMap.addUser(p, ""+(numberOfUsersCreated+1));
 				numberOfUsersCreated++;
 			}
 		}
 		addBSDatasAndMSDatas();
+		simulationMap.setAllEdges();
 		return simulationMap;
 	}
 
@@ -163,7 +164,6 @@ public class Model {
 							4*lengthOfOneBoxInTheMap_inMeter/1000.0));
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
-		simulationMap.setAllEdges();
 	}
 
 	/**
@@ -174,8 +174,8 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-//			createRandomSimulationMap(16, 16);
-			createRandomSimulationMap(8, 8);
+			createRandomSimulationMap(16, 16);
+//			createRandomSimulationMap(8, 8);
 		}
 		return simulationMap;
 	}
@@ -230,13 +230,18 @@ public class Model {
 				return false;
 			}
 			simulationMap = new SimulationMap(mapWidth, mapHeight);
+			int i=1;
 			for( Point p : bs_locations ) {
-				simulationMap.addBaseStation(p);
+				simulationMap.addBaseStation(p,""+i);
+				i++;
 			}
+			i=1;
 			for( Point p : u_locations ) {
-				simulationMap.addUser(p);
+				simulationMap.addUser(p,""+i);
+				i++;
 			}
 			addBSDatasAndMSDatas();
+			simulationMap.setAllEdges();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -276,14 +281,19 @@ public class Model {
 			simulationMap = new SimulationMap(maxX+1, maxY+1);
 			Key bsDataKey = simulationMap.getKeyOfBaseStationDataAttribute();
 			Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+			int i=1;
 			for( BSData bsData : tp.getBaseStations().values() ) {
-				BaseStation b = simulationMap.addBaseStation( bsData.getPosition() );
+				BaseStation b = simulationMap.addBaseStation( bsData.getPosition(), ""+i );
 				b.getAttribute(bsDataKey).setWeight(bsData);
+				i++;
 			}
+			i=1;
 			for( MSData msData : tp.getUsers().values() ) {
-				User u = simulationMap.addUser( msData.getPosition() );
+				User u = simulationMap.addUser( msData.getPosition(), ""+i );
 				u.getAttribute(userDataKey).setWeight(msData);
+				i++;
 			}
+			simulationMap.setAllEdges();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

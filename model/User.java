@@ -12,8 +12,8 @@ import model.graph.Vertex;
 public class User extends Vertex {
 
 	public String toString() {
-		return "User:\n" +
-				"-- "+super.toString();
+		return "User: " +
+				super.toString();
 	}
 
 	/**
@@ -85,7 +85,8 @@ public class User extends Vertex {
 		}
 		
 		public String toString() {
-			String str = "QoS = " + gamma;
+			String str = "Pos = ("+ position.x+","+position.y+")";
+			str += ", QoS = " + gamma;
 			return str;
 		}
 	}
