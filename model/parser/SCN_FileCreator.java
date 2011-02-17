@@ -1,4 +1,4 @@
-package model.zimpl;
+package model.parser;
 
 import java.awt.Point;
 import java.io.FileWriter;

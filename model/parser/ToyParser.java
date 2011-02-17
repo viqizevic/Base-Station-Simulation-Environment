@@ -1,4 +1,4 @@
-package model.zimpl;
+package model.parser;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -147,25 +147,6 @@ public class ToyParser
 	public String getName()
 	{
 		return filename.toString().substring(0,filename.length()-4);
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) 
-	{
-		ToyParser parser;
-		try
-		{
-			parser = new ToyParser(args[0]);
-			parser.parse();
-			System.out.println(parser.getName());
-		}
-		catch (FileNotFoundException e)
-		{
-			
-		}
-		
 	}
 
 }

@@ -13,11 +13,11 @@ import model.BaseStation.BSData;
 import model.SimulationMap.FieldUsageType;
 import model.User.MSData;
 import model.graph.Key;
+import model.parser.CommandExecutor;
+import model.parser.SCIP_FileOutputParser;
+import model.parser.SCN_FileCreator;
+import model.parser.ToyParser;
 import model.pathloss.Cost231WalfishIkegami_PathLossModel;
-import model.zimpl.CommandExecutor;
-import model.zimpl.SCIP_FileOutputParser;
-import model.zimpl.SCN_FileCreator;
-import model.zimpl.ToyParser;
 
 import view.View;
 
@@ -282,7 +282,6 @@ public class Model {
 	
 	public boolean executeSCIP( String lpFileName, String outputFileName ) {
 		return CommandExecutor.execute("scip -f " + lpFileName + " -l " + outputFileName);
-//		toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+7);
 	}
 	
 	public boolean readSolutionFromSCIP( String scipFileOutputName ) {

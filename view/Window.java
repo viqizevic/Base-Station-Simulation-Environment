@@ -30,6 +30,8 @@ import model.SimulationMap;
 public class Window extends JFrame {
 	
 	private static final long serialVersionUID = -5266572208804064177L;
+	
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * The canvas to draw the simulation map.
@@ -45,6 +47,7 @@ public class Window extends JFrame {
 	 */
 	public Window( String title, SimulationMap map ) {
 		super( title );
+		tabbedPane = new JTabbedPane();
 		modelCanvas = new SimulationMapCanvas(map);
 		outputTab = new OutputTab();
 		init();
@@ -58,8 +61,6 @@ public class Window extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setMinimumSize( new Dimension(600,570) );
 		this.setPreferredSize( new Dimension(790,570) );
-
-		JTabbedPane tabbedPane = new JTabbedPane();
 
 		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
 		
@@ -80,7 +81,7 @@ public class Window extends JFrame {
 //        ChartPanel xyChartPanel = new ChartPanel(chart);
 //
         tabbedPane.addTab("Main", null, modelCanvas, "Main");
-        tabbedPane.addTab("Output", null, outputTab, "Main");
+        tabbedPane.addTab("Output", null, outputTab, "Output");
 //        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
 		this.add( tabbedPane );
 	}
@@ -142,8 +143,11 @@ public class Window extends JFrame {
 	}
 	
 	public void refresh() {
+		tabbedPane.removeAll();
 		modelCanvas = new SimulationMapCanvas(Model.getModel().getSimulationMap());
-		modelCanvas.repaint();
+		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
+        tabbedPane.addTab("Main", null, modelCanvas, "Main");
+        tabbedPane.addTab("Output", null, outputTab, "Output");
 		this.repaint();
 	}
 }
