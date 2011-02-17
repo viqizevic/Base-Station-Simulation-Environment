@@ -1,9 +1,14 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.TextArea;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import control.Control;
 
 public class OutputTab extends JPanel {
 
@@ -14,13 +19,28 @@ public class OutputTab extends JPanel {
 	
 	private TextArea textArea;
 	
+	private JButton scnOutputButton;
+	
 	public OutputTab() {
 		super();
 		textArea = new TextArea(35,35);
+		scnOutputButton = new JButton("See SCN File");
+		init();
+	}
+	
+	public void init() {
+		scnOutputButton.addActionListener( Control.getControl().getRunOptionListener() );
+		
 		textArea.setEditable(false);
-		BorderLayout borderLayout = new BorderLayout(5,5);
-		this.setLayout(borderLayout);
+		textArea.setBackground(Color.WHITE);
+		Font font = new Font( Font.MONOSPACED, Font.PLAIN, 12);
+		textArea.setFont(font);
+		this.setLayout(new BorderLayout(5,5));
 		this.add( textArea, BorderLayout.CENTER );
+		
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.add(scnOutputButton);
+		this.add(buttonsPanel, BorderLayout.NORTH);
 	}
 	
 	public void setText( String text ) {

@@ -32,11 +32,8 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = -5266572208804064177L;
 	
 	private JTabbedPane tabbedPane;
-
-	/**
-	 * The canvas to draw the simulation map.
-	 */
-	private SimulationMapCanvas modelCanvas;
+	
+	private MainTab mainTab;
 	
 	private OutputTab outputTab;
 
@@ -48,7 +45,7 @@ public class Window extends JFrame {
 	public Window( String title, SimulationMap map ) {
 		super( title );
 		tabbedPane = new JTabbedPane();
-		modelCanvas = new SimulationMapCanvas(map);
+		mainTab = new MainTab( map );
 		outputTab = new OutputTab();
 		init();
 	}
@@ -61,8 +58,6 @@ public class Window extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setMinimumSize( new Dimension(600,570) );
 		this.setPreferredSize( new Dimension(790,570) );
-
-		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
 		
 		// Create a simple XY chart
 //		XYSeries series = new XYSeries("");
@@ -80,7 +75,8 @@ public class Window extends JFrame {
 //				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
 //        ChartPanel xyChartPanel = new ChartPanel(chart);
 //
-        tabbedPane.addTab("Main", null, modelCanvas, "Main");
+
+		tabbedPane.addTab("Main", null, mainTab, "Main");
         tabbedPane.addTab("Output", null, outputTab, "Output");
 //        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
 		this.add( tabbedPane );
@@ -115,8 +111,8 @@ public class Window extends JFrame {
 		
 		toggleGrids.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				modelCanvas.toggleGrids();
-				modelCanvas.repaint();
+				mainTab.getModelCanvas().toggleGrids();
+				mainTab.getModelCanvas().repaint();
 			}
 		});
 
@@ -131,7 +127,7 @@ public class Window extends JFrame {
 	}
 
 	public SimulationMapCanvas getSimulationMapCanvas() {
-		return modelCanvas;
+		return mainTab.getModelCanvas();
 	}
 	
 	public void setText( String text ) {
@@ -144,9 +140,8 @@ public class Window extends JFrame {
 	
 	public void refresh() {
 		tabbedPane.removeAll();
-		modelCanvas = new SimulationMapCanvas(Model.getModel().getSimulationMap());
-		modelCanvas.addMouseListener(Control.getControl().getCanvasMouseListener());
-        tabbedPane.addTab("Main", null, modelCanvas, "Main");
+		mainTab = new MainTab(Model.getModel().getSimulationMap());
+        tabbedPane.addTab("Main", null, mainTab, "Main");
         tabbedPane.addTab("Output", null, outputTab, "Output");
 		this.repaint();
 	}

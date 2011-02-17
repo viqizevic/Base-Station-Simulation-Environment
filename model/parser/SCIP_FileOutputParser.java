@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import view.View;
+
 import model.BaseStation;
 import model.SimulationMap;
 import model.User;
@@ -24,6 +26,8 @@ public class SCIP_FileOutputParser {
 					input = br.readLine();
 					if( input.startsWith("objective value:") ) {
 						// TODO check the objective value
+					} else if( input.startsWith("no solution") ) {
+						View.getView().showMessage("No solution available..");
 					}
 					while( (input=br.readLine()).startsWith("a") ) {
 						String[] str = input.split("#");	// expected: a#i#j#k ...

@@ -37,6 +37,8 @@ public class Model {
      * The simulation map.
      */
     private SimulationMap simulationMap;
+    
+    private int lengthOfOneBoxInTheMap_inMeter;
 
     /**
      * The thread for the simulation.
@@ -49,6 +51,8 @@ public class Model {
 	public Model() {
 		// FIXME place the simulation.ini correctly..
 		readIniFile("src/simulation.ini");
+		// TODO this should also be placed in ini file
+		lengthOfOneBoxInTheMap_inMeter = 250;
 	}
 
 	/**
@@ -59,9 +63,18 @@ public class Model {
 		return model;
 	}
 	
-	// TODO this is hard coded..
-	public double getDistanceBetweenTwoBlocksInMeter() {
-		return 250.0;
+	/**
+	 * Get the side length of the box in meter.
+	 * This is the same as the distance between two objects in adjacent blocks.
+	 * Since we assume that the object placed in the middle of the box.
+	 * @return The side length of the box in meter.
+	 */
+	public int getLengthOfOneBoxInTheMap_inMeter() {
+		return lengthOfOneBoxInTheMap_inMeter;
+	}
+
+	public void setLengthOfOneBoxInTheMap_inMeter(int lengthOfOneBoxInTheMap_inMeter) {
+		this.lengthOfOneBoxInTheMap_inMeter = lengthOfOneBoxInTheMap_inMeter;
 	}
 
 	/**
@@ -272,8 +285,8 @@ public class Model {
 		}
 	}
 	
-	public void createSCN( String fileName ) {
-		SCN_FileCreator.createSCN(simulationMap, fileName);
+	public void createSCN( String fileName, boolean showMessage ) {
+		SCN_FileCreator.createSCN(simulationMap, fileName, showMessage);
 	}
 	
 	public boolean executeZIMPL( String zimplFileName, String resourceFileName ) {

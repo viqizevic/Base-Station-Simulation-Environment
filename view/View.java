@@ -73,6 +73,10 @@ public class View {
 		window.appendText(text);
 	}
 	
+	public void repaint() {
+		window.repaint();
+	}
+	
 	public void refresh() {
 		window.refresh();
 	}
