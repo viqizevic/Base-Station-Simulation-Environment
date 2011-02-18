@@ -24,6 +24,8 @@ public class Control {
 	private RunOptionListener runOptionListener;
 	
 	private MoveObjectActionListener moveObjectActionListener;
+	
+	private EditObjectActionListener editObjectActionListener;
 
 	/**
 	 * Construct the controller.
@@ -32,6 +34,7 @@ public class Control {
 		canvasMouseListener = new CanvasMouseListener();
 		runOptionListener = new RunOptionListener();
 		moveObjectActionListener = new MoveObjectActionListener();
+		editObjectActionListener = new EditObjectActionListener();
 	}
 
 	/**
@@ -65,11 +68,15 @@ public class Control {
 		return moveObjectActionListener;
 	}
 
+	public EditObjectActionListener getEditObjectActionListener() {
+		return editObjectActionListener;
+	}
+
 	public void loadFile() {
 		String file = View.getView().loadFile();
 		if( !file.isEmpty() ) {
 			Model.getModel().loadFile(file);
-			View.getView().refresh();
+			View.getView().reloadTheMap();
 		}
 	}
 }

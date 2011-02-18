@@ -5,7 +5,6 @@ import java.awt.Point;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import model.Model;
 import model.User;
 import model.graph.Vertex;
 
@@ -22,7 +21,7 @@ public class View {
 	private Window window;
 
 	public View() {
-		window = new Window("Base stations model", Model.getModel().getSimulationMap());
+		window = new Window("Base stations model");
 		window.setLocationRelativeTo( null );
 		window.pack();
 		window.setVisible(true);
@@ -78,8 +77,8 @@ public class View {
 		window.repaint();
 	}
 	
-	public void refresh() {
-		window.refresh();
+	public void reloadTheMap() {
+		window.reloadTheMap();
 	}
 	
 	public String loadFile(){
@@ -95,6 +94,12 @@ public class View {
 	}
 	
 	public void showMoveObjectDialog( User user ) {
+		@SuppressWarnings("unused")
 		MoveObjectDialog mod = new MoveObjectDialog(window, user);
+	}
+	
+	public void showEditObjectDialog( Vertex v ) {
+		@SuppressWarnings("unused")
+		EditObjectDialog eod = new EditObjectDialog(window, v);
 	}
 }

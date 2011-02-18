@@ -8,6 +8,7 @@ import java.io.IOException;
 import view.View;
 
 import model.BaseStation;
+import model.Model;
 import model.SimulationMap;
 import model.User;
 import model.graph.Edge;
@@ -27,6 +28,8 @@ public class SCIP_FileOutputParser {
 					if( input.startsWith("objective value:") ) {
 						// TODO check the objective value
 					} else if( input.startsWith("no solution") ) {
+						Model.getModel().getSimulationMap().clearAssignmentAndConnectionFromAllEdges();
+						View.getView().repaint();
 						View.getView().showMessage("No solution available..");
 						return false;
 					}

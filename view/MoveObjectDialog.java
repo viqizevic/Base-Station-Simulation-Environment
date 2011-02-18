@@ -21,22 +21,24 @@ public class MoveObjectDialog extends JDialog {
 
 	private static final long serialVersionUID = 4576041303583030366L;
 	
+	private User user;
+	
 	private JButton[] directionButtons;
 
 	private JButton optimizeButton;
 
-	private JButton okButton;
+	private JButton editButton;
 
 	public MoveObjectDialog( Window window, User user ) {
-		super( window, "Move mobile station "+user.getId(), false );
-		Control.getControl().getMoveObjectActionListener().setUserToMove(user);
+		super( window, "Move MS "+user.getId(), true );
+		this.user = user;
 		directionButtons = new JButton[4];
 		directionButtons[0] = new JButton("^");
 		directionButtons[1] = new JButton(">");
 		directionButtons[2] = new JButton("v");
 		directionButtons[3] = new JButton("<");
 		optimizeButton = new JButton("Optimize");
-		okButton = new JButton( "Finish" );
+		editButton = new JButton( "Data" );
 		init(window);
 	}
 
@@ -55,20 +57,22 @@ public class MoveObjectDialog extends JDialog {
 		cCenter.add(new JLabel());
 		cCenter.add(directionButtons[2]);
 		cCenter.add(new JLabel());
+		Control.getControl().getMoveObjectActionListener().setUserToMove(user);
 		for( int i=0; i<directionButtons.length; i++ ) {
 			directionButtons[i].addActionListener(
 					Control.getControl().getMoveObjectActionListener() );
 		}
 
 		optimizeButton.addActionListener( Control.getControl().getRunOptionListener() );
-		okButton.addActionListener( new ActionListener() {
+		editButton.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				close();
+				View.getView().showEditObjectDialog(user);
+//				close();
 			}
 		});
 		Container cSouth = new Container();
 		cSouth.setLayout( new FlowLayout() );
-		cSouth.add( okButton );
+		cSouth.add( editButton );
 		cSouth.add( optimizeButton );
 		
 		this.setLayout( new BorderLayout(2,2) );
@@ -80,7 +84,6 @@ public class MoveObjectDialog extends JDialog {
 		Point windowPos = window.getLocationOnScreen();
 		this.setLocation( new Point(windowPos.x+window.getWidth()-w,
 				windowPos.y+window.getHeight()-h) );
-		this.setResizable(false);
 		this.setVisible(true);
 	}
 	

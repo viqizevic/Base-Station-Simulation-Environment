@@ -42,10 +42,10 @@ public class Window extends JFrame {
 	 * @param title The title of the frame.
 	 * @param map The simulation map from {@link Model}.
 	 */
-	public Window( String title, SimulationMap map ) {
+	public Window( String title ) {
 		super( title );
 		tabbedPane = new JTabbedPane();
-		mainTab = new MainTab( map );
+		mainTab = new MainTab( Model.getModel().getSimulationMap() );
 		outputTab = new OutputTab();
 		init();
 	}
@@ -138,9 +138,9 @@ public class Window extends JFrame {
 		outputTab.appendText(text);
 	}
 	
-	public void refresh() {
-		tabbedPane.removeAll();
+	public void reloadTheMap() {
 		mainTab = new MainTab(Model.getModel().getSimulationMap());
+		tabbedPane.removeAll();
         tabbedPane.addTab("Main", null, mainTab, "Main");
         tabbedPane.addTab("Output", null, outputTab, "Output");
 		this.repaint();

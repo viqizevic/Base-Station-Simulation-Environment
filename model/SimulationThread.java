@@ -73,7 +73,7 @@ public class SimulationThread extends Thread {
 					}
 				}
 			}
-			View.getView().refresh();
+			View.getView().reloadTheMap();
 			try {
 				sleep(1000);
 			} catch (InterruptedException e) {
