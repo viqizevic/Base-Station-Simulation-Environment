@@ -5,6 +5,7 @@ import java.awt.Point;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import model.Model;
 import model.User;
 import model.graph.Vertex;
 
@@ -89,6 +90,22 @@ public class View {
 		
 		if(state == JFileChooser.APPROVE_OPTION){
 			return fileChooser.getSelectedFile().getPath();
+		}
+		return "";
+	}
+	
+	public String showInputDialog() {
+		String s = (String)JOptionPane.showInputDialog(
+		                    window,
+		                    "Edit the gamma value"
+		                    + "\nfor all MS:",
+		                    "Set gamma",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    null,
+		                    Model.getModel().getGamma());
+		if ((s != null) && (s.length() > 0)) {
+		    return s;
 		}
 		return "";
 	}

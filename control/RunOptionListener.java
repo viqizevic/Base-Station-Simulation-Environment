@@ -5,9 +5,6 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
-
 import view.View;
 
 import model.Model;

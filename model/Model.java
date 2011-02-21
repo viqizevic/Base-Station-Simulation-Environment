@@ -40,6 +40,8 @@ public class Model {
     private SimulationMap simulationMap;
     
     private int lengthOfOneBoxInTheMap_inMeter;
+    
+    private double gamma;
 
     /**
      * The thread for the simulation.
@@ -54,6 +56,7 @@ public class Model {
 		readIniFile("src/simulation.ini");
 		// TODO this should also be placed in ini file
 		lengthOfOneBoxInTheMap_inMeter = 250;
+		gamma = 0.00001;
 		Graph.debugMode = false;
 	}
 
@@ -77,6 +80,19 @@ public class Model {
 
 	public void setLengthOfOneBoxInTheMap_inMeter(int lengthOfOneBoxInTheMap_inMeter) {
 		this.lengthOfOneBoxInTheMap_inMeter = lengthOfOneBoxInTheMap_inMeter;
+	}
+
+	public double getGamma() {
+		return gamma;
+	}
+
+	public void setGamma(double gamma) {
+		this.gamma = gamma;
+		Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+		for( User u : simulationMap.getUsers() ) {
+			MSData msData = (MSData) u.getAttribute(userDataKey).getWeight();
+			msData.setGamma(gamma);
+		}
 	}
 
 	/**
@@ -159,9 +175,7 @@ public class Model {
 		
 		for( User u : simulationMap.getUsers() ) {
 			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
-			MSData msData = u.new MSData(uPos,
-					1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800,
-							4*lengthOfOneBoxInTheMap_inMeter/1000.0));
+			MSData msData = u.new MSData(uPos, gamma);
 			u.getAttribute(userDataKey).setWeight(msData);
 		}
 	}
@@ -346,6 +360,7 @@ public class Model {
 		}
 	}
 	
+	// TODO this should be compatible with the loading method
 	public void saveModelFile(String path){
 		try{
 			FileWriter out = new FileWriter(path);

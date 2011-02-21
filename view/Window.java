@@ -20,7 +20,6 @@ import javax.swing.JTabbedPane;
 import control.Control;
 
 import model.Model;
-import model.SimulationMap;
 
 /**
  * The window frame of the GUI.
@@ -107,8 +106,20 @@ public class Window extends JFrame {
 		runSCIP.addActionListener( Control.getControl().getRunOptionListener() );
 		
 		JMenu option = new JMenu("Option");
+		JMenuItem setGamma = new JMenuItem("Set gamma");
 		JMenuItem toggleGrids = new JMenuItem("Toggle grids");
 		
+		setGamma.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String str = View.getView().showInputDialog();
+				try {
+					double val = Double.parseDouble(str);
+					Model.getModel().setGamma(val);
+				} catch( NumberFormatException nfe ) {
+					View.getView().showMessage("Your input is not valid: "+str);
+				}
+			}
+		});
 		toggleGrids.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mainTab.getModelCanvas().toggleGrids();
@@ -119,6 +130,7 @@ public class Window extends JFrame {
 		file.add(open);
 		file.add(exit);
 		run.add(runSCIP);
+		option.add(setGamma);
 		option.add(toggleGrids);
 		m.add(file);
 		m.add(run);

@@ -60,7 +60,7 @@ public class SimulationThread extends Thread {
 				double minDistance = Double.MAX_VALUE;
 				BaseStation bsToRequest = null;
 				for( BaseStation bs : map.getBasestations() ) {
-					double euclidianDistance = Model.getModel().computeEuclidianDistance(
+					double euclidianDistance = Model.computeEuclidianDistance(
 							map.getVertexCoordinates(u.getKey()), map.getVertexCoordinates(bs.getKey()));
 					if( euclidianDistance < minDistance ) {
 						minDistance = euclidianDistance;
