@@ -107,7 +107,7 @@ public class View {
 		if ((s != null) && (s.length() > 0)) {
 		    return s;
 		}
-		return "";
+		return null;
 	}
 	
 	public void showMoveObjectDialog( User user ) {

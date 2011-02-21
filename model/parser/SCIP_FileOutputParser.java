@@ -20,13 +20,16 @@ public class SCIP_FileOutputParser {
 			BufferedReader br = new BufferedReader( new FileReader( fileOutputName ) );
 			
 			String input;
+			double objective;
 			while( (input=br.readLine()) != null ) {
 				if( input.startsWith("primal solution:") ) {
 					br.readLine(); // "=============="
 					br.readLine(); // ""
 					input = br.readLine();
 					if( input.startsWith("objective value:") ) {
-						// TODO check the objective value
+						String[] str = input.split("value:");
+						objective = Double.parseDouble(str[1].trim());
+						System.out.println("Obj: "+objective);
 					} else if( input.startsWith("no solution") ) {
 						Model.getModel().getSimulationMap().clearAssignmentAndConnectionFromAllEdges();
 						View.getView().repaint();

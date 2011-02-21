@@ -102,8 +102,10 @@ public class Window extends JFrame {
 
 		JMenu run = new JMenu("Run");
 		JMenuItem runSCIP = new JMenuItem("Optimize");
+		JMenuItem coopsOpt = new JMenuItem("Max coops");
 		
 		runSCIP.addActionListener( Control.getControl().getRunOptionListener() );
+		coopsOpt.addActionListener( Control.getControl().getRunOptionListener() );
 		
 		JMenu option = new JMenu("Option");
 		JMenuItem setGamma = new JMenuItem("Set gamma");
@@ -113,8 +115,10 @@ public class Window extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String str = View.getView().showInputDialog();
 				try {
-					double val = Double.parseDouble(str);
-					Model.getModel().setGamma(val);
+					if( str != null ) {
+						double val = Double.parseDouble(str);
+						Model.getModel().setGamma(val);
+					}
 				} catch( NumberFormatException nfe ) {
 					View.getView().showMessage("Your input is not valid: "+str);
 				}
@@ -130,6 +134,7 @@ public class Window extends JFrame {
 		file.add(open);
 		file.add(exit);
 		run.add(runSCIP);
+//		run.add(coopsOpt);
 		option.add(setGamma);
 		option.add(toggleGrids);
 		m.add(file);

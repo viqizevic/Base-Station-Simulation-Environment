@@ -56,7 +56,7 @@ public class Model {
 		readIniFile("src/simulation.ini");
 		// TODO this should also be placed in ini file
 		lengthOfOneBoxInTheMap_inMeter = 250;
-		gamma = 0.00001;
+		gamma = 1.0E-8;
 		Graph.debugMode = false;
 	}
 
@@ -99,9 +99,12 @@ public class Model {
 	 * Create a simulation map of the model.
 	 * @param numberOfBaseStations The number of the base stations.
 	 * @param numberOfUsers The number of the users.
+	 * @param fieldNumberPerBlockSide number of the fields in one block is the square of this number
+	 * @param blockNumberPerRow number of blocks in a row
 	 * @return The simulation map created.
 	 */
-	public SimulationMap createRandomSimulationMap( int baseStationsNumber, int usersNumber ) {
+	public SimulationMap createRandomSimulationMap( int baseStationsNumber, int usersNumber,
+			int fieldNumberPerBlockSide, int blockNumberPerRow) {
 		/* We divide the map into small blocks
 		 *  B1 B2 B3 B4
 		 *  B5 B6 B7 ...
@@ -110,8 +113,6 @@ public class Model {
 		 * with at most one base station in the middle of the block.
 		 */
 		// TODO this parameters should be saved in an init file
-		int fieldNumberPerBlockSide = 5; // number of the fields in one block is the square of this number
-		int blockNumberPerRow = 4; // number of blocks in a row
 		if( baseStationsNumber < blockNumberPerRow ) {
 			blockNumberPerRow = Math.max(1, baseStationsNumber);
 		}
@@ -142,9 +143,9 @@ public class Model {
 		
 		// Create and place the users randomly
 		int numberOfUsersCreated = 0;
+		Random random = new Random(usersNumber);
 		while( numberOfUsersCreated < usersNumber ) {
 			// TODO set a random user generator class
-			Random random = new Random();
 			i = random.nextInt(totalFieldNumberVertically);
 			j = random.nextInt(totalFieldNumberHorizontally);
 //			do {
@@ -188,8 +189,8 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-			createRandomSimulationMap(16, 16);
-//			createRandomSimulationMap(8, 8);
+//			createRandomSimulationMap(16, 16, 5, 4);
+			createRandomSimulationMap(9, 9, 5, 3);
 		}
 		return simulationMap;
 	}
