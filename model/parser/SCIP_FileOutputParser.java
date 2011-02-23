@@ -46,7 +46,7 @@ public class SCIP_FileOutputParser {
 						if( val < 0.01 ) {
 							continue;
 						}
-						// FIXME define indices for the vertices
+						// FIXME use the indices of the vertices
 						int i = 1;
 						for( User user : map.getUsers() ) {
 							if( i == idx_u ) {
@@ -55,24 +55,52 @@ public class SCIP_FileOutputParser {
 									if( j == idx_b1 ) {
 										Edge e_ub1 = map.getEdge(user, base1);
 										e_ub1.getAttribute(map.getAssignmentKey()).setWeight(true);
-										if( idx_b1 != idx_b2 ) {
-											int k = 1;
-											for( BaseStation base2 : map.getBasestations() ) {
-												if( k == idx_b2 ) {
-													Edge e_ub2 = map.getEdge(user, base2);
-													e_ub2.getAttribute(map.getAssignmentKey()).setWeight(true);
-													Edge e_b1b2 = map.getEdge(base1, base2);
-													e_b1b2.getAttribute(map.getCooperationKey()).setWeight(true);
-												}
-												k++;
-											}
-										}
+//										if( idx_b1 != idx_b2 ) {
+//											int k = 1;
+//											for( BaseStation base2 : map.getBasestations() ) {
+//												if( k == idx_b2 ) {
+//													Edge e_ub2 = map.getEdge(user, base2);
+//													e_ub2.getAttribute(map.getAssignmentKey()).setWeight(true);
+//													Edge e_b1b2 = map.getEdge(base1, base2);
+//													e_b1b2.getAttribute(map.getCooperationKey()).setWeight(true);
+//												}
+//												k++;
+//											}
+//										}
 									}
 									j++;
 								}
 							}
 							i++;
 						}
+					}
+					while( input.startsWith("c") ) {
+						String[] str = input.split("#");	// expected: c#j#k ...
+						int idx_b1 = Integer.parseInt(str[1]);
+						int idx_b2 = Integer.parseInt(str[2].substring(0, 3).trim());
+						str = str[2].substring(3).split("obj");
+						double val = Double.parseDouble(str[0].substring(0, str[0].length()-1));
+						if( val < 0.01 ) {
+							continue;
+						}
+						// FIXME use the indices of the vertices
+						int j = 1;
+						for( BaseStation base1 : map.getBasestations() ) {
+							if( j == idx_b1 ) {
+								if( idx_b1 != idx_b2 ) {
+									int k = 1;
+									for( BaseStation base2 : map.getBasestations() ) {
+										if( k == idx_b2 ) {
+											Edge e_b1b2 = map.getEdge(base1, base2);
+											e_b1b2.getAttribute(map.getCooperationKey()).setWeight(true);
+										}
+										k++;
+									}
+								}
+							}
+							j++;
+						}
+						input = br.readLine();
 					}
 				}
 			}
