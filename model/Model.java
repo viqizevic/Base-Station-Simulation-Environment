@@ -159,7 +159,7 @@ public class Model {
 			}
 		}
 		addBSDatasAndMSDatas();
-		simulationMap.setAllEdges();
+		simulationMap.addAllEdges();
 		return simulationMap;
 	}
 
@@ -189,8 +189,8 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-//			createRandomSimulationMap(16, 16, 5, 4);
-			createRandomSimulationMap(9, 9, 5, 3);
+			createRandomSimulationMap(16, 16, 5, 4);
+//			createRandomSimulationMap(9, 9, 5, 3);
 		}
 		return simulationMap;
 	}
@@ -256,7 +256,7 @@ public class Model {
 				i++;
 			}
 			addBSDatasAndMSDatas();
-			simulationMap.setAllEdges();
+			simulationMap.addAllEdges();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -308,7 +308,7 @@ public class Model {
 				u.getAttribute(userDataKey).setWeight(msData);
 				i++;
 			}
-			simulationMap.setAllEdges();
+			simulationMap.addAllEdges();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

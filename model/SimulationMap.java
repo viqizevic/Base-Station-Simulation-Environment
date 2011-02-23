@@ -3,7 +3,6 @@ package model;
 
 import java.awt.Point;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Vector;
 
 import model.User.MSData;
@@ -158,7 +157,7 @@ public class SimulationMap extends Graph {
     	 */
     }
     
-    public void setAllEdges() {
+    public void addAllEdges() {
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex bs : basestationsGraph.getVertices() ) {
     			this.addEdge(u, bs);
@@ -185,6 +184,10 @@ public class SimulationMap extends Graph {
     		e.getAttribute(cooperationKey).setDescription(
     				basestationsGraph.getEdgeAttributeDescription(cooperationKey));
     	}
+    }
+    
+    public Vector<Edge> getEdgesBetweenBaseStations() {
+    	return basestationsGraph.getEdges();
     }
     
     public void clearAssignmentAndConnectionFromAllEdges() {

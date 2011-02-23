@@ -22,7 +22,7 @@ public class View {
 	private Window window;
 
 	public View() {
-		window = new Window("Base stations model");
+		window = new Window("Network Simulation");
 		window.setLocationRelativeTo( null );
 		window.pack();
 		window.setVisible(true);
