@@ -81,6 +81,7 @@ public class SCIP_FileOutputParser {
 						str = str[2].substring(3).split("obj");
 						double val = Double.parseDouble(str[0].substring(0, str[0].length()-1));
 						if( val < 0.01 ) {
+							input = br.readLine();
 							continue;
 						}
 						// FIXME use the indices of the vertices
