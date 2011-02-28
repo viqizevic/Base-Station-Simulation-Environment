@@ -13,12 +13,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+//import org.jfree.chart.ChartFactory;
+//import org.jfree.chart.ChartPanel;
+//import org.jfree.chart.JFreeChart;
+//import org.jfree.chart.plot.PlotOrientation;
+//import org.jfree.data.xy.XYSeries;
+//import org.jfree.data.xy.XYSeriesCollection;
 
 import control.Control;
 
@@ -74,25 +74,25 @@ public class Window extends JFrame {
 		simulationPanel.add( modelCanvas, BorderLayout.CENTER );
 		simulationPanel.add( textArea, BorderLayout.EAST );
 		
-		// Create a simple XY chart
-		XYSeries series = new XYSeries("");
-		double d = 0.25;
-		while( d <= 5 ) {
-			series.add(d, 1000000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
-//			System.out.println(d + ": " + 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
-//			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
-			d += 0.05;
-		}
-		// Add the series to your data set
-		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
-		JFreeChart chart = ChartFactory.createXYLineChart("",
-				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
-        ChartPanel xyChartPanel = new ChartPanel(chart);
-
-        tabbedPane.addTab("Main", null, simulationPanel, "Main");
-//        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
-		this.add( tabbedPane );
+//		// Create a simple XY chart
+//		XYSeries series = new XYSeries("");
+//		double d = 0.25;
+//		while( d <= 5 ) {
+//			series.add(d, 1000000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+////			System.out.println(d + ": " + 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
+////			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
+//			d += 0.05;
+//		}
+//		// Add the series to your data set
+//		XYSeriesCollection dataset = new XYSeriesCollection();
+//		dataset.addSeries(series);
+//		JFreeChart chart = ChartFactory.createXYLineChart("",
+//				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
+//        ChartPanel xyChartPanel = new ChartPanel(chart);
+//
+//        tabbedPane.addTab("Main", null, simulationPanel, "Main");
+////        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
+//		this.add( tabbedPane );
 	}
 
 	/**

@@ -96,7 +96,7 @@ public class ToyModel
 			parser = new ToyParser(args[0]);
 			parser.parse();
 			ToyModel toy = new ToyModel(parser.getBaseStations(),parser.getUsers(),parser.getName());
-			toy.users.get(Key.toKey(1)).changeGamma(1.4);
+/*			toy.users.get(Key.toKey(1)).changeGamma(1.4);
 			toy.users.get(Key.toKey(2)).changeGamma(1.4);
 			for(int i=1;i<=4;i++)
 			{
@@ -108,7 +108,7 @@ public class ToyModel
 				toy.execute("zimpl model_globalCluster.zpl");
 				toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+i);
 				toy.userStep(1, 50, 0);
-//				toy.userStep(2, true, -50);
+				toy.userStep(2, t5rue, -50);
 				System.out.println(toy.users.get(Key.toKey(2)).getXPosition());
 				System.out.println(toy.users.get(Key.toKey(2)).getYPosition());
 //				toy.users.get(Key.toKey(1)).setGamma(toy.users.get(Key.toKey(1)).getGamma()*0.75);
@@ -122,11 +122,14 @@ public class ToyModel
 			toy.execute("zimpl model_globalCluster.zpl");
 			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+7);
 //			toy.userStep(2, true, -50);
-//			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
-//			toy.execute("zimpl model_globalCluster.zpl");
-//			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+8);
+ * 
+ */
+			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
+			toy.execute("zimpl model_globalCluster.zpl");
+			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+8);
 //			System.out.println(toy.users.get(Key.toKey(2)).getXPosition());
 //			System.out.println(toy.users.get(Key.toKey(2)).getYPosition());
+
 		}
 		catch (FileNotFoundException e)
 		{
