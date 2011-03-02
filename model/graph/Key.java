@@ -23,6 +23,7 @@ public final class Key {
       this.id = internalIdCounter++;
     }
     
+
     public Key(Long l) {
         this.id = l;
      }

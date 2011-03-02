@@ -2,9 +2,11 @@ package view;
 
 import java.awt.Point;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import model.Model;
+import model.User;
 import model.graph.Vertex;
 
 public class View {
@@ -20,7 +22,7 @@ public class View {
 	private Window window;
 
 	public View() {
-		window = new Window("Base stations model", Model.getModel().getSimulationMap());
+		window = new Window("Network Simulation");
 		window.setLocationRelativeTo( null );
 		window.pack();
 		window.setVisible(true);
@@ -67,8 +69,54 @@ public class View {
 	public void setText( String text ) {
 		window.setText(text);
 	}
+
+	public void appendText( String text ) {
+		window.appendText(text);
+	}
 	
-	public void refresh() {
-		window.getSimulationMapCanvas().repaint();
+	public void repaint() {
+		window.repaint();
+	}
+	
+	public void reloadTheMap() {
+		window.reloadTheMap();
+	}
+	
+	public String loadFile(){
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		
+		int state = fileChooser.showOpenDialog(null);
+		
+		if(state == JFileChooser.APPROVE_OPTION){
+			return fileChooser.getSelectedFile().getPath();
+		}
+		return "";
+	}
+	
+	public String showInputDialog() {
+		String s = (String)JOptionPane.showInputDialog(
+		                    window,
+		                    "Edit the gamma value"
+		                    + "\nfor all MS:",
+		                    "Set gamma",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    null,
+		                    Model.getModel().getGamma());
+		if ((s != null) && (s.length() > 0)) {
+		    return s;
+		}
+		return null;
+	}
+	
+	public void showMoveObjectDialog( User user ) {
+		@SuppressWarnings("unused")
+		MoveObjectDialog mod = new MoveObjectDialog(window, user);
+	}
+	
+	public void showEditObjectDialog( Vertex v ) {
+		@SuppressWarnings("unused")
+		EditObjectDialog eod = new EditObjectDialog(window, v);
 	}
 }

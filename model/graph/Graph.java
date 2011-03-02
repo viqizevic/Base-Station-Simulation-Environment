@@ -242,6 +242,21 @@ public class Graph {
     public Edge getEdge(Key key) {
         return (edges.get(key));
     }
+
+    /**
+     * Return an edge beginning from head vertex given and ended in tail vertex
+     * @param head the head vertex
+     * @param tail the tail vertex
+     * @return the edge searched, null if none exists
+     */
+    public Edge getEdge( Vertex head, Vertex tail ) {
+    	for( Edge e : head.getOutgoingEdges() ) {
+    		if( e.getTail() == tail ) {
+    			return e;
+    		}
+    	}
+    	return null;
+    }
     
     /**
      * adds an Vertex Attribute

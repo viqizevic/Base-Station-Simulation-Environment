@@ -60,7 +60,7 @@ public class CreateZPL
             out.write("#sigma^2 (noise per MS)\n");
             for(Key key : users.keySet())
             {
-            	out.write(Long.toString(key.getId()) + " 5.E-12\n");
+            	out.write(Long.toString(key.getId()) + " 1.E-8\n");
             }
             out.close();    
             

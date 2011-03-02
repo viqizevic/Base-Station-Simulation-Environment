@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import model.Model;
 import model.SimulationMap.Field;
 import model.SimulationMap.FieldUsageType;
+import model.User;
 
 import view.View;
 
@@ -38,7 +39,14 @@ public class CanvasMouseListener implements MouseListener {
         if( field.getFieldUsageType() != FieldUsageType.Empty ) {
         	String output = "" + field.getFieldUser();
         	View.getView().highlightVertex(field.getFieldUser());
-        	View.getView().setText(output);
+        	// TODO show edit options after double click
+        	if( e.getClickCount() >= 2 ) {
+        		if( field.getFieldUsageType() == FieldUsageType.User ) {
+        			View.getView().showMoveObjectDialog((User)field.getFieldUser());
+        		} else {
+            		View.getView().showMessage(output);
+        		}
+        	}
         }
     }
 

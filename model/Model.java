@@ -7,6 +7,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
+
+import model.BaseStation.BSData;
+import model.SimulationMap.FieldUsageType;
+import model.User.MSData;
+import model.graph.Graph;
+import model.graph.Key;
+import model.parser.CommandExecutor;
+import model.parser.SCIP_FileOutputParser;
+import model.parser.SCN_FileCreator;
+import model.parser.ToyParser;
+import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 
 import view.View;
 
@@ -26,6 +38,10 @@ public class Model {
      * The simulation map.
      */
     private SimulationMap simulationMap;
+    
+    private int lengthOfOneBoxInTheMap_inMeter;
+    
+    private double gamma;
 
     /**
      * The thread for the simulation.
@@ -36,7 +52,12 @@ public class Model {
      * Construct the model.
      */
 	public Model() {
+		// FIXME place the simulation.ini correctly..
 		readIniFile("src/simulation.ini");
+		// TODO this should also be placed in ini file
+		lengthOfOneBoxInTheMap_inMeter = 250;
+		gamma = 1.0E-8;
+		Graph.debugMode = false;
 	}
 
 	/**
@@ -46,16 +67,118 @@ public class Model {
 	public static Model getModel() {
 		return model;
 	}
+	
+	/**
+	 * Get the side length of the box in meter.
+	 * This is the same as the distance between two objects in adjacent blocks.
+	 * Since we assume that the object placed in the middle of the box.
+	 * @return The side length of the box in meter.
+	 */
+	public int getLengthOfOneBoxInTheMap_inMeter() {
+		return lengthOfOneBoxInTheMap_inMeter;
+	}
+
+	public void setLengthOfOneBoxInTheMap_inMeter(int lengthOfOneBoxInTheMap_inMeter) {
+		this.lengthOfOneBoxInTheMap_inMeter = lengthOfOneBoxInTheMap_inMeter;
+	}
+
+	public double getGamma() {
+		return gamma;
+	}
+
+	public void setGamma(double gamma) {
+		this.gamma = gamma;
+		Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+		for( User u : simulationMap.getUsers() ) {
+			MSData msData = (MSData) u.getAttribute(userDataKey).getWeight();
+			msData.setGamma(gamma);
+		}
+	}
 
 	/**
 	 * Create a simulation map of the model.
 	 * @param numberOfBaseStations The number of the base stations.
 	 * @param numberOfUsers The number of the users.
+	 * @param fieldNumberPerBlockSide number of the fields in one block is the square of this number
+	 * @param blockNumberPerRow number of blocks in a row
 	 * @return The simulation map created.
 	 */
-	public SimulationMap createSimulationMap( int numberOfBaseStations, int numberOfUsers ) {
-		simulationMap = new SimulationMap(numberOfBaseStations, numberOfUsers);
+	public SimulationMap createRandomSimulationMap( int baseStationsNumber, int usersNumber,
+			int fieldNumberPerBlockSide, int blockNumberPerRow) {
+		/* We divide the map into small blocks
+		 *  B1 B2 B3 B4
+		 *  B5 B6 B7 ...
+		 *  ...
+		 * Each block is a square containing small fields
+		 * with at most one base station in the middle of the block.
+		 */
+		// TODO this parameters should be saved in an init file
+		if( baseStationsNumber < blockNumberPerRow ) {
+			blockNumberPerRow = Math.max(1, baseStationsNumber);
+		}
+		int blockNumberPerColumn = baseStationsNumber/blockNumberPerRow; // number of blocks in a column
+		if( baseStationsNumber%blockNumberPerRow > 0 || baseStationsNumber == 0 ) {
+			blockNumberPerColumn++;
+		}
+		int totalFieldNumberHorizontally = blockNumberPerRow*fieldNumberPerBlockSide;
+		int totalFieldNumberVertically = blockNumberPerColumn*fieldNumberPerBlockSide;
+		simulationMap = new SimulationMap(totalFieldNumberHorizontally, totalFieldNumberVertically);
+		
+		// Create and place the base stations in the middle of the blocks
+		int i = 0;
+		int j = 0;
+		int numberOfFieldsToTheMiddle = fieldNumberPerBlockSide/2;
+		int numberOfBaseStationsCreated = 0;
+		for( int k=0; k<blockNumberPerColumn; k++ ) {
+			i = k*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
+			for( int l=0; l<blockNumberPerRow; l++ ) {
+				j = l*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
+				if( numberOfBaseStationsCreated < baseStationsNumber ) {
+					Point p = new Point(j, i);
+					simulationMap.addBaseStation(p, ""+(numberOfBaseStationsCreated+1));
+					numberOfBaseStationsCreated++;
+				}
+			}
+		}
+		
+		// Create and place the users randomly
+		int numberOfUsersCreated = 0;
+		Random random = new Random(usersNumber);
+		while( numberOfUsersCreated < usersNumber ) {
+			// TODO set a random user generator class
+			i = random.nextInt(totalFieldNumberVertically);
+			j = random.nextInt(totalFieldNumberHorizontally);
+//			do {
+//				i = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
+//				j = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
+//			} while( i<0 || j<0 || i>=totalFieldNumberVertically || j>=totalFieldNumberHorizontally );
+			if( simulationMap.getField(j, i).getFieldUsageType() == FieldUsageType.Empty ) {
+				Point p = new Point( j, i );
+				simulationMap.addUser(p, ""+(numberOfUsersCreated+1));
+				numberOfUsersCreated++;
+			}
+		}
+		addBSDatasAndMSDatas();
+		simulationMap.addAllEdges();
 		return simulationMap;
+	}
+
+	// FIXME this is hard coded..
+	private void addBSDatasAndMSDatas() {
+		Key bsDataKey = simulationMap.getKeyOfBaseStationDataAttribute();
+		Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+		
+		for( BaseStation b : simulationMap.getBasestations() ) {
+			Point bsPos = simulationMap.getVertexCoordinates(b.getKey());
+			BSData bsData = b.new BSData(bsPos, 1.0, 3.0);
+			b.getAttribute(bsDataKey).setWeight(bsData);
+		}
+		
+		for( User u : simulationMap.getUsers() ) {
+			Point uPos = simulationMap.getVertexCoordinates(u.getKey());
+			MSData msData = u.new MSData(uPos, gamma);
+			u.getAttribute(userDataKey).setWeight(msData);
+		}
 	}
 
 	/**
@@ -66,7 +189,8 @@ public class Model {
 	 */
 	public SimulationMap getSimulationMap() {
 		if( simulationMap == null ) {
-			createSimulationMap(16, 32);
+			createRandomSimulationMap(16, 16, 5, 4);
+//			createRandomSimulationMap(9, 9, 5, 3);
 		}
 		return simulationMap;
 	}
@@ -117,13 +241,22 @@ public class Model {
 			if( bs_numb < 0 || u_numb < 0 || mapWidth < 0 || mapHeight < 0 ) {
 				return false;
 			}
-			simulationMap = new SimulationMap(bs_numb, u_numb, mapWidth, mapHeight);
+			if( bs_numb != bs_locations.size() || u_numb != u_locations.size() ) {
+				return false;
+			}
+			simulationMap = new SimulationMap(mapWidth, mapHeight);
+			int i=1;
 			for( Point p : bs_locations ) {
-				simulationMap.addBaseStation(p);
+				simulationMap.addBaseStation(p,""+i);
+				i++;
 			}
+			i=1;
 			for( Point p : u_locations ) {
-				simulationMap.addUser(p);
+				simulationMap.addUser(p,""+i);
+				i++;
 			}
+			addBSDatasAndMSDatas();
+			simulationMap.addAllEdges();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -136,6 +269,75 @@ public class Model {
 			return false;
 		}
 		return true;
+	}
+	
+	public void loadFile( String filename ) {
+		try {
+			ToyParser tp = new ToyParser(filename);
+			tp.parse();
+			int maxX = 0;
+			int maxY = 0;
+			for( BSData bsData : tp.getBaseStations().values() ) {
+				if( bsData.getXPosition() > maxX ) {
+					maxX = (int) Math.ceil( bsData.getXPosition() );
+				}
+				if( bsData.getYPosition() > maxY ) {
+					maxY = (int) Math.ceil( bsData.getYPosition() );
+				}
+			}
+			for( MSData msData : tp.getUsers().values() ) {
+				if( msData.getXPosition() > maxX ) {
+					maxX = (int) Math.ceil( msData.getXPosition() );
+				}
+				if( msData.getYPosition() > maxY ) {
+					maxY = (int) Math.ceil( msData.getYPosition() );
+				}
+			}
+			simulationMap = new SimulationMap(maxX+1, maxY+1);
+			Key bsDataKey = simulationMap.getKeyOfBaseStationDataAttribute();
+			Key userDataKey = simulationMap.getKeyOfUserDataAttribute();
+			int i=1;
+			for( BSData bsData : tp.getBaseStations().values() ) {
+				BaseStation b = simulationMap.addBaseStation( bsData.getPosition(), ""+i );
+				b.getAttribute(bsDataKey).setWeight(bsData);
+				i++;
+			}
+			i=1;
+			for( MSData msData : tp.getUsers().values() ) {
+				User u = simulationMap.addUser( msData.getPosition(), ""+i );
+				u.getAttribute(userDataKey).setWeight(msData);
+				i++;
+			}
+			simulationMap.addAllEdges();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean createSCN( String fileName, boolean showMessage ) {
+		return SCN_FileCreator.createSCN(simulationMap, fileName, showMessage);
+	}
+	
+	public boolean executeZIMPL( String zimplFileName, String resourceFileName ) {
+		if( CommandExecutor.execute("zimpl " + zimplFileName + " -D file=" + resourceFileName) ) {
+			return true;
+		} else {
+			try {
+				new FileReader(zimplFileName);
+			} catch (FileNotFoundException e) {
+				View.getView().showMessage("Cannot find the zimpl file: "
+						+ zimplFileName);
+			}
+			return false;
+		}
+	}
+	
+	public boolean executeSCIP( String lpFileName, String outputFileName ) {
+		return CommandExecutor.execute("scip -f " + lpFileName + " -l " + outputFileName);
+	}
+	
+	public boolean readSolutionFromSCIP( String scipFileOutputName ) {
+		return SCIP_FileOutputParser.readSolutionAndEditTheMap(scipFileOutputName, simulationMap);
 	}
 	
 	public static double computeEuclidianDistance( Point p1, Point p2 ) {
@@ -159,6 +361,7 @@ public class Model {
 		}
 	}
 	
+	// TODO this should be compatible with the loading method
 	public void saveModelFile(String path){
 		try{
 			FileWriter out = new FileWriter(path);

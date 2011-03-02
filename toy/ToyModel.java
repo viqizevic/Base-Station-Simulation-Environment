@@ -96,37 +96,49 @@ public class ToyModel
 			parser = new ToyParser(args[0]);
 			parser.parse();
 			ToyModel toy = new ToyModel(parser.getBaseStations(),parser.getUsers(),parser.getName());
-/*			toy.users.get(Key.toKey(1)).changeGamma(1.4);
-			toy.users.get(Key.toKey(2)).changeGamma(1.4);
-			for(int i=1;i<=4;i++)
-			{
-//				toy.baseStations.get(Key.toKey(i)).setNUsersServed(2.5);
+			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
+			toy.execute("zimpl model_globalCluster.zpl");
+			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+0);
+/*			for(int i=0;i<5;i++)
+			{	
+				CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
+				toy.execute("zimpl model_globalCluster.zpl");
+				toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+i);
+				toy.users.get(Key.toKey(1)).changeGamma(1.5);
 			}
+*/
+//			toy.users.get(Key.toKey(2)).changeGamma(1.4);
+			
+/*			for(int i=1;i<=4;i++)
+			{
+				toy.baseStations.get(Key.toKey(i)).setNUsersServed(2.5);
+			}
+*/
 			for(int i=1;i<7;i++)
 			{
 				CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
 				toy.execute("zimpl model_globalCluster.zpl");
 				toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+i);
 				toy.userStep(1, 50, 0);
-				toy.userStep(2, t5rue, -50);
-				System.out.println(toy.users.get(Key.toKey(2)).getXPosition());
-				System.out.println(toy.users.get(Key.toKey(2)).getYPosition());
+				toy.userStep(2, -50, 0);
+				System.out.println(toy.users.get(Key.toKey(1)).getXPosition());
+				System.out.println(toy.users.get(Key.toKey(1)).getYPosition());
 //				toy.users.get(Key.toKey(1)).setGamma(toy.users.get(Key.toKey(1)).getGamma()*0.75);
 //				toy.users.get(Key.toKey(2)).setGamma(toy.users.get(Key.toKey(2)).getGamma()*.75);
 //				toy.users.get(Key.toKey(3)).setGamma(toy.users.get(Key.toKey(3)).getGamma()*.75);
 //				toy.baseStations.get(Key.toKey(1)).changeNUsersServed(0.7);
 			}
-			System.out.println(toy.users.get(Key.toKey(2)).getXPosition());
-			System.out.println(toy.users.get(Key.toKey(2)).getYPosition());
-			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
-			toy.execute("zimpl model_globalCluster.zpl");
-			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+7);
+//			System.out.println(toy.users.get(Key.toKey(2)).getXPosition());
+//			System.out.println(toy.users.get(Key.toKey(2)).getYPosition());
+//			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
+//			toy.execute("zimpl model_globalCluster.zpl");
+//			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+7);
 //			toy.userStep(2, true, -50);
- * 
- */
-			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
-			toy.execute("zimpl model_globalCluster.zpl");
-			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+8);
+ 
+
+//			CreateZPL.createZPL(toy.baseStations,toy.users,toy.name);
+//			toy.execute("zimpl model_globalCluster.zpl");
+//			toy.execute("scip -f model_globalCluster.lp -l "+toy.name+"-"+8);
 //			System.out.println(toy.users.get(Key.toKey(2)).getXPosition());
 //			System.out.println(toy.users.get(Key.toKey(2)).getYPosition());
 

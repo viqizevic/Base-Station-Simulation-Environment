@@ -1,0 +1,44 @@
+zimpl	v       0	a#1#1           	"a#1#1"
+zimpl	v       1	a#1#2           	"a#1#2"
+zimpl	v       2	a#1#3           	"a#1#3"
+zimpl	v       3	a#1#4           	"a#1#4"
+zimpl	v       4	a#2#1           	"a#2#1"
+zimpl	v       5	a#2#2           	"a#2#2"
+zimpl	v       6	a#2#3           	"a#2#3"
+zimpl	v       7	a#2#4           	"a#2#4"
+zimpl	v       8	c#1#2           	"c#1#2"
+zimpl	v       9	c#1#3           	"c#1#3"
+zimpl	v      10	c#1#4           	"c#1#4"
+zimpl	v      11	c#2#3           	"c#2#3"
+zimpl	v      12	c#2#4           	"c#2#4"
+zimpl	v      13	c#3#4           	"c#3#4"
+zimpl	c       0	sinr_1          	"sinr_1"	0.0000000000000000e+00
+zimpl	c       1	sinr_2          	"sinr_2"	0.0000000000000000e+00
+zimpl	c       2	power_1         	"power_1"	0.0000000000000000e+00
+zimpl	c       3	power_2         	"power_2"	0.0000000000000000e+00
+zimpl	c       4	power_3         	"power_3"	0.0000000000000000e+00
+zimpl	c       5	power_4         	"power_4"	0.0000000000000000e+00
+zimpl	c       6	cooperation_1   	"cooperation_1"	0.0000000000000000e+00
+zimpl	c       7	cooperation_2   	"cooperation_2"	0.0000000000000000e+00
+zimpl	c       8	cooperation_3   	"cooperation_3"	0.0000000000000000e+00
+zimpl	c       9	cooperation_4   	"cooperation_4"	0.0000000000000000e+00
+zimpl	c      10	cooperation_5   	"cooperation_5"	0.0000000000000000e+00
+zimpl	c      11	cooperation_6   	"cooperation_6"	0.0000000000000000e+00
+zimpl	c      12	cooperation_7   	"cooperation_7"	0.0000000000000000e+00
+zimpl	c      13	cooperation_8   	"cooperation_8"	0.0000000000000000e+00
+zimpl	c      14	cooperation_9   	"cooperation_9"	0.0000000000000000e+00
+zimpl	c      15	cooperation_10  	"cooperation_10"	0.0000000000000000e+00
+zimpl	c      16	cooperation_11  	"cooperation_11"	0.0000000000000000e+00
+zimpl	c      17	cooperation_12  	"cooperation_12"	0.0000000000000000e+00
+zimpl	c      18	completeClust@12	"completeCluster1_1"	0.0000000000000000e+00
+zimpl	c      19	completeClust@13	"completeCluster1_2"	0.0000000000000000e+00
+zimpl	c      20	completeClust@14	"completeCluster1_3"	0.0000000000000000e+00
+zimpl	c      21	completeClust@15	"completeCluster1_4"	0.0000000000000000e+00
+zimpl	c      22	completeClust@16	"completeCluster2_1"	0.0000000000000000e+00
+zimpl	c      23	completeClust@17	"completeCluster2_2"	0.0000000000000000e+00
+zimpl	c      24	completeClust@18	"completeCluster2_3"	0.0000000000000000e+00
+zimpl	c      25	completeClust@19	"completeCluster2_4"	0.0000000000000000e+00
+zimpl	c      26	completeClust@1a	"completeCluster3_1"	0.0000000000000000e+00
+zimpl	c      27	completeClust@1b	"completeCluster3_2"	0.0000000000000000e+00
+zimpl	c      28	completeClust@1c	"completeCluster3_3"	0.0000000000000000e+00
+zimpl	c      29	completeClust@1d	"completeCluster3_4"	0.0000000000000000e+00

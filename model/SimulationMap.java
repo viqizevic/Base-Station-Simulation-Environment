@@ -2,13 +2,15 @@
 package model;
 
 import java.awt.Point;
-import java.util.Random;
+import java.util.Arrays;
 import java.util.Vector;
 
+import model.User.MSData;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Key;
 import model.graph.Vertex;
+import model.graph.VertexComparator;
 import model.pathloss.Cost231WalfishIkegami_PathLossModel;
 
 /**
@@ -41,8 +43,10 @@ public class SimulationMap extends Graph {
 	private Field[][] fieldsMatrix;
 
 	private Key assignmentKey;
+	
+	private Key cooperationKey;
 
-    public SimulationMap( int baseStationsNumber, int usersNumber, int fieldWidth, int fieldHeight ) {
+    public SimulationMap( int fieldWidth, int fieldHeight ) {
     	super();
     	basestationsGraph = new Graph();
     	usersGraph = new Graph();
@@ -56,102 +60,44 @@ public class SimulationMap extends Graph {
 		}
     }
 
-    public void addBaseStation( Point p ) {
+    public BaseStation addBaseStation( Point p, String id ) {
 		BaseStation bs = new BaseStation();
+		bs.setId(id);
 		addVertex(bs, p);
 		basestationsGraph.addVertex(bs, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(bs);
+		return bs;
     }
     
-    public void addUser( Point p ) {
+    public User addUser( Point p, String id ) {
 		User u = new User();
+		u.setId(id);
 		addVertex(u, p);
 		usersGraph.addVertex(u, p);
 		fieldsMatrix[p.y][p.x].setFieldUser(u);
+		return u;
     }
-
-    /**
-     * Construct a simulation map.
-     * @param baseStationsNumber The number of base stations in the map.
-     * @param usersNumber The number of the users in the map.
-     */
-    public SimulationMap( int baseStationsNumber, int usersNumber ) {
-    	super();
-    	basestationsGraph = new Graph();
-    	usersGraph = new Graph();
-		setEuclidian(true);
-		/* We divide the map into small blocks
-		 *  B1 B2 B3 B4
-		 *  B5 B6 B7 ...
-		 *  ...
-		 * Each block is a square containing small fields
-		 * with at most one base station in the middle of the block.
-		 */
-		// TODO this parameters should be saved in an init file
-		int fieldNumberPerBlockSide = 5; // number of the fields in one block is the square of this number
-		int blockNumberPerRow = 4; // number of blocks in a row
-		if( baseStationsNumber < blockNumberPerRow ) {
-			blockNumberPerRow = Math.max(1, baseStationsNumber);
-		}
-		int blockNumberPerColumn = baseStationsNumber/blockNumberPerRow; // number of blocks in a column
-		if( baseStationsNumber%blockNumberPerRow > 0 || baseStationsNumber == 0 ) {
-			blockNumberPerColumn++;
-		}
-		int totalFieldNumberHorizontally = blockNumberPerRow*fieldNumberPerBlockSide;
-		int totalFieldNumberVertically = blockNumberPerColumn*fieldNumberPerBlockSide;
-		fieldsMatrix = new Field[totalFieldNumberVertically][totalFieldNumberHorizontally];
-		for( int i=0; i<totalFieldNumberVertically; i++ ) {
-			for( int j=0; j<totalFieldNumberHorizontally; j++ ) {
-				fieldsMatrix[i][j] = new Field();
-			}
-		}
-		
-		// Create and place the base stations in the middle of the blocks
-		int i = 0;
-		int j = 0;
-		int numberOfFieldsToTheMiddle = fieldNumberPerBlockSide/2;
-		int numberOfBaseStationsCreated = 0;
-		for( int k=0; k<blockNumberPerColumn; k++ ) {
-			i = k*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
-			for( int l=0; l<blockNumberPerRow; l++ ) {
-				j = l*fieldNumberPerBlockSide + numberOfFieldsToTheMiddle;
-				if( numberOfBaseStationsCreated < baseStationsNumber ) {
-					BaseStation bs = new BaseStation();
-					Point p = new Point(j, i);
-					addVertex(bs, p);
-					basestationsGraph.addVertex(bs, p);
-					fieldsMatrix[i][j].setFieldUser(bs);
-					numberOfBaseStationsCreated++;
-				}
-			}
-		}
-		// Create and place the users randomly
-		int numberOfUsersCreated = 0;
-		while( numberOfUsersCreated < usersNumber ) {
-			/**
-			 * TODO set a random user generator class
-			 */
-			Random random = new Random();
-			i = random.nextInt(totalFieldNumberVertically);
-			j = random.nextInt(totalFieldNumberHorizontally);
-//			do {
-//				i = (int) Math.round(random.nextGaussian()*totalFieldNumberVertically/5 + totalFieldNumberVertically/2);
-//				j = (int) Math.round(random.nextGaussian()*totalFieldNumberHorizontally/5 + totalFieldNumberHorizontally/2);
-//			} while( i<0 || j<0 || i>=totalFieldNumberVertically || j>=totalFieldNumberHorizontally );
-			if( fieldsMatrix[i][j].getFieldUsageType() == FieldUsageType.Empty ) {
-				User u = new User();
-				Point p = new Point( j, i );
-				addVertex(u, p);
-				usersGraph.addVertex(u, p);
-				fieldsMatrix[i][j].setFieldUser(u);
-				numberOfUsersCreated++;
-			}
-		}
-		
-		setAttributesOfTheBasestations();
-		setAttributesOfTheUser();
-		
-		setAllEdges();
+    
+    public Key getKeyOfBaseStationDataAttribute() {
+    	String bsDataDescription = "BS Data";
+    	String[] attrDescriptions = basestationsGraph.getVertexAttributeDescriptions();
+    	for( int i=0; i<attrDescriptions.length; i++ ) {
+    		if( attrDescriptions[i].equals(bsDataDescription) ) {
+    			return basestationsGraph.getKeyToVertexAttributeDescription(bsDataDescription);
+    		}
+    	}
+    	return basestationsGraph.addVertexAttribute(bsDataDescription);
+    }
+    
+    public Key getKeyOfUserDataAttribute() {
+    	String userDataDescription = "User Data";
+    	String[] attrDescriptions = usersGraph.getVertexAttributeDescriptions();
+    	for( int i=0; i<attrDescriptions.length; i++ ) {
+    		if( attrDescriptions[i].equals(userDataDescription) ) {
+    			return usersGraph.getKeyToVertexAttributeDescription(userDataDescription);
+    		}
+    	}
+    	return usersGraph.addVertexAttribute(userDataDescription);
     }
     
     private void setAttributesOfTheBasestations() {
@@ -211,7 +157,7 @@ public class SimulationMap extends Graph {
     	 */
     }
     
-    private void setAllEdges() {
+    public void addAllEdges() {
     	for( Vertex u : usersGraph.getVertices() ) {
     		for( Vertex bs : basestationsGraph.getVertices() ) {
     			this.addEdge(u, bs);
@@ -232,11 +178,24 @@ public class SimulationMap extends Graph {
     			basestationsGraph.addEdge(bs_i, bs_j);
     		}
     	}
-    	Key cooperationKey = basestationsGraph.addEdgeAttribute("Cooperating");
+    	cooperationKey = basestationsGraph.addEdgeAttribute("Cooperating");
     	for( Edge e : basestationsGraph.getEdges() ) {
     		e.getAttribute(cooperationKey).setWeight(false);
     		e.getAttribute(cooperationKey).setDescription(
     				basestationsGraph.getEdgeAttributeDescription(cooperationKey));
+    	}
+    }
+    
+    public Vector<Edge> getEdgesBetweenBaseStations() {
+    	return basestationsGraph.getEdges();
+    }
+    
+    public void clearAssignmentAndConnectionFromAllEdges() {
+    	for( Edge e : this.getEdges() ) {
+    		e.getAttribute(assignmentKey).setWeight(false);
+    	}
+    	for( Edge e : basestationsGraph.getEdges() ) {
+    		e.getAttribute(cooperationKey).setWeight(false);
     	}
     }
 
@@ -263,6 +222,43 @@ public class SimulationMap extends Graph {
 		}
 		return fieldsMatrix[y][x];
 	}
+	
+	public boolean moveUser( Key userKey, Direction dir ) {
+		Point userPos = getVertexCoordinates(userKey);
+		User user = (User) this.getVertex(userKey);
+		int x = userPos.x;
+		int y = userPos.y;
+		switch (dir) {
+		case UP:
+			return moveUser(user, x, y, x, y-1);
+		case RIGHT:
+			return moveUser(user, x, y, x+1, y);
+		case DOWN:
+			return moveUser(user, x, y, x, y+1);
+		case LEFT:
+			return moveUser(user, x, y, x-1, y);
+		default:
+			return false;
+		}
+	}
+	
+	private boolean moveUser( User user, int x, int y, int new_x, int new_y ) {
+		if( new_x < 0 || fieldsMatrix[0].length <= new_x
+				|| new_y < 0 || fieldsMatrix.length <= new_y ) {
+			return false;
+		}
+		if(fieldsMatrix[new_y][new_x].fieldUsageType == FieldUsageType.Empty) {
+			fieldsMatrix[new_y][new_x].setFieldUser(user);
+			fieldsMatrix[y][x].setFieldUser(null);
+			getVertexCoordinates(user.getKey()).setLocation(new_x, new_y);
+			MSData msData = (MSData) user.getAttribute(
+					getKeyOfUserDataAttribute()).getWeight();
+			msData.setPosition(new_x, new_y);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
 	 * Get all the base stations.
@@ -272,6 +268,13 @@ public class SimulationMap extends Graph {
 		Vector<BaseStation> basestations = new Vector<BaseStation>();
 		for( Vertex v : basestationsGraph.getVertices() ) {
 			basestations.add( (BaseStation) v );
+		}
+		BaseStation[] bases = new BaseStation[basestations.size()];
+		basestations.toArray(bases);
+		Arrays.sort(bases, new VertexComparator());
+		basestations = new Vector<BaseStation>();
+		for(int i=0; i<bases.length; i++) {
+			basestations.add(bases[i]);
 		}
 		return basestations;
 	}
@@ -285,11 +288,22 @@ public class SimulationMap extends Graph {
 		for( Vertex v : usersGraph.getVertices() ) {
 			users.add( (User) v );
 		}
+		User[] mobiles = new User[users.size()];
+		users.toArray(mobiles);
+		Arrays.sort(mobiles, new VertexComparator());
+		users = new Vector<User>();
+		for( int i=0; i<mobiles.length; i++ ) {
+			users.add(mobiles[i]);
+		}
 		return users;
 	}
 
 	public Key getAssignmentKey() {
 		return assignmentKey;
+	}
+
+	public Key getCooperationKey() {
+		return cooperationKey;
 	}
 
 	public String toString() {
