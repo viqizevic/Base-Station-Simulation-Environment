@@ -87,7 +87,7 @@ public class SCN_FileCreator {
 			output += "#sigma^2 (noise per MS)\n";
 			i=1;
 			for( @SuppressWarnings("unused") User u : users ) {
-				output += i + " 5.E-12\n";
+				output += i + " " + Model.getModel().getNoise() + "\n";
 				i++;
 			}
 			out.write( output );
