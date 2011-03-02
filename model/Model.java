@@ -41,7 +41,19 @@ public class Model {
     
     private int lengthOfOneBoxInTheMap_inMeter;
     
+    /**
+     * The transmit power of all base station in watt.
+     */
+    private double transmitPower;
+    
+    /**
+     * The number of user each base station able to served.
+     */
+    private int maximalUserServed;
+    
     private double gamma;
+    
+    private double noise;
 
     /**
      * The thread for the simulation.
@@ -56,7 +68,10 @@ public class Model {
 		readIniFile("src/simulation.ini");
 		// TODO this should also be placed in ini file
 		lengthOfOneBoxInTheMap_inMeter = 250;
+		transmitPower = 40.0;
+		maximalUserServed = 3;
 		gamma = 1.0E-8;
+		noise = Math.pow(10, (-174/10.0)-3);
 		Graph.debugMode = false;
 	}
 
@@ -82,6 +97,24 @@ public class Model {
 		this.lengthOfOneBoxInTheMap_inMeter = lengthOfOneBoxInTheMap_inMeter;
 	}
 
+	public double getTransmitPower() {
+		return transmitPower;
+	}
+
+	public void setTransmitPower(double transmitPower) {
+		this.transmitPower = transmitPower;
+		// TODO change also all data in every base station
+	}
+
+	public int getMaximalUserServed() {
+		return maximalUserServed;
+	}
+
+	public void setMaximalUserServed(int maximalUserServed) {
+		this.maximalUserServed = maximalUserServed;
+		// TODO change also all data in every base station
+	}
+
 	public double getGamma() {
 		return gamma;
 	}
@@ -93,6 +126,14 @@ public class Model {
 			MSData msData = (MSData) u.getAttribute(userDataKey).getWeight();
 			msData.setGamma(gamma);
 		}
+	}
+
+	public double getNoise() {
+		return noise;
+	}
+
+	public void setNoise(double noise) {
+		this.noise = noise;
 	}
 
 	/**
@@ -170,7 +211,7 @@ public class Model {
 		
 		for( BaseStation b : simulationMap.getBasestations() ) {
 			Point bsPos = simulationMap.getVertexCoordinates(b.getKey());
-			BSData bsData = b.new BSData(bsPos, 1.0, 3.0);
+			BSData bsData = b.new BSData(bsPos, transmitPower, (double)maximalUserServed);
 			b.getAttribute(bsDataKey).setWeight(bsData);
 		}
 		
