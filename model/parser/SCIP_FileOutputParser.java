@@ -37,11 +37,13 @@ public class SCIP_FileOutputParser {
 						return false;
 					}
 					while( (input=br.readLine()).startsWith("a") ) {
-						String[] str = input.split("#");	// expected: a#i#j#k ...
+						String[] str = input.split("#");	// expected: a#i#j ...
 						int idx_u = Integer.parseInt(str[1]);
-						int idx_b1 = Integer.parseInt(str[2]);
-						int idx_b2 = Integer.parseInt(str[3].substring(0, 3).trim());
-						str = str[3].substring(3).split("obj");
+//						int idx_b1 = Integer.parseInt(str[2]); // expected: a#i#j#k
+//						int idx_b2 = Integer.parseInt(str[3].substring(0, 3).trim());
+//						str = str[3].substring(3).split("obj");
+						int idx_b1 = Integer.parseInt(str[2].substring(0, 3).trim());
+						str = str[2].substring(3).split("obj");
 						double val = Double.parseDouble(str[0].substring(0, str[0].length()-1));
 						if( val < 0.01 ) {
 							continue;

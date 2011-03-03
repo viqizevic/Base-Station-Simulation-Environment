@@ -1,7 +1,7 @@
 #second model
 
 #file
-param file := "toy5.scn";
+#param file := "toy5.scn";
 
 #sets:
 param noBS := read file as "1n" use 1 comment "#";
