@@ -10,13 +10,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
-//import org.jfree.chart.ChartFactory;
-//import org.jfree.chart.ChartPanel;
-//import org.jfree.chart.JFreeChart;
-//import org.jfree.chart.plot.PlotOrientation;
-//import org.jfree.data.xy.XYSeries;
-//import org.jfree.data.xy.XYSeriesCollection;
-
 import control.Control;
 
 import model.Model;
@@ -58,41 +51,10 @@ public class Window extends JFrame {
 		this.setMinimumSize( new Dimension(600,570) );
 		this.setPreferredSize( new Dimension(790,570) );
 		
-<<<<<<< HEAD
-//		// Create a simple XY chart
-=======
-		// Create a simple XY chart
->>>>>>> 661af5705eeefba0eddac3678511611edff4e700
-//		XYSeries series = new XYSeries("");
-//		double d = 0.25;
-//		while( d <= 5 ) {
-//			series.add(d, 1000000*1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
-////			System.out.println(d + ": " + 1.0/Cost231WalfishIkegami_PathLossModel.getPathLoss(800, d));
-////			series.add(d, 1000000*1.0/OkumuraHata_PathLossModel.getPathLoss(800, d, 30, 1.5));
-//			d += 0.05;
-//		}
-<<<<<<< HEAD
-//		// Add the series to your data set
-=======
-//		// Add the series to our data set
->>>>>>> 661af5705eeefba0eddac3678511611edff4e700
-//		XYSeriesCollection dataset = new XYSeriesCollection();
-//		dataset.addSeries(series);
-//		JFreeChart chart = ChartFactory.createXYLineChart("",
-//				"distance", "", dataset, PlotOrientation.VERTICAL, true, true, false);
-//        ChartPanel xyChartPanel = new ChartPanel(chart);
-//
-<<<<<<< HEAD
-//        tabbedPane.addTab("Main", null, simulationPanel, "Main");
-////        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
-//		this.add( tabbedPane );
-=======
-
 		tabbedPane.addTab("Main", null, mainTab, "Main");
         tabbedPane.addTab("Output", null, outputTab, "Output");
 //        tabbedPane.addTab("Chart", null, xyChartPanel, "Chart");
 		this.add( tabbedPane );
->>>>>>> 661af5705eeefba0eddac3678511611edff4e700
 	}
 
 	/**
